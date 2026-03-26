@@ -1,0 +1,40 @@
+# Data — never commit raw or processed data
+data/
+
+# Environment
+.env
+.venv/
+venv/
+env/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+dist/
+build/
+
+# ChromaDB local storage
+.chroma/
+chroma_data/
+
+# Neo4j local data
+neo4j/data/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
