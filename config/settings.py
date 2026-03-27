@@ -11,7 +11,9 @@ class Settings(BaseSettings):
     gemini_api_key: str
     youtube_api_key: str
     balldontlie_api_key: str
-    anthropic_api_key: str = ""
+
+    # Gemini models
+    gemini_text_model: str = "gemini-2.0-flash"
 
     # Neo4j
     neo4j_uri: str = "bolt://localhost:7687"

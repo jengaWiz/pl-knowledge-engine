@@ -5,8 +5,8 @@ Cleans raw auto-generated YouTube transcript text, fixing punctuation,
 capitalisation, player/team name spellings, and paragraph structure.
 
 Two modes:
-- **LLM mode** (requires ``ANTHROPIC_API_KEY``): sends ~2000-word chunks to
-  Claude claude-3-5-haiku for high-quality cleaning.
+- **LLM mode** (uses ``GEMINI_API_KEY``): sends ~2000-word chunks to
+  Gemini for high-quality cleaning.
 - **Regex fallback**: applies rule-based fixes with no external dependency.
 
 Output: data/cleaned/transcripts/{youtube_id}_cleaned.txt
@@ -14,7 +14,6 @@ Output: data/cleaned/transcripts/{youtube_id}_cleaned.txt
 from __future__ import annotations
 
 import re
-from pathlib import Path
 from typing import Any
 
 from config.settings import settings
@@ -28,7 +27,6 @@ logger = get_logger(__name__)
 # Known name spellings for regex-based correction
 # ---------------------------------------------------------------------------
 PLAYER_NAMES: list[tuple[str, str]] = [
-    # (wrong spelling pattern, correct spelling)
     (r"\bsalah\b", "Salah"),
     (r"\bvan dijk\b", "Van Dijk"),
     (r"\bwatkins\b", "Watkins"),
@@ -78,43 +76,35 @@ Raw transcript:
 
 
 # ---------------------------------------------------------------------------
-# LLM cleaner (Anthropic Claude)
+# LLM cleaner (Gemini)
 # ---------------------------------------------------------------------------
 
 
 @retry(max_attempts=3, base_delay=2.0)
-def _call_claude(chunk: str, api_key: str) -> str:
-    """Send a transcript chunk to Claude for LLM-based cleaning.
+def _call_gemini(chunk: str) -> str:
+    """Send a transcript chunk to Gemini for LLM-based cleaning.
 
     Args:
         chunk: Raw transcript text (approx. 2000 words).
-        api_key: Anthropic API key string.
 
     Returns:
         Cleaned text returned by the model.
     """
-    import anthropic
+    from google import genai
 
-    client = anthropic.Anthropic(api_key=api_key)
-    message = client.messages.create(
-        model="claude-3-5-haiku-latest",
-        max_tokens=4096,
-        messages=[
-            {
-                "role": "user",
-                "content": CLEANING_PROMPT.format(raw_text=chunk),
-            }
-        ],
+    client = genai.Client(api_key=settings.gemini_api_key)
+    response = client.models.generate_content(
+        model=settings.gemini_text_model,
+        contents=CLEANING_PROMPT.format(raw_text=chunk),
     )
-    return message.content[0].text
+    return response.text
 
 
-def _llm_clean(raw_text: str, api_key: str, chunk_words: int = 2000) -> str:
-    """Clean a full transcript via LLM in word-chunked batches.
+def _llm_clean(raw_text: str, chunk_words: int = 2000) -> str:
+    """Clean a full transcript via Gemini in word-chunked batches.
 
     Args:
         raw_text: Full raw transcript string.
-        api_key: Anthropic API key.
         chunk_words: Approximate word count per LLM batch.
 
     Returns:
@@ -134,7 +124,7 @@ def _llm_clean(raw_text: str, api_key: str, chunk_words: int = 2000) -> str:
             total=len(chunks),
             words=len(chunk.split()),
         )
-        cleaned_chunks.append(_call_claude(chunk, api_key))
+        cleaned_chunks.append(_call_gemini(chunk))
 
     return "\n\n".join(cleaned_chunks)
 
@@ -152,7 +142,7 @@ def _regex_clean(raw_text: str) -> str:
     2. Capitalise the first letter of each sentence.
     3. Apply known player/team name corrections (case-insensitive).
     4. Remove common filler words.
-    5. Add period spacing.
+    5. Clean up excess spaces.
 
     Args:
         raw_text: Raw concatenated transcript text.
@@ -162,26 +152,21 @@ def _regex_clean(raw_text: str) -> str:
     """
     text = re.sub(r"\s+", " ", raw_text).strip()
 
-    # Capitalise first word of sentence
     text = re.sub(
         r"(^|[.!?]\s+)([a-z])",
         lambda m: m.group(1) + m.group(2).upper(),
         text,
     )
 
-    # Apply player name corrections
     for pattern, replacement in PLAYER_NAMES:
         text = re.sub(pattern, replacement, text, flags=re.IGNORECASE)
 
-    # Apply team name corrections
     for pattern, replacement in TEAM_NAMES:
         text = re.sub(pattern, replacement, text, flags=re.IGNORECASE)
 
-    # Remove common fillers (only standalone words)
     fillers = r"\b(um+|uh+|er+|hmm+|you know|i mean|sort of|kind of|like)\b,?\s*"
     text = re.sub(fillers, " ", text, flags=re.IGNORECASE)
 
-    # Clean up excess spaces again after removals
     text = re.sub(r"\s+", " ", text).strip()
 
     return text
@@ -199,16 +184,16 @@ class TranscriptCleaner:
         raw_dir: Directory containing raw transcript text files.
         cleaned_dir: Output directory for cleaned transcripts.
         checkpoint: Tracks which episodes have been cleaned.
-        use_llm: Whether Anthropic API key is available.
+        use_llm: Always True — Gemini key is always available.
     """
 
     def __init__(self) -> None:
-        """Set up cleaner with paths from settings and detect LLM availability."""
+        """Set up cleaner with paths from settings."""
         self.raw_dir = settings.raw_dir / "transcripts"
         self.cleaned_dir = settings.cleaned_dir / "transcripts"
         self.cleaned_dir.mkdir(parents=True, exist_ok=True)
         self.checkpoint = Checkpoint("transcript_clean")
-        self.use_llm = bool(settings.anthropic_api_key)
+        self.use_llm = bool(settings.gemini_api_key)
         logger.info(
             "transcript cleaner initialised",
             mode="llm" if self.use_llm else "regex",
@@ -231,7 +216,7 @@ class TranscriptCleaner:
         raw_text = raw_path.read_text(encoding="utf-8")
 
         if self.use_llm:
-            cleaned = _llm_clean(raw_text, settings.anthropic_api_key)
+            cleaned = _llm_clean(raw_text)
         else:
             cleaned = _regex_clean(raw_text)
 
