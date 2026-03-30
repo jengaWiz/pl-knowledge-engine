@@ -11,7 +11,9 @@ class Settings(BaseSettings):
     gemini_api_key: str
     youtube_api_key: str
     balldontlie_api_key: str
-    anthropic_api_key: str = ""
+
+    # Gemini models
+    gemini_text_model: str = "gemini-2.0-flash"
 
     # Neo4j
     neo4j_uri: str = "bolt://localhost:7687"
@@ -28,8 +30,8 @@ class Settings(BaseSettings):
     # Embedding config
     gemini_model: str = "gemini-embedding-2-preview"
     embedding_dimensions: int = 3072
-    embedding_batch_size: int = 5
-    embedding_delay_seconds: float = 1.5
+    embedding_batch_size: int = 100
+    embedding_delay_seconds: float = 1.0
 
     # Chunking config
     chunk_size_words: int = 400

@@ -38,3 +38,8 @@ Thumbs.db
 # Logs
 *.log
 logs/
+
+# Node
+node_modules/
+frontend/dist/
+frontend/.vite/

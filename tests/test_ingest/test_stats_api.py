@@ -22,13 +22,13 @@ from src.ingest.stats_api import BallDontLieClient
 @pytest.fixture
 def client(tmp_path, monkeypatch):
     """Return a BallDontLieClient with paths redirected to a temp directory."""
-    monkeypatch.setenv("BALLDONTLIE_API_KEY", "test_key")
-    monkeypatch.setenv("GEMINI_API_KEY", "test_key")
-    monkeypatch.setenv("YOUTUBE_API_KEY", "test_key")
-    monkeypatch.setenv("NEO4J_PASSWORD", "test_pass")
+    monkeypatch.setenv("BALLDONTLIE_API_KEY", "fake-key-for-ci-testing")
+    monkeypatch.setenv("GEMINI_API_KEY", "fake-key-for-ci-testing")
+    monkeypatch.setenv("YOUTUBE_API_KEY", "fake-key-for-ci-testing")
+    monkeypatch.setenv("NEO4J_PASSWORD", "fake-password-for-ci-testing")
     # We patch settings paths BEFORE importing settings in the client
     with patch("src.ingest.stats_api.settings") as mock_settings:
-        mock_settings.balldontlie_api_key = "test_key"
+        mock_settings.balldontlie_api_key = "fake-key-for-ci-testing"
         mock_settings.raw_dir = tmp_path / "raw"
         mock_settings.checkpoint_dir = tmp_path / "checkpoints"
         c = BallDontLieClient.__new__(BallDontLieClient)
