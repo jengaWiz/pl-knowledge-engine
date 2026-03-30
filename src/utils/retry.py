@@ -7,6 +7,7 @@ Usage:
     def call_api():
         ...
 """
+import re
 import time
 import functools
 from src.utils.logger import get_logger
@@ -14,8 +15,31 @@ from src.utils.logger import get_logger
 logger = get_logger(__name__)
 
 
-def retry(max_attempts: int = 5, base_delay: float = 1.0, max_delay: float = 60.0):
+def _parse_retry_after(error: Exception) -> float | None:
+    """Extract suggested retry delay from a 429 error response.
+
+    Gemini API 429 responses include a JSON body like:
+        "Please retry in 45.6s"  or  "retryDelay": "29s"
+
+    Args:
+        error: The exception raised by the API call.
+
+    Returns:
+        Seconds to wait, or None if not parseable.
+    """
+    text = str(error)
+    # Match "retryDelay": "29s" or "retry in 45.6s"
+    match = re.search(r"retry[^0-9]*(\d+\.?\d*)\s*s", text, re.IGNORECASE)
+    if match:
+        return float(match.group(1)) + 2.0  # add a small buffer
+    return None
+
+
+def retry(max_attempts: int = 5, base_delay: float = 1.0, max_delay: float = 120.0):
     """Decorator that retries a function with exponential backoff.
+
+    For 429 rate-limit errors the suggested retryDelay from the response body
+    is honoured instead of the exponential backoff schedule.
 
     Args:
         max_attempts: Maximum number of retry attempts.
@@ -43,7 +67,15 @@ def retry(max_attempts: int = 5, base_delay: float = 1.0, max_delay: float = 60.
                             error=str(e),
                         )
                         raise
-                    delay = min(base_delay * (2 ** (attempt - 1)), max_delay)
+
+                    # Honour retryDelay from 429 responses; fall back to backoff
+                    is_rate_limit = "429" in str(e) or "RESOURCE_EXHAUSTED" in str(e)
+                    if is_rate_limit:
+                        suggested = _parse_retry_after(e)
+                        delay = suggested if suggested else min(base_delay * (2 ** (attempt - 1)), max_delay)
+                    else:
+                        delay = min(base_delay * (2 ** (attempt - 1)), max_delay)
+
                     logger.warning(
                         "retrying after error",
                         function=func.__name__,

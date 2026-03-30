@@ -29,27 +29,79 @@ setup_logging()
 logger = get_logger(__name__)
 
 MATCHES_CSV = settings.cleaned_dir / "stats" / "matches.csv"
-ROSTER_PATTERN = "data/raw/stats/roster_*.json"
+FPL_PLAYERS_CSV = settings.raw_dir / "stats" / "fpl" / "players.csv"
+FPL_GW_DIR = settings.raw_dir / "stats" / "fpl"
+PODCAST_MANIFEST = settings.raw_dir / "transcripts" / "podcast_episodes.json"
+
+POSITION_MAP = {1: "GKP", 2: "DEF", 3: "MID", 4: "FWD"}
 
 
 def _load_rosters() -> dict[str, list[dict]]:
-    """Load all roster JSON files from data/raw/stats/.
+    """Load focus-team players from the FPL players CSV.
 
     Returns:
         Dict mapping team_name → list of player dicts.
     """
+    if not FPL_PLAYERS_CSV.exists():
+        logger.warning("fpl players CSV not found", path=str(FPL_PLAYERS_CSV))
+        return {}
+
+    df = pd.read_csv(FPL_PLAYERS_CSV)
     rosters: dict[str, list[dict]] = {}
-    for path in sorted(Path(".").glob(ROSTER_PATTERN)):
-        try:
-            with open(path, encoding="utf-8") as f:
-                data = json.load(f)
-            # Expect list of dicts with a 'team_name' key, or infer from filename
-            team_name = path.stem.replace("roster_", "").replace("_", " ").title()
-            rosters[team_name] = data if isinstance(data, list) else data.get("data", [])
-            logger.info("loaded roster", team=team_name, players=len(rosters[team_name]))
-        except Exception as exc:
-            logger.warning("failed to load roster", path=str(path), error=str(exc))
+
+    STAT_COLS = [
+        "goals_scored", "assists", "clean_sheets", "minutes", "yellow_cards",
+        "red_cards", "expected_goals", "expected_assists", "total_points",
+        "form", "points_per_game", "now_cost", "starts", "influence",
+        "creativity", "threat", "ict_index",
+    ]
+
+    for team_name, group in df.groupby("team_name"):
+        players = []
+        for _, row in group.iterrows():
+            pos_code = int(row.get("element_type", 0))
+            player = {
+                "id": str(row["id"]),
+                "first_name": row.get("first_name", ""),
+                "last_name": row.get("second_name", ""),
+                "web_name": row.get("web_name", ""),
+                "position": POSITION_MAP.get(pos_code, str(pos_code)),
+            }
+            for col in STAT_COLS:
+                player[col] = row.get(col, 0)
+            players.append(player)
+        rosters[team_name] = players
+        logger.info("loaded roster", team=team_name, players=len(players))
     return rosters
+
+
+def _load_gw_stats() -> pd.DataFrame:
+    """Load all per-GW player stat CSVs into a single DataFrame.
+
+    Returns:
+        Combined DataFrame of all GW appearance records, or empty DataFrame
+        if no files are found.
+    """
+    gw_files = sorted(FPL_GW_DIR.glob("GW*/playerstats_gw.csv"))
+    if not gw_files:
+        logger.warning("no GW stat files found", path=str(FPL_GW_DIR))
+        return pd.DataFrame()
+
+    frames = []
+    for f in gw_files:
+        try:
+            frames.append(pd.read_csv(f))
+        except Exception as exc:
+            logger.warning("skipping GW file", path=str(f), error=str(exc))
+
+    if not frames:
+        return pd.DataFrame()
+
+    combined = pd.concat(frames, ignore_index=True)
+    # Drop duplicate appearances (same player + fixture from multiple GW files)
+    combined = combined.drop_duplicates(subset=["player_id", "fixture_id"])
+    logger.info("loaded gw stats", files=len(frames), rows=len(combined))
+    return combined
 
 
 def _log_node_counts(store: Neo4jStore) -> None:
@@ -84,6 +136,7 @@ def main() -> None:
     logger.info("loaded matches", rows=len(matches_df))
 
     rosters = _load_rosters()
+    gw_stats = _load_gw_stats()
 
     teams_data = [
         {
@@ -119,6 +172,27 @@ def main() -> None:
 
         logger.info("loading: matches")
         store.create_matches(matches_df)
+
+        if not gw_stats.empty:
+            # Only keep appearances for fixtures that exist as Match nodes
+            valid_ids = set(matches_df["id"].astype(str))
+            filtered = gw_stats[gw_stats["fixture_id"].astype(str).isin(valid_ids)]
+            dropped = len(gw_stats) - len(filtered)
+            if dropped:
+                logger.info("dropped appearances for non-PL fixtures", count=dropped)
+            logger.info("loading: player appearances", rows=len(filtered))
+            store.create_player_appearances(filtered)
+
+        # Load podcast episodes if manifest exists
+        if PODCAST_MANIFEST.exists():
+            with open(PODCAST_MANIFEST, encoding="utf-8") as f:
+                episodes = json.load(f)
+            logger.info("loading: podcast episodes", count=len(episodes))
+            for ep in episodes:
+                store.create_podcast_episode_with_season(ep)
+            logger.info("podcast episodes loaded", count=len(episodes))
+        else:
+            logger.info("no podcast manifest found, skipping")
 
         logger.info("all data loaded — querying node counts")
         _log_node_counts(store)

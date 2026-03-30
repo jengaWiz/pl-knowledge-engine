@@ -124,10 +124,10 @@ def run_embedding_pipeline() -> dict[str, int]:
     # ------------------------------------------------------------------
     match_summaries = _load_json(settings.cleaned_dir / "stats" / "match_summaries.json")
     if match_summaries:
-        def embed_text_item(item: dict) -> list[float]:
-            return embedder.embed_text(item["text"])
+        def embed_text_batch(batch: list[dict]) -> list[list[float]]:
+            return embedder.embed_texts_batch([item["text"] for item in batch])
 
-        be = BatchEmbedder("match_summaries", embed_text_item, "text")
+        be = BatchEmbedder("match_summaries", embed_text_batch, "text")
         results["match_summaries"] = be.embed_all(match_summaries)
 
     # ------------------------------------------------------------------
@@ -135,10 +135,10 @@ def run_embedding_pipeline() -> dict[str, int]:
     # ------------------------------------------------------------------
     player_summaries = _load_json(settings.cleaned_dir / "stats" / "player_summaries.json")
     if player_summaries:
-        def embed_text_item(item: dict) -> list[float]:  # noqa: F811
-            return embedder.embed_text(item["text"])
+        def embed_text_batch(batch: list[dict]) -> list[list[float]]:  # noqa: F811
+            return embedder.embed_texts_batch([item["text"] for item in batch])
 
-        be = BatchEmbedder("player_summaries", embed_text_item, "text")
+        be = BatchEmbedder("player_summaries", embed_text_batch, "text")
         results["player_summaries"] = be.embed_all(player_summaries)
 
     # ------------------------------------------------------------------
@@ -146,43 +146,43 @@ def run_embedding_pipeline() -> dict[str, int]:
     # ------------------------------------------------------------------
     transcript_chunks = _collect_transcript_chunks()
     if transcript_chunks:
-        def embed_text_item(item: dict) -> list[float]:  # noqa: F811
-            return embedder.embed_text(item["text"])
+        def embed_text_batch(batch: list[dict]) -> list[list[float]]:  # noqa: F811
+            return embedder.embed_texts_batch([item["text"] for item in batch])
 
-        be = BatchEmbedder("transcript_chunks", embed_text_item, "text")
+        be = BatchEmbedder("transcript_chunks", embed_text_batch, "text")
         results["transcript_chunks"] = be.embed_all(transcript_chunks)
 
     # ------------------------------------------------------------------
-    # 4. Images
+    # 4. Images  (one API call per image — no batch API for binary content)
     # ------------------------------------------------------------------
     image_items = _collect_image_items()
     if image_items:
-        def embed_image_item(item: dict) -> list[float]:
-            return embedder.embed_image(Path(item["file_path"]))
+        def embed_image_batch(batch: list[dict]) -> list[list[float]]:
+            return [embedder.embed_image(Path(item["file_path"])) for item in batch]
 
-        be = BatchEmbedder("images", embed_image_item, "images")
+        be = BatchEmbedder("images", embed_image_batch, "images")
         results["images"] = be.embed_all(image_items)
 
     # ------------------------------------------------------------------
-    # 5. Audio segments
+    # 5. Audio segments  (one API call per segment)
     # ------------------------------------------------------------------
     audio_items = _collect_audio_items()
     if audio_items:
-        def embed_audio_item(item: dict) -> list[float]:
-            return embedder.embed_audio(Path(item["file_path"]))
+        def embed_audio_batch(batch: list[dict]) -> list[list[float]]:
+            return [embedder.embed_audio(Path(item["file_path"])) for item in batch]
 
-        be = BatchEmbedder("audio_segments", embed_audio_item, "audio")
+        be = BatchEmbedder("audio_segments", embed_audio_batch, "audio")
         results["audio_segments"] = be.embed_all(audio_items)
 
     # ------------------------------------------------------------------
-    # 6. Video highlights
+    # 6. Video highlights  (one API call per video)
     # ------------------------------------------------------------------
     video_items = _collect_video_items()
     if video_items:
-        def embed_video_item(item: dict) -> list[float]:
-            return embedder.embed_video(Path(item["file_path"]))
+        def embed_video_batch(batch: list[dict]) -> list[list[float]]:
+            return [embedder.embed_video(Path(item["file_path"])) for item in batch]
 
-        be = BatchEmbedder("video_highlights", embed_video_item, "video")
+        be = BatchEmbedder("video_highlights", embed_video_batch, "video")
         results["video_highlights"] = be.embed_all(video_items)
 
     logger.info("embedding pipeline complete", results=results)

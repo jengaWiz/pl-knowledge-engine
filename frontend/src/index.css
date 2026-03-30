@@ -1,0 +1,121 @@
+/* ─── Design Tokens ─────────────────────────────────────────── */
+:root {
+  --bg-0:   #060609;       /* OLED near-black base */
+  --bg-1:   #0d1117;       /* Primary surface */
+  --bg-2:   #161b22;       /* Elevated surface */
+  --bg-3:   #21262d;       /* Borders / dividers */
+  --bg-4:   #30363d;       /* Strong borders */
+  --t-1:    #f0f6fc;       /* Primary text */
+  --t-2:    #8b949e;       /* Secondary text */
+  --t-3:    #484f58;       /* Muted / placeholder */
+  --villa:      #670E36;   /* Aston Villa claret */
+  --villa-l:    #9b1548;   /* Villa claret lighter */
+  --villa-blue: #6BAED8;   /* Aston Villa sky blue */
+  --lfc:        #C8102E;   /* Liverpool red */
+  --lfc-gold:   #F6C94E;   /* Liverpool gold */
+  --green:  #3fb950;
+  --amber:  #d29922;
+  --blue:   #388bfd;
+  --r-sm:   6px;
+  --r-md:   10px;
+  --r-lg:   14px;
+}
+
+/* ─── Reset ────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: var(--bg-0);
+  color: var(--t-1);
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ─── Scrollbar ─────────────────────────────────────────────── */
+::-webkit-scrollbar          { width: 4px; height: 4px; }
+::-webkit-scrollbar-track    { background: transparent; }
+::-webkit-scrollbar-thumb    { background: var(--bg-4); border-radius: 2px; }
+::-webkit-scrollbar-thumb:hover { background: var(--t-3); }
+
+/* ─── Inputs ────────────────────────────────────────────────── */
+input::placeholder { color: var(--t-3); }
+input:focus        { outline: none; }
+button             { font-family: inherit; }
+
+/* ─── Keyframes ─────────────────────────────────────────────── */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0);    }
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@keyframes pulseDot {
+  0%, 100% { opacity: 0.25; transform: translateY(0);    }
+  50%      { opacity: 1;    transform: translateY(-4px); }
+}
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ─── Animation helpers ─────────────────────────────────────── */
+.fade-in-up { animation: fadeInUp 0.25s ease forwards; }
+.fade-in    { animation: fadeIn   0.2s  ease forwards; }
+
+/* ─── Markdown prose ────────────────────────────────────────── */
+.markdown { color: var(--t-1); line-height: 1.65; }
+.markdown p            { margin-bottom: 8px; }
+.markdown p:last-child { margin-bottom: 0; }
+.markdown ul,
+.markdown ol  { padding-left: 18px; margin-bottom: 8px; }
+.markdown li  { margin-bottom: 3px; }
+.markdown strong { font-weight: 600; color: var(--t-1); }
+.markdown em     { font-style: italic; color: var(--t-2); }
+.markdown code {
+  background: rgba(255,255,255,0.07);
+  border: 1px solid var(--bg-3);
+  padding: 1px 5px;
+  border-radius: 4px;
+  font-size: 0.82em;
+  font-family: 'JetBrains Mono', 'Fira Code', ui-monospace, monospace;
+}
+.markdown pre {
+  background: var(--bg-0);
+  border: 1px solid var(--bg-3);
+  border-radius: var(--r-md);
+  padding: 12px 14px;
+  overflow-x: auto;
+  margin-bottom: 10px;
+}
+.markdown pre code { background: none; border: none; padding: 0; }
+.markdown h1, .markdown h2, .markdown h3 {
+  color: var(--t-1);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin: 12px 0 6px;
+}
+.markdown h1 { font-size: 1.05em; }
+.markdown h2 { font-size: 0.97em; }
+.markdown h3 { font-size: 0.9em; }
+.markdown a { color: var(--blue); text-decoration: underline; }
+.markdown table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 10px;
+  font-size: 0.85em;
+}
+.markdown th {
+  background: var(--bg-2);
+  color: var(--t-2);
+  font-weight: 600;
+  padding: 6px 10px;
+  text-align: left;
+  border-bottom: 1px solid var(--bg-3);
+}
+.markdown td {
+  padding: 5px 10px;
+  border-bottom: 1px solid var(--bg-3);
+}
+.markdown tr:last-child td { border-bottom: none; }

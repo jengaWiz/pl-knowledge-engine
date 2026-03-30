@@ -51,7 +51,7 @@ class GeminiEmbedder:
 
     @retry(max_attempts=5, base_delay=1.0)
     def embed_text(self, text: str) -> list[float]:
-        """Embed a text string.
+        """Embed a single text string.
 
         Args:
             text: Input text (up to ~8192 tokens for Gemini Embedding 2).
@@ -64,6 +64,25 @@ class GeminiEmbedder:
             contents=text,
         )
         return response.embeddings[0].values
+
+    @retry(max_attempts=5, base_delay=1.0)
+    def embed_texts_batch(self, texts: list[str]) -> list[list[float]]:
+        """Embed a batch of text strings in a single API call.
+
+        Sends all texts together via batchEmbedContents, consuming only one
+        request against the rate limit regardless of batch size.
+
+        Args:
+            texts: List of input strings (up to 100 items per call).
+
+        Returns:
+            List of embedding vectors, one per input text.
+        """
+        response = self.client.models.embed_content(
+            model=self.model,
+            contents=texts,
+        )
+        return [e.values for e in response.embeddings]
 
     @retry(max_attempts=5, base_delay=1.0)
     def embed_image(self, image_path: Path) -> list[float]:

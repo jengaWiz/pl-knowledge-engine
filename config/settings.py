@@ -30,8 +30,8 @@ class Settings(BaseSettings):
     # Embedding config
     gemini_model: str = "gemini-embedding-2-preview"
     embedding_dimensions: int = 3072
-    embedding_batch_size: int = 5
-    embedding_delay_seconds: float = 1.5
+    embedding_batch_size: int = 100
+    embedding_delay_seconds: float = 1.0
 
     # Chunking config
     chunk_size_words: int = 400

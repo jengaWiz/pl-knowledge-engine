@@ -94,11 +94,15 @@ class Neo4jStore:
                 SET t.abbreviation = $abbreviation,
                     t.stadium = $stadium,
                     t.city = $city
+                WITH t
+                MATCH (s:Season {label: $season})
+                MERGE (t)-[:IN_SEASON]->(s)
                 """,
                 name=team["name"],
                 abbreviation=team.get("abbreviation", ""),
                 stadium=team.get("stadium", ""),
                 city=team.get("stadium_city", ""),
+                season=SEASON_LABEL,
             )
 
         focus = [t for t in teams_data if t.get("name") in FOCUS_TEAM_NAMES]
@@ -159,7 +163,25 @@ class Neo4jStore:
                 MERGE (p:Player {player_id: $player_id})
                 SET p.first_name = $first_name,
                     p.last_name = $last_name,
-                    p.position = $position
+                    p.web_name = $web_name,
+                    p.position = $position,
+                    p.goals_scored = $goals_scored,
+                    p.assists = $assists,
+                    p.clean_sheets = $clean_sheets,
+                    p.minutes = $minutes,
+                    p.yellow_cards = $yellow_cards,
+                    p.red_cards = $red_cards,
+                    p.expected_goals = $expected_goals,
+                    p.expected_assists = $expected_assists,
+                    p.total_points = $total_points,
+                    p.form = $form,
+                    p.points_per_game = $points_per_game,
+                    p.now_cost = $now_cost,
+                    p.starts = $starts,
+                    p.influence = $influence,
+                    p.creativity = $creativity,
+                    p.threat = $threat,
+                    p.ict_index = $ict_index
                 WITH p
                 MATCH (t:Team {name: $team})
                 MERGE (p)-[:PLAYS_FOR]->(t)
@@ -167,7 +189,25 @@ class Neo4jStore:
                 player_id=str(player.get("id", "")),
                 first_name=player.get("first_name", ""),
                 last_name=player.get("last_name", player.get("second_name", "")),
+                web_name=player.get("web_name", ""),
                 position=player.get("position", player.get("element_type", "")),
+                goals_scored=int(player.get("goals_scored", 0) or 0),
+                assists=int(player.get("assists", 0) or 0),
+                clean_sheets=int(player.get("clean_sheets", 0) or 0),
+                minutes=int(player.get("minutes", 0) or 0),
+                yellow_cards=int(player.get("yellow_cards", 0) or 0),
+                red_cards=int(player.get("red_cards", 0) or 0),
+                expected_goals=float(player.get("expected_goals", 0.0) or 0.0),
+                expected_assists=float(player.get("expected_assists", 0.0) or 0.0),
+                total_points=int(player.get("total_points", 0) or 0),
+                form=float(player.get("form", 0.0) or 0.0),
+                points_per_game=float(player.get("points_per_game", 0.0) or 0.0),
+                now_cost=int(player.get("now_cost", 0) or 0),
+                starts=int(player.get("starts", 0) or 0),
+                influence=float(player.get("influence", 0.0) or 0.0),
+                creativity=float(player.get("creativity", 0.0) or 0.0),
+                threat=float(player.get("threat", 0.0) or 0.0),
+                ict_index=float(player.get("ict_index", 0.0) or 0.0),
                 team=team_name,
             )
 
@@ -229,23 +269,30 @@ class Neo4jStore:
                 MERGE (m:Match {match_id: $match_id})
                 SET m.date = $date,
                     m.home_score = $home_score,
-                    m.away_score = $away_score
+                    m.away_score = $away_score,
+                    m.home_team_name = $home_team,
+                    m.away_team_name = $away_team,
+                    m.gameweek = $gameweek
                 WITH m
-                MATCH (home:Team {name: $home_team})
-                MERGE (home)-[:HOME_TEAM]->(m)
+                OPTIONAL MATCH (home:Team {name: $home_team})
+                FOREACH (_ IN CASE WHEN home IS NOT NULL THEN [1] ELSE [] END |
+                    MERGE (home)-[:HOME_TEAM]->(m)
+                )
                 WITH m
-                MATCH (away:Team {name: $away_team})
-                MERGE (away)-[:AWAY_TEAM]->(m)
+                OPTIONAL MATCH (away:Team {name: $away_team})
+                FOREACH (_ IN CASE WHEN away IS NOT NULL THEN [1] ELSE [] END |
+                    MERGE (away)-[:AWAY_TEAM]->(m)
+                )
                 WITH m
                 MATCH (g:Gameweek {number: $gameweek})
                 MERGE (m)-[:PART_OF]->(g)
                 """,
                 match_id=str(row.get("id", "")),
-                date=str(row.get("date", "")),
-                home_score=int(row.get("home_score", row.get("home_team_score", 0)) or 0),
-                away_score=int(row.get("away_score", row.get("visitor_team_score", 0)) or 0),
-                home_team=str(row.get("home_team", "")),
-                away_team=str(row.get("away_team", "")),
+                date=str(row.get("match_date", row.get("date", ""))),
+                home_score=int(hs) if (hs := row.get("home_score", row.get("home_team_score"))) is not None and str(hs).lower() != "nan" else None,
+                away_score=int(as_) if (as_ := row.get("away_score", row.get("visitor_team_score"))) is not None and str(as_).lower() != "nan" else None,
+                home_team=str(row.get("home_team_name", row.get("home_team", ""))),
+                away_team=str(row.get("away_team_name", row.get("away_team", ""))),
                 gameweek=int(row.get("gameweek", 0) or 0),
             )
 
@@ -255,16 +302,85 @@ class Neo4jStore:
         logger.info("match nodes merged", count=len(matches_df))
 
     # ------------------------------------------------------------------
+    # Player Appearances (per-GW performance linking Player → Match)
+    # ------------------------------------------------------------------
+
+    def create_player_appearances(self, gw_df: pd.DataFrame) -> None:
+        """MERGE PlayerAppearance nodes and link them to Players and Matches.
+
+        Each row represents one player's stats in one fixture. Creates:
+            (p:Player)-[:HAD_APPEARANCE]->(a:PlayerAppearance)-[:IN_MATCH]->(m:Match)
+
+        Args:
+            gw_df: Combined GW stats DataFrame with columns:
+                ``player_id``, ``fixture_id``, ``gw``, ``was_home``,
+                ``minutes``, ``goals_scored``, ``assists``, ``clean_sheets``,
+                ``goals_conceded``, ``yellow_cards``, ``red_cards``, ``saves``,
+                ``bonus``, ``bps``, ``total_points``, ``expected_goals``,
+                ``expected_assists``, ``starts``.
+        """
+
+        def _merge_appearance(tx: Any, row: dict[str, Any]) -> None:
+            tx.run(
+                """
+                MERGE (a:PlayerAppearance {appearance_id: $appearance_id})
+                SET a.name = $name,
+                    a.gw = $gw,
+                    a.was_home = $was_home,
+                    a.minutes = $minutes,
+                    a.goals_scored = $goals_scored,
+                    a.assists = $assists,
+                    a.clean_sheets = $clean_sheets,
+                    a.goals_conceded = $goals_conceded,
+                    a.yellow_cards = $yellow_cards,
+                    a.red_cards = $red_cards,
+                    a.saves = $saves,
+                    a.bonus = $bonus,
+                    a.bps = $bps,
+                    a.total_points = $total_points,
+                    a.expected_goals = $expected_goals,
+                    a.expected_assists = $expected_assists,
+                    a.starts = $starts
+                WITH a
+                MATCH (p:Player {player_id: $player_id})
+                MERGE (p)-[:HAD_APPEARANCE]->(a)
+                WITH a
+                MATCH (m:Match {match_id: $match_id})
+                MERGE (a)-[:IN_MATCH]->(m)
+                """,
+                appearance_id=f"{row['player_id']}_{row['fixture_id']}",
+                name=f"{row.get('web_name', row['player_id'])} GW{int(row.get('gw', 0) or 0)}",
+                gw=int(row.get("gw", 0) or 0),
+                was_home=bool(row.get("was_home", False)),
+                minutes=int(row.get("minutes", 0) or 0),
+                goals_scored=int(row.get("goals_scored", 0) or 0),
+                assists=int(row.get("assists", 0) or 0),
+                clean_sheets=int(row.get("clean_sheets", 0) or 0),
+                goals_conceded=int(row.get("goals_conceded", 0) or 0),
+                yellow_cards=int(row.get("yellow_cards", 0) or 0),
+                red_cards=int(row.get("red_cards", 0) or 0),
+                saves=int(row.get("saves", 0) or 0),
+                bonus=int(row.get("bonus", 0) or 0),
+                bps=int(row.get("bps", 0) or 0),
+                total_points=int(row.get("total_points", 0) or 0),
+                expected_goals=float(row.get("expected_goals", 0.0) or 0.0),
+                expected_assists=float(row.get("expected_assists", 0.0) or 0.0),
+                starts=int(row.get("starts", 0) or 0),
+                player_id=str(row["player_id"]),
+                match_id=str(row["fixture_id"]),
+            )
+
+        with self.driver.session() as session:
+            for _, row in gw_df.iterrows():
+                session.execute_write(_merge_appearance, row.to_dict())
+        logger.info("player appearance nodes merged", count=len(gw_df))
+
+    # ------------------------------------------------------------------
     # Podcast Episodes
     # ------------------------------------------------------------------
 
     def create_podcast_episode(self, episode: dict[str, Any]) -> None:
-        """MERGE a PodcastEpisode node.
-
-        Args:
-            episode: Episode metadata dict with ``youtube_id``, ``title``,
-                ``channel``, ``published_at``, ``duration_seconds``.
-        """
+        """MERGE a PodcastEpisode node."""
 
         def _merge_ep(tx: Any) -> None:
             tx.run(
@@ -289,3 +405,40 @@ class Neo4jStore:
             youtube_id=episode.get("youtube_id"),
             title=episode.get("title", "")[:50],
         )
+
+    def create_podcast_episode_with_season(self, episode: dict[str, Any]) -> None:
+        """MERGE a PodcastEpisode node with a COVERS_SEASON relationship.
+
+        Args:
+            episode: Episode metadata dict with ``youtube_id``, ``title``,
+                ``channel``, ``published_at``, ``duration_seconds``.
+        """
+
+        def _merge_ep(tx: Any) -> None:
+            tx.run(
+                """
+                MERGE (e:PodcastEpisode {youtube_id: $youtube_id})
+                SET e.title = $title,
+                    e.channel = $channel,
+                    e.published_at = $published_at,
+                    e.duration_seconds = $duration_seconds
+                WITH e
+                MATCH (s:Season {label: $season})
+                MERGE (e)-[:COVERS_SEASON]->(s)
+                """,
+                youtube_id=episode["youtube_id"],
+                title=episode.get("title", ""),
+                channel=episode.get("channel", ""),
+                published_at=episode.get("published_at", ""),
+                duration_seconds=int(episode.get("duration_seconds", 0)),
+                season=SEASON_LABEL,
+            )
+
+        with self.driver.session() as session:
+            session.execute_write(lambda tx: _merge_ep(tx))
+        logger.info(
+            "podcast episode merged with season",
+            youtube_id=episode.get("youtube_id"),
+            title=episode.get("title", "")[:50],
+        )
+

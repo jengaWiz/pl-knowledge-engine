@@ -35,12 +35,15 @@ CONSTRAINTS = [
     "CREATE CONSTRAINT IF NOT EXISTS FOR (m:Match) REQUIRE m.match_id IS UNIQUE",
     "CREATE CONSTRAINT IF NOT EXISTS FOR (e:PodcastEpisode) REQUIRE e.youtube_id IS UNIQUE",
     "CREATE CONSTRAINT IF NOT EXISTS FOR (mgr:Manager) REQUIRE mgr.name IS UNIQUE",
+    "CREATE CONSTRAINT IF NOT EXISTS FOR (a:PlayerAppearance) REQUIRE a.appearance_id IS UNIQUE",
 ]
 
 INDEXES = [
     "CREATE INDEX IF NOT EXISTS FOR (m:Match) ON (m.date)",
+    "CREATE INDEX IF NOT EXISTS FOR (m:Match) ON (m.gameweek)",
     "CREATE INDEX IF NOT EXISTS FOR (p:Player) ON (p.last_name)",
     "CREATE INDEX IF NOT EXISTS FOR (e:PodcastEpisode) ON (e.published_at)",
+    "CREATE INDEX IF NOT EXISTS FOR (a:PlayerAppearance) ON (a.gw)",
 ]
 
 

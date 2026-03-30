@@ -6,8 +6,6 @@ from __future__ import annotations
 import json
 from unittest.mock import MagicMock, patch
 
-import pytest
-
 from src.embed.batch_embedder import BatchEmbedder
 
 
@@ -21,7 +19,8 @@ def _make_embedder(tmp_path, stage="test_stage"):
 
         mock_cp.return_value.is_completed.return_value = False
 
-        embed_fn = MagicMock(return_value=[0.1, 0.2, 0.3])
+        # embed_fn now accepts a list of items and returns a list of vectors
+        embed_fn = MagicMock(return_value=[[0.1, 0.2, 0.3], [0.4, 0.5, 0.6]])
         embedder = BatchEmbedder(stage, embed_fn, "text")
         embedder.checkpoint = mock_cp.return_value
         return embedder, embed_fn
@@ -36,11 +35,12 @@ class TestBatchEmbedder:
         ]
         count = embedder.embed_all(items)
         assert count == 2
-        assert embed_fn.call_count == 2
+        assert embed_fn.call_count == 1  # one batch call for both items
 
     def test_skips_checkpointed_items(self, tmp_path):
         embedder, embed_fn = _make_embedder(tmp_path)
         embedder.checkpoint.is_completed.side_effect = lambda x: x == "c1"
+        embed_fn.return_value = [[0.1, 0.2, 0.3]]  # only one item in batch
         items = [
             {"chunk_id": "c1", "text": "already done"},
             {"chunk_id": "c2", "text": "new item"},
@@ -51,6 +51,7 @@ class TestBatchEmbedder:
 
     def test_writes_jsonl_output(self, tmp_path):
         embedder, _ = _make_embedder(tmp_path)
+        embedder.embed_fn.return_value = [[0.1, 0.2, 0.3]]
         items = [{"chunk_id": "c1", "text": "test"}]
         embedder.embed_all(items)
         assert embedder.output_path.exists()
@@ -69,6 +70,7 @@ class TestBatchEmbedder:
 
     def test_marks_checkpoint_after_success(self, tmp_path):
         embedder, _ = _make_embedder(tmp_path)
+        embedder.embed_fn.return_value = [[0.1, 0.2, 0.3]]
         items = [{"chunk_id": "c1", "text": "test"}]
         embedder.embed_all(items)
         embedder.checkpoint.mark_completed.assert_called_once_with("c1")

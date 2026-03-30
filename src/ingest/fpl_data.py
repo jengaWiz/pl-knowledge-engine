@@ -1,179 +1,209 @@
 """
-FPL-Core-Insights CSV loader.
+FPL player and per-gameweek stats ingestion.
 
-Downloads per-gameweek player performance CSVs from the FPL-Core-Insights
-GitHub repository and filters to only Aston Villa and Liverpool players.
+Fetches player metadata and per-gameweek performance history from the official
+Fantasy Premier League API (no API key required), filtered to Aston Villa and
+Liverpool players only.
 
-Repository: https://github.com/olbauday/FPL-Core-Insights
-Target path: data/2025-2026/
+Endpoints used:
+    GET https://fantasy.premierleague.com/api/bootstrap-static/
+        → all player metadata and season totals
+    GET https://fantasy.premierleague.com/api/element-summary/{id}/
+        → per-gameweek history for a single player
+
+Output:
+    data/raw/stats/fpl/players.csv
+    data/raw/stats/fpl/GW{n}/playerstats_gw.csv   (one file per completed GW)
 """
 from __future__ import annotations
 
-import io
-from pathlib import Path
+import time
+from collections import defaultdict
 from typing import Any
 
 import pandas as pd
 import requests
 
 from config.settings import settings
-from config.teams import FOCUS_TEAM_NAMES
+from config.teams import ASTON_VILLA, LIVERPOOL, FOCUS_TEAMS
 from src.utils.logger import get_logger
 from src.utils.retry import retry
 
 logger = get_logger(__name__)
 
-REPO_BASE = "https://raw.githubusercontent.com/olbauday/FPL-Core-Insights/main"
-SEASON_PATH = "data/2025-2026"
+FPL_BASE = "https://fantasy.premierleague.com/api"
 
-# FPL uses slightly different team name spellings — map to canonical names
-FPL_TEAM_NAME_MAP: dict[str, str] = {
-    "Aston Villa": "Aston Villa",
-    "Liverpool": "Liverpool",
-    # Add more mappings if FPL uses abbreviated names
-}
+FOCUS_FPL_IDS = {t.fpl_id: t.name for t in FOCUS_TEAMS}
+
+# Seconds to wait between element-summary requests to avoid rate limiting
+_REQUEST_DELAY = 0.3
 
 
-class FPLDataLoader:
-    """Downloads and saves FPL CSV data for focus teams.
+class FPLPlayerLoader:
+    """Downloads and saves FPL player metadata and per-GW stats.
 
     Attributes:
-        fpl_dir: Local directory to store downloaded FPL CSVs.
-        session: Persistent HTTP session for GitHub raw content.
+        fpl_dir: Local directory for saving CSV output.
+        session: Persistent HTTP session.
     """
 
     def __init__(self) -> None:
-        """Initialize the loader, creating the output directory if needed."""
         self.fpl_dir = settings.raw_dir / "stats" / "fpl"
         self.fpl_dir.mkdir(parents=True, exist_ok=True)
         self.session = requests.Session()
+        self.session.headers.update({"User-Agent": "Mozilla/5.0"})
 
     @retry(max_attempts=5, base_delay=1.0)
-    def _download_csv(self, relative_path: str) -> pd.DataFrame | None:
-        """Download a CSV file from the FPL-Core-Insights GitHub repo.
+    def _get(self, endpoint: str) -> Any:
+        """GET a FPL API endpoint and return parsed JSON.
 
         Args:
-            relative_path: Path relative to the repo root (e.g. ``data/2025-2026/players.csv``).
+            endpoint: Path relative to FPL_BASE.
 
         Returns:
-            DataFrame with the CSV contents, or None if the file is not found.
+            Parsed JSON response.
         """
-        url = f"{REPO_BASE}/{relative_path}"
-        logger.info("downloading fpl csv", url=url)
+        url = f"{FPL_BASE}{endpoint}"
         response = self.session.get(url, timeout=30)
-        if response.status_code == 404:
-            logger.warning("fpl csv not found", url=url)
-            return None
         response.raise_for_status()
-        return pd.read_csv(io.StringIO(response.text))
+        return response.json()
 
-    def _filter_to_focus_teams(self, df: pd.DataFrame) -> pd.DataFrame:
-        """Filter a DataFrame to rows belonging to focus teams.
+    def fetch_players(self) -> pd.DataFrame:
+        """Download focus-team player metadata from bootstrap-static.
 
-        Tries common column names used in FPL datasets (``team``,
-        ``team_name``, ``club``, ``Team``).
-
-        Args:
-            df: Raw FPL DataFrame potentially containing all teams.
+        Filters to Aston Villa and Liverpool players, adds the team name as a
+        column, and saves to fpl/players.csv.
 
         Returns:
-            Filtered DataFrame with only Aston Villa and Liverpool rows.
+            DataFrame of focus-team players with season-total stats.
         """
-        team_columns = ["team", "team_name", "club", "Team"]
-        team_col = next((c for c in team_columns if c in df.columns), None)
-        if team_col is None:
-            logger.warning("no team column found in fpl dataframe", columns=list(df.columns))
-            return df
+        logger.info("fetching bootstrap-static for players")
+        bootstrap = self._get("/bootstrap-static/")
+        elements = bootstrap["elements"]
 
-        # Build a case-insensitive match set for focus team names
-        focus_lower = {n.lower() for n in FOCUS_TEAM_NAMES}
-        mask = df[team_col].str.lower().isin(focus_lower)
-        filtered = df[mask].copy()
-        logger.info(
-            "filtered fpl dataframe",
-            original_rows=len(df),
-            filtered_rows=len(filtered),
-            team_col=team_col,
-        )
-        return filtered
+        focus_players = [
+            {**p, "team_name": FOCUS_FPL_IDS[p["team"]]}
+            for p in elements
+            if p["team"] in FOCUS_FPL_IDS
+        ]
 
-    def fetch_players(self) -> pd.DataFrame | None:
-        """Download player metadata CSV and save focus-team players.
-
-        Returns:
-            Filtered DataFrame of focus-team players, or None on failure.
-        """
-        df = self._download_csv(f"{SEASON_PATH}/players.csv")
-        if df is None:
-            return None
-        filtered = self._filter_to_focus_teams(df)
-        filtered.to_csv(self.fpl_dir / "players.csv", index=False)
-        logger.info("saved fpl players", rows=len(filtered))
-        return filtered
-
-    def fetch_gameweeks(self) -> pd.DataFrame | None:
-        """Download gameweek metadata CSV.
-
-        Returns:
-            DataFrame of gameweek dates/metadata, or None on failure.
-        """
-        df = self._download_csv(f"{SEASON_PATH}/gameweeks.csv")
-        if df is None:
-            return None
-        df.to_csv(self.fpl_dir / "gameweeks.csv", index=False)
-        logger.info("saved fpl gameweeks", rows=len(df))
+        df = pd.DataFrame(focus_players)
+        df.to_csv(self.fpl_dir / "players.csv", index=False)
+        logger.info("saved focus-team players", rows=len(df))
         return df
 
-    def fetch_gameweek_stats(self, gameweek: int) -> pd.DataFrame | None:
-        """Download per-gameweek player stats CSV and filter to focus teams.
+    @retry(max_attempts=3, base_delay=1.0)
+    def _fetch_player_history(self, player_id: int) -> list[dict[str, Any]]:
+        """Fetch the per-gameweek history for a single player.
 
         Args:
-            gameweek: Gameweek number (1-38).
+            player_id: FPL element ID.
 
         Returns:
-            Filtered DataFrame for the requested gameweek, or None on failure.
+            List of per-GW history records for this player.
         """
-        path = f"{SEASON_PATH}/GW{gameweek}/playerstats_gw.csv"
-        df = self._download_csv(path)
-        if df is None:
-            return None
-        filtered = self._filter_to_focus_teams(df)
-        gw_dir = self.fpl_dir / f"GW{gameweek}"
-        gw_dir.mkdir(parents=True, exist_ok=True)
-        filtered.to_csv(gw_dir / "playerstats_gw.csv", index=False)
-        logger.info("saved gw stats", gameweek=gameweek, rows=len(filtered))
-        return filtered
+        data = self._get(f"/element-summary/{player_id}/")
+        return data.get("history", [])
 
-    def fetch_all_gameweek_stats(self, max_gameweeks: int = 38) -> list[pd.DataFrame]:
-        """Download stats for all completed gameweeks.
+    def fetch_all_gw_stats(self, players_df: pd.DataFrame | None = None) -> int:
+        """Fetch per-GW stats for all focus-team players and save by gameweek.
 
-        Iterates from GW1 to ``max_gameweeks``, stopping early if a gameweek
-        CSV is not yet available (404).
+        For each completed gameweek, combines all focus-team player records
+        into a single CSV at fpl/GW{n}/playerstats_gw.csv.
 
         Args:
-            max_gameweeks: Maximum gameweek number to attempt (default 38).
+            players_df: Pre-fetched focus-team players DataFrame. If None,
+                calls fetch_players() first.
 
         Returns:
-            List of filtered DataFrames for each completed gameweek.
+            Number of completed gameweeks saved.
         """
-        results = []
-        for gw in range(1, max_gameweeks + 1):
-            df = self.fetch_gameweek_stats(gw)
-            if df is None:
-                logger.info("no more gameweek data, stopping", last_gw=gw - 1)
-                break
-            results.append(df)
-        return results
+        if players_df is None:
+            players_df = self.fetch_players()
+
+        # Build ID → metadata map for enriching history records
+        id_to_meta: dict[int, dict[str, Any]] = {}
+        for _, row in players_df.iterrows():
+            id_to_meta[int(row["id"])] = {
+                "name": f"{row['first_name']} {row['second_name']}".strip(),
+                "web_name": row.get("web_name", ""),
+                "team": row.get("team_name", ""),
+                "position": row.get("element_type", ""),
+            }
+
+        # Collect all per-GW records grouped by round
+        gw_records: dict[int, list[dict[str, Any]]] = defaultdict(list)
+
+        total_players = len(id_to_meta)
+        for idx, (player_id, meta) in enumerate(id_to_meta.items(), 1):
+            logger.info(
+                "fetching player gw history",
+                player=meta["name"],
+                player_id=player_id,
+                progress=f"{idx}/{total_players}",
+            )
+            history = self._fetch_player_history(player_id)
+            for entry in history:
+                record = {
+                    "player_id": player_id,
+                    "name": meta["name"],
+                    "web_name": meta["web_name"],
+                    "team": meta["team"],
+                    "position": meta["position"],
+                    "gw": entry.get("round"),
+                    "fixture_id": entry.get("fixture"),
+                    "kickoff_time": entry.get("kickoff_time"),
+                    "opponent_team_id": entry.get("opponent_team"),
+                    "was_home": entry.get("was_home"),
+                    "minutes": entry.get("minutes", 0),
+                    "goals_scored": entry.get("goals_scored", 0),
+                    "assists": entry.get("assists", 0),
+                    "clean_sheets": entry.get("clean_sheets", 0),
+                    "goals_conceded": entry.get("goals_conceded", 0),
+                    "own_goals": entry.get("own_goals", 0),
+                    "penalties_saved": entry.get("penalties_saved", 0),
+                    "penalties_missed": entry.get("penalties_missed", 0),
+                    "yellow_cards": entry.get("yellow_cards", 0),
+                    "red_cards": entry.get("red_cards", 0),
+                    "saves": entry.get("saves", 0),
+                    "bonus": entry.get("bonus", 0),
+                    "bps": entry.get("bps", 0),
+                    "total_points": entry.get("total_points"),
+                    "expected_goals": entry.get("expected_goals"),
+                    "expected_assists": entry.get("expected_assists"),
+                    "expected_goal_involvements": entry.get("expected_goal_involvements"),
+                    "influence": entry.get("influence"),
+                    "creativity": entry.get("creativity"),
+                    "threat": entry.get("threat"),
+                    "ict_index": entry.get("ict_index"),
+                    "starts": entry.get("starts", 0),
+                    "value": entry.get("value"),
+                    "selected": entry.get("selected"),
+                }
+                gw = entry.get("round")
+                if gw:
+                    gw_records[gw].append(record)
+
+            time.sleep(_REQUEST_DELAY)
+
+        # Save one CSV per completed gameweek
+        for gw, records in sorted(gw_records.items()):
+            gw_dir = self.fpl_dir / f"GW{gw}"
+            gw_dir.mkdir(parents=True, exist_ok=True)
+            df = pd.DataFrame(records)
+            df.to_csv(gw_dir / "playerstats_gw.csv", index=False)
+            logger.info("saved gw stats", gameweek=gw, rows=len(df))
+
+        logger.info("all gw stats saved", gameweeks=len(gw_records))
+        return len(gw_records)
 
 
 def run_fpl_ingestion() -> None:
-    """Orchestrate the full FPL data download.
+    """Orchestrate focus-team player metadata and per-GW stats download.
 
-    Downloads player metadata, gameweek metadata, and per-gameweek player
-    stats, saving filtered CSVs to ``data/raw/stats/fpl/``.
+    Saves filtered CSVs to data/raw/stats/fpl/.
     """
-    loader = FPLDataLoader()
-    loader.fetch_players()
-    loader.fetch_gameweeks()
-    loader.fetch_all_gameweek_stats()
+    loader = FPLPlayerLoader()
+    players_df = loader.fetch_players()
+    loader.fetch_all_gw_stats(players_df)
     logger.info("fpl ingestion complete")
