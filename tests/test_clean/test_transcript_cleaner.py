@@ -47,7 +47,7 @@ class TestRegexCleaner:
 class TestTranscriptCleaner:
     def test_llm_mode_detection_with_key(self, tmp_path):
         with patch("src.clean.transcript_cleaner.settings") as ms:
-            ms.gemini_api_key = "real_key"
+            ms.gemini_api_key = "fake-key-for-testing"
             ms.raw_dir = tmp_path
             ms.cleaned_dir = tmp_path / "cleaned"
             ms.checkpoint_dir = tmp_path / "checkpoints"

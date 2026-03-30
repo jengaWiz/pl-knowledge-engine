@@ -5,7 +5,7 @@ module level and raises ValidationError if required keys are absent.
 """
 import os
 
-os.environ.setdefault("GEMINI_API_KEY", "test-gemini-key")
-os.environ.setdefault("YOUTUBE_API_KEY", "test-youtube-key")
-os.environ.setdefault("BALLDONTLIE_API_KEY", "test-balldontlie-key")
-os.environ.setdefault("NEO4J_PASSWORD", "test-password")
+os.environ.setdefault("GEMINI_API_KEY", "fake-key-for-ci-testing")
+os.environ.setdefault("YOUTUBE_API_KEY", "fake-key-for-ci-testing")
+os.environ.setdefault("BALLDONTLIE_API_KEY", "fake-key-for-ci-testing")
+os.environ.setdefault("NEO4J_PASSWORD", "fake-password-for-ci-testing")
