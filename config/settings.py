@@ -2,15 +2,20 @@
 Central configuration loaded from environment variables.
 All modules import from here — never read .env directly.
 """
-from pydantic_settings import BaseSettings
+
 from pathlib import Path
+
+from pydantic import field_validator
+from pydantic_settings import BaseSettings
+
+from config.season import season_bounds
 
 
 class Settings(BaseSettings):
     # API Keys
-    gemini_api_key: str
-    youtube_api_key: str
-    balldontlie_api_key: str
+    gemini_api_key: str = ""
+    youtube_api_key: str = ""
+    balldontlie_api_key: str = ""
 
     # Gemini models
     gemini_text_model: str = "gemini-2.0-flash"
@@ -18,7 +23,21 @@ class Settings(BaseSettings):
     # Neo4j
     neo4j_uri: str = "bolt://localhost:7687"
     neo4j_user: str = "neo4j"
-    neo4j_password: str
+    neo4j_password: str = ""
+
+    # Historical MVP scope; source adapters must prove this season.
+    season: str = "2025-26"
+
+    @field_validator("season")
+    @classmethod
+    def validate_season(cls, value: str) -> str:
+        season_bounds(value)
+        return value
+
+    def require_credentials(self, *names: str) -> None:
+        missing = [name.upper() for name in names if not getattr(self, name).strip()]
+        if missing:
+            raise ValueError("This feature requires: " + ", ".join(missing))
 
     # Paths (relative to project root)
     data_dir: Path = Path("data")
@@ -39,7 +58,7 @@ class Settings(BaseSettings):
     audio_segment_seconds: int = 75
     audio_overlap_seconds: int = 10
 
-    model_config = {"env_file": ".env", "env_file_encoding": "utf-8"}
+    model_config = {"env_file": ".env", "env_file_encoding": "utf-8", "extra": "ignore"}
 
 
 settings = Settings()

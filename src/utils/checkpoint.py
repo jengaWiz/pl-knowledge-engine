@@ -9,7 +9,6 @@ Usage:
     cp.mark_completed("chunk_042")
 """
 import json
-from pathlib import Path
 from src.utils.logger import get_logger
 from config.settings import settings
 

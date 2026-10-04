@@ -3,9 +3,8 @@ Tests for src/ingest/youtube_search.py
 """
 from __future__ import annotations
 
-from unittest.mock import MagicMock, patch, call
+from unittest.mock import MagicMock, patch
 
-import pytest
 
 from src.ingest.youtube_search import (
     YouTubeSearchClient,
@@ -89,7 +88,7 @@ class TestDeduplication:
 
     def test_duplicate_episodes_deduplicated(self, tmp_path):
         """Same youtube_id appearing in two channels should appear once."""
-        client = self._make_client(tmp_path)
+        self._make_client(tmp_path)
 
         # Simulate two search results returning the same video ID
         ep1 = {"youtube_id": "abc", "title": "Test", "channel": "Ch1",

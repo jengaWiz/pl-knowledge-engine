@@ -25,6 +25,7 @@ from typing import Any
 import requests
 
 from config.settings import settings
+from config.season import validate_bootstrap, validate_season_dates, resolve_focus_ids
 from config.teams import ASTON_VILLA, LIVERPOOL, FOCUS_TEAMS
 from src.utils.logger import get_logger
 from src.utils.retry import retry
@@ -81,6 +82,7 @@ class FPLMatchClient:
             List of team records from the FPL API.
         """
         bootstrap = self._get("/bootstrap-static/")
+        validate_bootstrap(bootstrap, settings.season)
         teams = bootstrap["teams"]
         self._save_json(teams, self.raw_stats_dir / "teams.json")
         logger.info("fetched teams", count=len(teams))
@@ -97,6 +99,7 @@ class FPLMatchClient:
         """
         if teams is None:
             bootstrap = self._get("/bootstrap-static/")
+            validate_bootstrap(bootstrap, settings.season)
             teams = bootstrap["teams"]
 
         standings = [
@@ -135,6 +138,7 @@ class FPLMatchClient:
         """
         if teams is None:
             bootstrap = self._get("/bootstrap-static/")
+            validate_bootstrap(bootstrap, settings.season)
             teams = bootstrap["teams"]
 
         id_to_name = {t["id"]: t["name"] for t in teams}
@@ -143,8 +147,11 @@ class FPLMatchClient:
         fixtures = self._get("/fixtures/")
         logger.info("fetched fixtures", total=len(fixtures))
 
-        villa_id = ASTON_VILLA.fpl_id
-        liverpool_id = LIVERPOOL.fpl_id
+        validate_season_dates([f.get("kickoff_time", "") for f in fixtures], settings.season)
+        focus_ids = resolve_focus_ids(teams, {ASTON_VILLA.name, LIVERPOOL.name})
+        by_name = {name: team_id for team_id, name in focus_ids.items()}
+        villa_id = by_name[ASTON_VILLA.name]
+        liverpool_id = by_name[LIVERPOOL.name]
 
         villa_matches: list[dict[str, Any]] = []
         liverpool_matches: list[dict[str, Any]] = []

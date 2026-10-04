@@ -4,8 +4,6 @@ Tests for src/ingest/video_download.py
 from __future__ import annotations
 
 from unittest.mock import MagicMock, patch
-import json
-import pytest
 
 from src.ingest.video_download import VideoHighlightDownloader, _parse_iso8601_duration
 
@@ -84,7 +82,6 @@ class TestVideoDownloader:
         }
         dl._get_video_duration = MagicMock(return_value=180)
         # Simulate download creating the tmp file, then trimming
-        tmp_file = tmp_path / "video" / "m3_highlights_full.mp4"
 
         def fake_download(vid_id, dest):
             dest.write_bytes(b"fake_video_data")

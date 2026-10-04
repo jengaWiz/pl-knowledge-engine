@@ -3,10 +3,9 @@ Tests for src/ingest/images.py
 """
 from __future__ import annotations
 
-from unittest.mock import MagicMock, patch, call
+from unittest.mock import MagicMock, patch
 import json
 
-import pytest
 
 from src.ingest.images import ImageDownloader, _safe_filename
 

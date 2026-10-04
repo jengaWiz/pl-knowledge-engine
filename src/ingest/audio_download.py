@@ -9,7 +9,6 @@ Output: data/raw/audio/{youtube_id}.mp3
 from __future__ import annotations
 
 import time
-from pathlib import Path
 from typing import Any
 
 import yt_dlp

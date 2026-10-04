@@ -10,12 +10,11 @@ from __future__ import annotations
 import json
 import re
 from pathlib import Path
-from typing import Any
 
 import pandas as pd
 
 from config.settings import settings
-from config.teams import ASTON_VILLA, LIVERPOOL, FOCUS_TEAM_NAMES
+from config.teams import ASTON_VILLA, LIVERPOOL
 from src.utils.logger import get_logger
 
 logger = get_logger(__name__)

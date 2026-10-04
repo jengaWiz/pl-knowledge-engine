@@ -25,7 +25,8 @@ import pandas as pd
 import requests
 
 from config.settings import settings
-from config.teams import ASTON_VILLA, LIVERPOOL, FOCUS_TEAMS
+from config.season import validate_bootstrap, validate_season_dates, resolve_focus_ids
+from config.teams import FOCUS_TEAMS
 from src.utils.logger import get_logger
 from src.utils.retry import retry
 
@@ -79,12 +80,14 @@ class FPLPlayerLoader:
         """
         logger.info("fetching bootstrap-static for players")
         bootstrap = self._get("/bootstrap-static/")
+        validate_bootstrap(bootstrap, settings.season)
+        focus_ids = resolve_focus_ids(bootstrap["teams"], {t.name for t in FOCUS_TEAMS})
         elements = bootstrap["elements"]
 
         focus_players = [
-            {**p, "team_name": FOCUS_FPL_IDS[p["team"]]}
+            {**p, "team_name": focus_ids[p["team"]]}
             for p in elements
-            if p["team"] in FOCUS_FPL_IDS
+            if p["team"] in focus_ids
         ]
 
         df = pd.DataFrame(focus_players)
@@ -103,7 +106,10 @@ class FPLPlayerLoader:
             List of per-GW history records for this player.
         """
         data = self._get(f"/element-summary/{player_id}/")
-        return data.get("history", [])
+        history = data.get("history", [])
+        if history:
+            validate_season_dates([entry.get("kickoff_time", "") for entry in history], settings.season)
+        return history
 
     def fetch_all_gw_stats(self, players_df: pd.DataFrame | None = None) -> int:
         """Fetch per-GW stats for all focus-team players and save by gameweek.

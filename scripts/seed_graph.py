@@ -49,6 +49,7 @@ INDEXES = [
 
 def main() -> None:
     """Execute all constraint and index DDL statements idempotently."""
+    settings.require_credentials("neo4j_password")
     driver = GraphDatabase.driver(
         settings.neo4j_uri,
         auth=(settings.neo4j_user, settings.neo4j_password),

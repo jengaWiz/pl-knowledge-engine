@@ -50,6 +50,7 @@ app.add_middleware(
 # ---------------------------------------------------------------------------
 
 def _get_neo4j() -> Neo4jStore:
+    settings.require_credentials("neo4j_password")
     return Neo4jStore(settings.neo4j_uri, settings.neo4j_user, settings.neo4j_password)
 
 
@@ -367,6 +368,7 @@ class ChatRequest(BaseModel):
 def _embed_query(text: str) -> list[float]:
     """Embed a query string using Gemini Embedding 2."""
     from google import genai
+    settings.require_credentials("gemini_api_key")
     client = genai.Client(api_key=settings.gemini_api_key)
     response = client.models.embed_content(
         model=settings.gemini_model,
@@ -466,6 +468,7 @@ async def chat(req: ChatRequest) -> dict[str, Any]:
     from google import genai
     from google.genai import types
 
+    settings.require_credentials("gemini_api_key")
     store = _get_neo4j()
     chroma = _get_chroma()
     sources: list[dict] = []

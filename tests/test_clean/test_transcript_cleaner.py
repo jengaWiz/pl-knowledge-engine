@@ -5,7 +5,6 @@ from __future__ import annotations
 
 from unittest.mock import patch
 
-import pytest
 
 from src.clean.transcript_cleaner import _regex_clean, TranscriptCleaner
 

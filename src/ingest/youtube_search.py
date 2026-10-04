@@ -10,8 +10,6 @@ Output: data/raw/transcripts/podcast_episodes.json
 from __future__ import annotations
 
 import json
-from datetime import datetime, timezone
-from pathlib import Path
 from typing import Any
 
 from googleapiclient.discovery import build
@@ -60,6 +58,7 @@ class YouTubeSearchClient:
 
     def __init__(self) -> None:
         """Initialize the YouTube API client using credentials from settings."""
+        settings.require_credentials("youtube_api_key")
         self.youtube = build(
             "youtube", "v3", developerKey=settings.youtube_api_key
         )
