@@ -1,32 +1,33 @@
-.PHONY: setup install ingest clean-data embed store pipeline test lint
+.PHONY: setup install check-sources ingest clean-data embed store pipeline test lint
 
-setup:
-	python -m venv .venv
-	.venv/bin/pip install -e ".[dev]"
-	cp .env.example .env
-	@echo "Edit .env with your API keys before running anything"
+setup: install
+	@test -e .env || cp .env.example .env
 
 install:
-	pip install -e ".[dev]"
+	uv sync --locked --extra dev
+
+check-sources:
+	uv run --locked python scripts/check_sources.py
 
 ingest:
-	python scripts/run_ingest.py
+	uv run --locked python scripts/run_ingest.py
 
 clean-data:
-	python scripts/run_clean.py
+	uv run --locked python scripts/run_clean.py
 
 embed:
-	python scripts/run_embed.py
+	uv run --locked python scripts/run_embed.py
 
 store:
-	python scripts/run_store.py
+	uv run --locked python scripts/run_store.py
 
 pipeline:
-	python scripts/run_pipeline.py
+	uv run --locked python scripts/run_pipeline.py
 
 test:
-	pytest tests/ -v
+	uv run --locked --extra dev pytest tests/ -q
 
 lint:
-	ruff check src/ tests/
-	ruff format src/ tests/
+	uv run --locked --extra dev ruff check src config backend scripts tests --select E9,F
+	uv run --locked --extra dev ruff check config/season.py config/sources.py config/settings.py scripts/check_sources.py tests/test_config tests/test_ingest/test_stats_api.py
+	uv run --locked --extra dev ruff format --check config/season.py config/sources.py config/settings.py scripts/check_sources.py tests/test_config tests/test_ingest/test_stats_api.py

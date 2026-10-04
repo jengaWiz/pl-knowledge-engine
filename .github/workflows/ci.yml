@@ -1,0 +1,50 @@
+name: MVP CI
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: mvp-ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  python:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python: ['3.11', '3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          version: '0.7.17'
+      - run: uv sync --locked --extra dev --python ${{ matrix.python }}
+      - name: Check Python correctness across the repository
+        run: uv run --locked --extra dev ruff check src config backend scripts tests --select E9,F
+      - name: Check style for MVP foundation modules
+        run: |
+          uv run --locked --extra dev ruff check config/season.py config/sources.py config/settings.py scripts/check_sources.py tests/test_config tests/test_ingest/test_stats_api.py
+          uv run --locked --extra dev ruff format --check config/season.py config/sources.py config/settings.py scripts/check_sources.py tests/test_config tests/test_ingest/test_stats_api.py
+      - run: uv run --locked --extra dev pytest --junitxml=/tmp/pytest.xml -q
+      - name: Build distributable package
+        run: uv build
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: python-${{ matrix.python }}-results
+          path: /tmp/pytest.xml
+  frontend:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+      - run: npm ci --ignore-scripts
+        working-directory: frontend
+      - run: npm run build
+        working-directory: frontend

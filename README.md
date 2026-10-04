@@ -69,42 +69,58 @@ Neo4j provides explicit relationships and structured queries. ChromaDB provides 
 
 ### 1. Prepare the backend
 
-Prerequisites: Python 3.11+, Node.js with npm, a running Neo4j instance, and API credentials. Audio and video processing additionally require FFmpeg.
+Prerequisites: Python 3.11 or 3.12, uv, Node.js with npm, a running Neo4j instance for graph operations, and optional provider credentials. Audio and video processing additionally require FFmpeg.
 
 ```bash
 git clone https://github.com/jengaWiz/pl-knowledge-engine.git
 cd pl-knowledge-engine
-python3 -m venv .venv
-source .venv/bin/activate
-python -m pip install -e ".[dev]"
-python -m pip install -r backend/requirements.txt
+uv sync --locked --extra dev
 cp .env.example .env
 ```
 
-If your pip/setuptools version rejects editable installation because this repository has multiple top-level packages, install the dependencies listed in `pyproject.toml` directly into the virtual environment. Package discovery configuration still needs to be made explicit.
+Python dependencies are locked in `uv.lock`, with explicit package discovery. Python
+3.12 is the default; 3.11 is also tested. Audio processing currently relies on
+`audioop`, so Python 3.13+ is not supported yet. Notebook dependencies are optional:
+`uv sync --locked --extra dev --extra notebooks`.
 
-Edit `.env` with your own values:
+Public historical source checks require **no API keys or database**:
 
-| Variable | Purpose |
+```bash
+uv run --locked python scripts/check_sources.py
+```
+
+This downloads pinned 2025–26 source snapshots to `data/raw/source_checks/` and
+writes `data/reports/source_checks.json` with hashes, schemas, counts, attribution,
+and available date evidence. It validates accessibility and source identity; it
+does not yet normalize the corpus or populate the databases. Follow the
+[MVP milestone](https://github.com/jengaWiz/pl-knowledge-engine/milestone/1) for the
+remaining collection, loading, and deduction work. See [source contracts](docs/data-sources.md).
+
+Configure credentials only for features you use:
+
+| Variable | Required for |
 | --- | --- |
-| `GEMINI_API_KEY` | Embedding and chat generation. |
-| `YOUTUBE_API_KEY` | Podcast discovery through YouTube Data API. |
-| `BALLDONTLIE_API_KEY` | EPL statistics ingestion. |
-| `NEO4J_URI`, `NEO4J_USER`, `NEO4J_PASSWORD` | Graph database connection. |
+| `SEASON` | Historical scope, default `2025-26`. Unknown source-contract seasons fail explicitly. |
+| `GEMINI_API_KEY` | Optional Gemini embedding and generated chat. |
+| `YOUTUBE_API_KEY` | Optional YouTube API discovery. |
+| `NEO4J_URI`, `NEO4J_USER`, `NEO4J_PASSWORD` | Graph operations. |
 
-Settings require the three API keys and Neo4j password at import time, including when starting only the backend. Model names can be overridden with `GEMINI_MODEL` and `GEMINI_TEXT_MODEL`; select models available to your account and keep embedding dimensions consistent between ingestion and queries.
+The backend can import and serve liveness without provider keys. Operations that
+need a credential validate it when invoked. Public source checks do not call paid
+providers. Live FPL adapters reject dated records outside the configured season
+and resolve focus-team IDs from source names rather than fixed IDs.
 
 ### 2. Populate the stores
 
-Run from the repository root with the virtual environment active. These stages call external services and may incur API usage charges.
+The following legacy pipeline stages require separately populated compatible data and, for embedding, configured provider credentials. The archived MVP adapters are being implemented in the milestone above. A live FPL feed for another season will be rejected; it is not a historical-data fallback. Optional provider stages may incur API usage charges.
 
 ```bash
-python scripts/run_pipeline.py --stage ingest
-python scripts/run_pipeline.py --stage clean
-python scripts/run_pipeline.py --stage agent1
-python scripts/run_pipeline.py --stage embed
-python scripts/run_pipeline.py --stage store
-python scripts/run_pipeline.py --stage graph
+uv run --locked python scripts/run_pipeline.py --stage ingest
+uv run --locked python scripts/run_pipeline.py --stage clean
+uv run --locked python scripts/run_pipeline.py --stage agent1
+uv run --locked python scripts/run_pipeline.py --stage embed
+uv run --locked python scripts/run_pipeline.py --stage store
+uv run --locked python scripts/run_pipeline.py --stage graph
 ```
 
 Running stages separately makes failures easier to inspect. The all-in-one runner logs failed stages and continues, so a final completion message alone does not establish successful ingestion. Generated data and local stores are excluded from version control; a fresh clone starts without a populated dataset.
@@ -116,7 +132,7 @@ Optional media preparation scripts are `scripts/run_agent2.py` (audio), `scripts
 From the repository root:
 
 ```bash
-python -m uvicorn backend.main:app --reload --port 8000
+uv run --locked python -m uvicorn backend.main:app --reload --port 8000
 ```
 
 In a second terminal:
@@ -158,19 +174,18 @@ Open **http://localhost:5173** for the dashboard or **http://localhost:8000/docs
 ## Development checks
 
 ```bash
-python -m pytest tests/ -v
-ruff check src/ tests/
-ruff format --check src/ tests/
+make test
+make lint
 cd frontend
 npm run build
 ```
 
-The root `conftest.py` provides dummy environment values for tests. Live API calls and database integrations require separately configured services.
+GitHub Actions runs offline tests and Python correctness checks on 3.11 and 3.12, builds a wheel, and verifies a clean frontend build. Strict style checks cover the new MVP foundation modules; legacy style cleanup remains separate. The root `conftest.py` supplies test credentials, and a subprocess regression verifies backend liveness without any provider keys. Live API calls and database integrations require separately configured services.
 
 ## Scope and next steps
 
 This is a local development prototype. Data completeness depends on ingestion results, provider access, and the configured season; fresh FPL data may differ from the intended 2025–26 scope. There is no published benchmark or claim of production readiness.
 
-Next steps include reproducible packaging and dependency locking, API authentication, stricter deployment configuration, retrieval quality evaluation, and exposing multimodal search through the API.
+The active MVP starts from empty storage: collect historical match/player data, verify provenance and coverage, populate the stores, and deliver evidence-backed deductions through a local demo. API authentication, broader deployment hardening, and exposing multimodal search remain future work.
 
 For deeper design context, see the [implementation guide](IMPLEMENTATION_GUIDE.md) and [graph improvement plan](GRAPH_IMPROVEMENT_PLAN.md). These documents include planning material; the source code defines current behavior.
