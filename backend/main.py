@@ -13,27 +13,23 @@ from __future__ import annotations
 
 import sys
 from pathlib import Path
-from typing import Any
+from typing import Any, Literal
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from fastapi import FastAPI, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 from config.settings import settings
 from src.store.neo4j_store import Neo4jStore
-from src.store.chroma_store import ChromaStore
 from src.utils.logger import get_logger
 
 logger = get_logger(__name__)
 
-ALLOWED_STATS = {
-    "goals_scored", "assists", "clean_sheets", "minutes", "yellow_cards",
-    "red_cards", "expected_goals", "expected_assists", "total_points",
-    "form", "points_per_game", "starts", "influence", "creativity",
-    "threat", "ict_index", "now_cost", "bonus", "bps",
-}
+ALLOWED_STATS = {"goals_scored": "goals", "assists": "assists", "minutes": "minutes",
+                 "goals_per90": "goals_per90", "assists_per90": "assists_per90"}
+
 
 app = FastAPI(title="PL Knowledge Engine", version="1.0.0")
 
@@ -52,10 +48,6 @@ app.add_middleware(
 def _get_neo4j() -> Neo4jStore:
     settings.require_credentials("neo4j_password")
     return Neo4jStore(settings.neo4j_uri, settings.neo4j_user, settings.neo4j_password)
-
-
-def _get_chroma() -> ChromaStore:
-    return ChromaStore()
 
 
 def _query_graph(store: Neo4jStore, cypher: str, params: dict[str, Any] | None = None) -> list[dict]:
@@ -302,32 +294,28 @@ def top_players(
     stat: str = Query(default="goals_scored", description="Stat property to sort by"),
     limit: int = Query(default=10, ge=1, le=50),
 ) -> list[dict[str, Any]]:
-    """Return top players sorted by a stat property."""
+    """Rank verified appearance metrics; transferred players use only requested clubs."""
+    from src.analysis.deductions import AnalysisInputError, analyze
+    from src.clean.corpus_quality import load_verified_corpus
     if stat not in ALLOWED_STATS:
-        raise HTTPException(400, f"Invalid stat '{stat}'. Allowed: {sorted(ALLOWED_STATS)}")
-    store = _get_neo4j()
+        raise HTTPException(422, f"Unavailable metric. Supported: {sorted(ALLOWED_STATS)}")
     try:
-        if team:
-            rows = _query_graph(store, f"""
-                MATCH (p:Player)-[:PLAYS_FOR]->(t:Team {{name: $team}})
-                WHERE p.{stat} IS NOT NULL
-                RETURN p.web_name AS web_name, p.position AS position,
-                       p.{stat} AS value, t.name AS team
-                ORDER BY p.{stat} DESC
-                LIMIT $limit
-            """, {"team": team, "limit": limit})
-        else:
-            rows = _query_graph(store, f"""
-                MATCH (p:Player)-[:PLAYS_FOR]->(t:Team)
-                WHERE p.{stat} IS NOT NULL
-                RETURN p.web_name AS web_name, p.position AS position,
-                       p.{stat} AS value, t.name AS team
-                ORDER BY p.{stat} DESC
-                LIMIT $limit
-            """, {"limit": limit})
-        return rows
-    finally:
-        store.close()
+        result = analyze(settings.data_dir, settings.season, "player_rankings",
+                         teams=[team] if team else None, metric=ALLOWED_STATS[stat], limit=limit,
+                         min_minutes=450 if stat.endswith("per90") else 0)
+        players = {row["id"]: row for row in
+                   load_verified_corpus(settings.data_dir, settings.season)["players"]}
+        return [{"web_name": players[row["player_id"]]["web_name"],
+                 "position": players[row["player_id"]]["position"], "value": row["value"],
+                 "team": ", ".join(row["teams"]), "season": settings.season,
+                 "metric_definition": result["definition"], "minutes": row["minutes"],
+                 "appearances": row["appearances"], "player_id": row["player_id"],
+                 "minimum_minutes": result["minimum_minutes"]}
+                for row in result["rows"]]
+    except AnalysisInputError as exc:
+        raise HTTPException(422, str(exc)) from exc
+    except (OSError, ValueError, KeyError) as exc:
+        raise HTTPException(503, "Verified evidence is unavailable; run the MVP pipeline") from exc
 
 
 @app.get("/api/matches")
@@ -352,192 +340,61 @@ def get_matches() -> list[dict[str, Any]]:
 
 
 # ---------------------------------------------------------------------------
-# RAG Chatbot endpoint
+# Verified local analysis endpoints
 # ---------------------------------------------------------------------------
 
 class ChatMessage(BaseModel):
-    role: str
-    content: str
+    role: Literal["user", "assistant"]
+    content: str = Field(min_length=1, max_length=4096)
 
 
 class ChatRequest(BaseModel):
-    message: str
-    history: list[ChatMessage] = []
+    message: str = Field(min_length=1, max_length=4096)
+    history: list[ChatMessage] = Field(default_factory=list, max_length=8)
 
 
-def _embed_query(text: str) -> list[float]:
-    """Embed a query string using Gemini Embedding 2."""
-    from google import genai
-    settings.require_credentials("gemini_api_key")
-    client = genai.Client(api_key=settings.gemini_api_key)
-    response = client.models.embed_content(
-        model=settings.gemini_model,
-        contents=text,
-    )
-    return response.embeddings[0].values
+class AnalysisRequest(BaseModel):
+    operation: Literal["team_stats", "form", "home_away", "player_rankings"]
+    teams: list[str] = Field(default_factory=list, max_length=20)
+    metric: Literal["goals", "assists", "minutes", "goals_per90", "assists_per90"] = "goals"
+    min_minutes: int = Field(default=0, ge=0, le=10000)
+    limit: int = Field(default=10, ge=1, le=100)
 
 
-def _neo4j_context(store: Neo4jStore, message: str) -> str:
-    """Extract structured Neo4j context based on message intent."""
-    msg_lower = message.lower()
-    context_parts: list[str] = []
-
-    # Detect player mentions
-    player_rows = _query_graph(store, """
-        MATCH (p:Player) RETURN p.web_name AS name
-    """)
-    player_names = [r["name"] for r in player_rows if r["name"]]
-
-    mentioned = [n for n in player_names if n.lower() in msg_lower]
-    for name in mentioned[:3]:
-        rows = _query_graph(store, """
-            MATCH (p:Player {web_name: $name})-[:PLAYS_FOR]->(t:Team)
-            RETURN p.web_name AS name, t.name AS team, p.goals_scored AS goals,
-                   p.assists AS assists, p.total_points AS points,
-                   p.expected_goals AS xg, p.form AS form, p.position AS position
-        """, {"name": name})
-        if rows:
-            r = rows[0]
-            context_parts.append(
-                f"Player {r['name']} ({r['team']}, {r['position']}): "
-                f"{r['goals']} goals, {r['assists']} assists, "
-                f"{r['points']} FPL points, form {r['form']}, xG {r['xg']}"
-            )
-
-    # Top scorers query
-    if any(w in msg_lower for w in ["top scorer", "most goals", "scored the most"]):
-        rows = _query_graph(store, """
-            MATCH (p:Player)-[:PLAYS_FOR]->(t:Team)
-            WHERE p.goals_scored IS NOT NULL
-            RETURN p.web_name AS name, t.name AS team, p.goals_scored AS goals
-            ORDER BY p.goals_scored DESC LIMIT 10
-        """)
-        if rows:
-            context_parts.append("Top scorers: " + ", ".join(
-                f"{r['name']} ({r['team']}, {r['goals']} goals)" for r in rows
-            ))
-
-    # Top assisters
-    if any(w in msg_lower for w in ["most assist", "top assist", "most creative"]):
-        rows = _query_graph(store, """
-            MATCH (p:Player)-[:PLAYS_FOR]->(t:Team)
-            WHERE p.assists IS NOT NULL
-            RETURN p.web_name AS name, t.name AS team, p.assists AS assists
-            ORDER BY p.assists DESC LIMIT 10
-        """)
-        if rows:
-            context_parts.append("Top assisters: " + ", ".join(
-                f"{r['name']} ({r['team']}, {r['assists']})" for r in rows
-            ))
-
-    # Team comparison
-    if any(w in msg_lower for w in ["villa", "aston villa"]) and any(w in msg_lower for w in ["liverpool", "reds"]):
-        for team_name in ["Aston Villa", "Liverpool"]:
-            rows = _query_graph(store, """
-                MATCH (p:Player)-[:PLAYS_FOR]->(t:Team {name: $team})
-                RETURN sum(p.goals_scored) AS total_goals,
-                       sum(p.assists) AS total_assists,
-                       sum(p.total_points) AS total_points
-            """, {"team": team_name})
-            if rows and rows[0]:
-                r = rows[0]
-                context_parts.append(
-                    f"{team_name} season totals: {r['total_goals']} goals, "
-                    f"{r['total_assists']} assists, {r['total_points']} FPL points"
-                )
-
-    # Recent form / last 5
-    if any(w in msg_lower for w in ["form", "last 5", "recent"]):
-        rows = _query_graph(store, """
-            MATCH (m:Match)-[:PART_OF]->(g:Gameweek)
-            RETURN m.home_team_name AS home, m.away_team_name AS away,
-                   m.home_score AS hs, m.away_score AS as, g.number AS gw
-            ORDER BY g.number DESC LIMIT 10
-        """)
-        if rows:
-            context_parts.append("Recent matches: " + "; ".join(
-                f"GW{r['gw']}: {r['home']} {r['hs']}-{r['as']} {r['away']}" for r in rows
-            ))
-
-    return "\n".join(context_parts) if context_parts else ""
+@app.post("/api/analysis")
+def analysis(req: AnalysisRequest) -> dict[str, Any]:
+    from src.analysis.deductions import AnalysisInputError, analyze
+    try:
+        return analyze(settings.data_dir, settings.season, **req.model_dump())
+    except AnalysisInputError as exc:
+        raise HTTPException(422, str(exc)) from exc
+    except (OSError, ValueError, KeyError) as exc:
+        raise HTTPException(503, "Verified evidence is unavailable; run the MVP pipeline") from exc
 
 
 @app.post("/api/chat")
-async def chat(req: ChatRequest) -> dict[str, Any]:
-    """RAG chatbot: semantic search + Neo4j context + Gemini generation."""
-    from google import genai
-    from google.genai import types
-
-    settings.require_credentials("gemini_api_key")
-    store = _get_neo4j()
-    chroma = _get_chroma()
-    sources: list[dict] = []
-
+def chat(req: ChatRequest) -> dict[str, Any]:
+    """Local deterministic answers; no provider credentials or billed generation."""
+    from src.analysis.deductions import answer
+    if not req.message.strip():
+        raise HTTPException(422, "Message must contain text")
     try:
-        # 1. Embed query and search ChromaDB
-        try:
-            query_vec = _embed_query(req.message)
-            chroma_results = chroma.search_text(query_vec, n_results=5)
-            rag_context = "\n\n".join(
-                r["document"] for r in chroma_results if r.get("document")
-            )
-            for r in chroma_results[:3]:
-                meta = r.get("metadata", {})
-                sources.append({
-                    "type": meta.get("source_type", "stats"),
-                    "summary": (r.get("document") or "")[:150],
-                })
-        except Exception as e:
-            logger.warning("chroma search failed", error=str(e))
-            rag_context = ""
+        return answer(settings.data_dir, settings.season, req.message)
+    except (OSError, ValueError, KeyError) as exc:
+        raise HTTPException(503, "Verified evidence is unavailable; run the MVP pipeline") from exc
 
-        # 2. Neo4j structured context
-        try:
-            neo4j_ctx = _neo4j_context(store, req.message)
-        except Exception as e:
-            logger.warning("neo4j context failed", error=str(e))
-            neo4j_ctx = ""
 
-        # 3. Build system prompt
-        system_prompt = (
-            "You are an expert Premier League football analyst for Aston Villa and Liverpool FC "
-            "in the 2025-26 season. Answer questions using the context below. "
-            "Be specific, cite statistics, and be engaging.\n\n"
-        )
-        if neo4j_ctx:
-            system_prompt += f"## Structured Data\n{neo4j_ctx}\n\n"
-        if rag_context:
-            system_prompt += f"## Relevant Podcast/Article Context\n{rag_context}\n\n"
-        system_prompt += "If you don't have enough data to answer precisely, say so honestly."
-
-        # 4. Build conversation for Gemini
-        client = genai.Client(api_key=settings.gemini_api_key)
-        contents = []
-
-        for msg in req.history[-8:]:  # last 8 messages for context window
-            contents.append(types.Content(
-                role=msg.role if msg.role == "user" else "model",
-                parts=[types.Part(text=msg.content)],
-            ))
-        contents.append(types.Content(
-            role="user",
-            parts=[types.Part(text=req.message)],
-        ))
-
-        response = client.models.generate_content(
-            model=settings.gemini_text_model,
-            config=types.GenerateContentConfig(system_instruction=system_prompt),
-            contents=contents,
-        )
-        reply = response.text
-
-    except Exception as exc:
-        logger.error("chat endpoint error", error=str(exc))
-        raise HTTPException(500, str(exc))
-    finally:
-        store.close()
-
-    return {"reply": reply, "sources": sources}
+@app.get("/api/evidence/search")
+def evidence_search(query: str = Query(min_length=1, max_length=4096),
+                    team: str = "", limit: int = Query(default=5, ge=1, le=20)):
+    from src.store.mvp_index import search
+    if not query.strip():
+        raise HTTPException(422, "Query must contain text")
+    try:
+        return {"season": settings.season,
+                "results": search(settings.data_dir, settings.season, query, team=team, limit=limit)}
+    except (OSError, ValueError, KeyError) as exc:
+        raise HTTPException(503, "Verified text index is unavailable; reload the MVP stores") from exc
 
 
 # ---------------------------------------------------------------------------
