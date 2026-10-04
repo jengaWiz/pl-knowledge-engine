@@ -1,6 +1,7 @@
 """Collect and validate the complete historical MVP match dataset."""
 
 import argparse
+import hashlib
 import json
 import sys
 from dataclasses import asdict
@@ -45,6 +46,7 @@ def collect_matches(season: str, output: Path, *, refresh: bool = False) -> dict
                 source_url=source.url, source_sha256=source.sha256, source_revision=source.revision
             )
         normalized = "".join(json.dumps(record, ensure_ascii=False) + "\n" for record in records)
+        report["normalized_sha256"] = hashlib.sha256(normalized.encode()).hexdigest()
         atomic_write(output / "cleaned" / "mvp" / season / "matches.jsonl", normalized.encode())
         report["status"] = "complete"
     except (ValueError, requests.RequestException) as exc:

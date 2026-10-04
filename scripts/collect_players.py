@@ -1,6 +1,7 @@
 """Collect archived focus-team players and reconcile match-level appearances."""
 
 import argparse
+import hashlib
 import json
 import sys
 from datetime import UTC, datetime
@@ -61,8 +62,10 @@ def collect_players(season: str, output: Path, *, refresh: bool = False) -> dict
         report.update(coverage, cached_sources=cached_count, sources=len(data))
         if not report["valid"]:
             raise ValueError("Player evidence coverage gate failed; see report")
+        report["normalized_sha256"] = {}
         for name, rows in [("players", roster), ("appearances", records)]:
             payload = "".join(json.dumps(row, ensure_ascii=False) + "\n" for row in rows)
+            report["normalized_sha256"][name] = hashlib.sha256(payload.encode()).hexdigest()
             atomic_write(output / "cleaned" / "mvp" / season / f"{name}.jsonl", payload.encode())
         report["status"] = "complete"
     except (ValueError, KeyError, OSError, requests.RequestException) as exc:
