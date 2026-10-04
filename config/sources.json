@@ -1,0 +1,74 @@
+[
+  {
+    "id": "matches",
+    "season": "2025-26",
+    "url": "https://www.football-data.co.uk/mmz4281/2526/E0.csv",
+    "publisher": "Football-Data.co.uk",
+    "reference_url": "https://www.football-data.co.uk/englandm.php",
+    "reuse_terms": "Publisher describes data as free; retain attribution and source acknowledgments. Raw downloads remain local.",
+    "revision": "sha256:3e3a8352f9ada6789c508d6ca184424421fed56a30400904a4a327c583407e62",
+    "sha256": "3e3a8352f9ada6789c508d6ca184424421fed56a30400904a4a327c583407e62",
+    "required_columns": [
+      "Div",
+      "Date",
+      "HomeTeam",
+      "AwayTeam",
+      "FTHG",
+      "FTAG",
+      "FTR"
+    ],
+    "schema_note": "Premier League full-time results; betting fields are not part of MVP."
+  },
+  {
+    "id": "teams",
+    "season": "2025-26",
+    "url": "https://raw.githubusercontent.com/olbauday/FPL-Core-Insights/644585b17f8db653fae9d877316b47025125e63f/data/2025-2026/teams.csv",
+    "publisher": "olbauday / FPL-Core-Insights",
+    "reference_url": "https://github.com/olbauday/FPL-Core-Insights/blob/644585b17f8db653fae9d877316b47025125e63f/README.md#using-the-data",
+    "reuse_terms": "README permits project use and requests a source backlink; no SPDX license is declared. Raw downloads remain local.",
+    "revision": "644585b17f8db653fae9d877316b47025125e63f",
+    "sha256": "8bf02fae3e246d6540a925ff4c1011d9656a8dad20ec19545dbfefb741cb93ce",
+    "required_columns": [
+      "code",
+      "id",
+      "name"
+    ],
+    "schema_note": "Season-scoped archived metadata."
+  },
+  {
+    "id": "players",
+    "season": "2025-26",
+    "url": "https://raw.githubusercontent.com/olbauday/FPL-Core-Insights/644585b17f8db653fae9d877316b47025125e63f/data/2025-2026/players.csv",
+    "publisher": "olbauday / FPL-Core-Insights",
+    "reference_url": "https://github.com/olbauday/FPL-Core-Insights/blob/644585b17f8db653fae9d877316b47025125e63f/README.md#using-the-data",
+    "reuse_terms": "README permits project use and requests a source backlink; no SPDX license is declared. Raw downloads remain local.",
+    "revision": "644585b17f8db653fae9d877316b47025125e63f",
+    "sha256": "20621e5a365a5ab5ed4f787345b75975f2b32e79fab5d219235c6060084ccee4",
+    "required_columns": [
+      "player_id",
+      "first_name",
+      "second_name",
+      "team_code",
+      "position"
+    ],
+    "schema_note": "Season-scoped archived metadata."
+  },
+  {
+    "id": "player_totals",
+    "season": "2025-26",
+    "url": "https://raw.githubusercontent.com/olbauday/FPL-Core-Insights/644585b17f8db653fae9d877316b47025125e63f/data/2025-2026/playerstats.csv",
+    "publisher": "olbauday / FPL-Core-Insights",
+    "reference_url": "https://github.com/olbauday/FPL-Core-Insights/blob/644585b17f8db653fae9d877316b47025125e63f/README.md#using-the-data",
+    "reuse_terms": "README permits project use and requests a source backlink; no SPDX license is declared. Raw downloads remain local.",
+    "revision": "644585b17f8db653fae9d877316b47025125e63f",
+    "sha256": "45deee671ee07bd413422ecdf0a40322abffc186d2fe4f953d17456d9b58ea76",
+    "required_columns": [
+      "id",
+      "gw",
+      "minutes",
+      "goals_scored",
+      "assists"
+    ],
+    "schema_note": "Repeated cumulative snapshots by player and gameweek; not discrete match appearances. Select last valid snapshot for season totals, never sum snapshots."
+  }
+]
