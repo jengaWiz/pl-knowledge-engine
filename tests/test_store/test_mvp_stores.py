@@ -78,3 +78,18 @@ def test_failed_load_replaces_prior_ready_manifest(tmp_path, monkeypatch):
 def test_graph_requires_credentials_before_accessing_data(tmp_path):
     with pytest.raises(ValueError, match="NEO4J_PASSWORD"):
         mvp_graph.load_graph(tmp_path, "2025-26", "bolt://localhost:1", "neo4j", "")
+
+
+def test_query_rejects_manifest_model_mismatch(tmp_path, monkeypatch):
+    path = prepare(tmp_path, monkeypatch)
+    index = mvp_index.build_index(tmp_path, "2025-26", embed=vector)
+    index["dimensions"] = 3072
+    (path / "stores.json").write_text(json.dumps({"valid": True, "index": index}))
+    with pytest.raises(ValueError, match="query contract"):
+        mvp_index.search(tmp_path, "2025-26", "Example")
+
+
+@pytest.mark.parametrize("query,limit", [(" ", 5), ("Example", 0), ("Example", 51)])
+def test_query_bounds_checked_before_data_access(tmp_path, query, limit):
+    with pytest.raises(ValueError, match="nonempty query"):
+        mvp_index.search(tmp_path, "2025-26", query, limit=limit)

@@ -133,6 +133,8 @@ def build_index(output: Path, season: str, *, embed=None) -> dict:
             "dataset_id": version,
         },
     )
+    if collection.metadata.get("model_sha256") != MODEL_SHA256:
+        raise ValueError("Stored collection embedding model differs from contract")
     for start in range(0, len(docs), 32):
         batch = docs[start : start + 32]
         vectors = embed([doc["text"] for doc in batch])
@@ -159,11 +161,19 @@ def build_index(output: Path, season: str, *, embed=None) -> dict:
 
 
 def search(output: Path, season: str, query: str, *, team: str = "", limit: int = 5) -> list[dict]:
+    if not query.strip() or not 1 <= limit <= 50:
+        raise ValueError("Search requires a nonempty query and limit between 1 and 50")
     load_verified_corpus(output, season)
     report = json.loads((output / "reports" / "mvp" / season / "stores.json").read_text())
     index = report["index"]
     if not report.get("valid") or index["dataset_id"] != dataset_id(output, season):
         raise ValueError("Text index is stale; reload the verified stores")
+    if (
+        index.get("model_sha256") != MODEL_SHA256
+        or index.get("model") != MODEL
+        or index.get("dimensions") != DIMENSIONS
+    ):
+        raise ValueError("Index embedding model differs from the query contract")
     client = chromadb.PersistentClient(path=str(output / "stores" / "chroma"))
     collection = client.get_collection(index["collection"], embedding_function=None)
     kwargs = {
