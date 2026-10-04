@@ -120,6 +120,7 @@ def main() -> None:
                 logger.info("stage complete", stage=stage_name)
             except Exception as exc:
                 logger.error("stage failed", stage=stage_name, error=str(exc))
+                raise
 
     logger.info("pipeline done")
 
