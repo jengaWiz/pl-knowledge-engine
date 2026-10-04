@@ -12,6 +12,8 @@ from config.season import validate_season_dates
 TEAM_NAMES = {
     "Man City": "Manchester City",
     "Man United": "Manchester United",
+    "Man Utd": "Manchester United",
+    "Spurs": "Tottenham Hotspur",
     "Newcastle": "Newcastle United",
     "Nott'm Forest": "Nottingham Forest",
     "Tottenham": "Tottenham Hotspur",

@@ -74,3 +74,35 @@ exactly one match per ordered home/away pair. Failure writes a failed coverage
 report and exits nonzero before publishing normalized records. An older successful
 corpus, if present, is retained; consumers must require the latest report to be
 valid before loading. Multi-stage checkpoint coordination follows in MVP05.
+
+## Player and appearance collection (MVP03)
+
+The registry also pins 114 Premier League archive files: match metadata, lineups,
+and discrete player-match statistics for each of GW1–GW38. Run `collect_matches.py`
+then `uv run --locked python scripts/collect_players.py`, using the same `--output`
+folder. All raw artifacts are cached and checksum-verified; the player collector
+will not run against a failed match coverage report.
+
+Join fixtures by canonical home/away teams and date. Football-Data results take
+precedence for score disagreements; the original archive values and source rows
+remain in `fixture_conflicts`. Persistent team codes are distinct from seasonal
+FPL team IDs. Player clubs come from match lineups, preserving transfer attribution.
+Appearances are keyed by player and fixture, so double gameweeks remain distinct.
+`minutes_played` is authoritative; it is never inferred from substitution times.
+
+Player totals select the latest available FPL snapshot instead of summing repeated
+cumulative values. They are explicitly labeled player-season totals across clubs.
+Per-match FPL points and FPL clean sheets are unavailable in this archive and stay
+null. Archive assists and FPL awarded assists are different metrics.
+
+The focus-team gate requires 38 reconciled fixtures per team, known player
+identities, match-team attribution and statistics for recorded starters. Missing
+bench statistics remain disclosed and unknown; they are never synthesized as
+zero-minute appearances. Gaps for non-focus clubs are reported separately.
+
+The initial collection retained 57 players and 1,284 player-match records,
+including 1,162 positive-minute appearances. All focus fixtures and recorded
+starters have evidence. It disclosed one score conflict and 36 unmatched appearance
+keys in non-focus fixtures. Cross-source completeness and per-team metric
+reconciliation are checked further in MVP04; these figures are coverage of the
+available corpus, not a claim that every possible source metric is complete.

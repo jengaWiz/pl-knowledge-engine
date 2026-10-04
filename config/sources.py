@@ -55,6 +55,10 @@ def inspect_source(source: SourceSpec, content: bytes) -> dict[str, Any]:
         validate_season_dates(dates, source.season)
         report["date_range"] = [min(dates), max(dates)]
         report["teams"] = sorted({row[field] for row in rows for field in ("HomeTeam", "AwayTeam")})
+    elif source.id.startswith("gw_") and source.id.endswith("_matches"):
+        validate_season_dates([row["kickoff_time"] for row in rows], source.season)
+        if any(row["tournament"] != "prem" for row in rows):
+            raise ValueError("Archive match source contains a non-Premier-League competition")
     elif source.id == "teams":
         from config.season import resolve_focus_ids
 

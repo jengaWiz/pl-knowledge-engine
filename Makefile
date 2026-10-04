@@ -1,4 +1,4 @@
-.PHONY: setup install check-sources collect-matches ingest clean-data embed store pipeline test lint
+.PHONY: setup install check-sources collect-matches collect-players ingest clean-data embed store pipeline test lint
 
 setup: install
 	@test -e .env || cp .env.example .env
@@ -11,6 +11,9 @@ check-sources:
 
 collect-matches:
 	uv run --locked python scripts/collect_matches.py
+
+collect-players:
+	uv run --locked python scripts/collect_players.py
 
 ingest:
 	uv run --locked python scripts/run_ingest.py
@@ -32,5 +35,5 @@ test:
 
 lint:
 	uv run --locked --extra dev ruff check src config backend scripts tests --select E9,F
-	uv run --locked --extra dev ruff check config/season.py config/sources.py config/settings.py scripts/check_sources.py tests/test_config tests/test_ingest/test_stats_api.py src/ingest/historical_matches.py src/ingest/source_download.py scripts/collect_matches.py tests/test_ingest/test_historical_matches.py tests/test_ingest/test_source_download.py
-	uv run --locked --extra dev ruff format --check config/season.py config/sources.py config/settings.py scripts/check_sources.py tests/test_config tests/test_ingest/test_stats_api.py src/ingest/historical_matches.py src/ingest/source_download.py scripts/collect_matches.py tests/test_ingest/test_historical_matches.py tests/test_ingest/test_source_download.py
+	uv run --locked --extra dev ruff check config/season.py config/sources.py config/settings.py scripts/check_sources.py tests/test_config tests/test_ingest/test_stats_api.py src/ingest/historical_matches.py src/ingest/source_download.py scripts/collect_matches.py tests/test_ingest/test_historical_matches.py tests/test_ingest/test_source_download.py src/ingest/historical_players.py scripts/collect_players.py tests/test_ingest/test_historical_players.py
+	uv run --locked --extra dev ruff format --check config/season.py config/sources.py config/settings.py scripts/check_sources.py tests/test_config tests/test_ingest/test_stats_api.py src/ingest/historical_matches.py src/ingest/source_download.py scripts/collect_matches.py tests/test_ingest/test_historical_matches.py tests/test_ingest/test_source_download.py src/ingest/historical_players.py scripts/collect_players.py tests/test_ingest/test_historical_players.py
