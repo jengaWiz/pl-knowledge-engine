@@ -6,7 +6,7 @@ import type { ChatMessage } from '../types'
 const STARTERS = [
   "Who are Liverpool's top scorers this season?",
   'How has Aston Villa performed in their last 5 games?',
-  'Compare Watkins and Díaz this season',
+  'Compare Aston Villa and Liverpool home versus away',
   'Which players have the most assists across both teams?',
 ]
 
@@ -27,7 +27,7 @@ export default function ChatView() {
     setInput('')
     setLoading(true)
     try {
-      const { reply, sources } = await sendChat(text, [...messages, userMsg])
+      const { reply, sources } = await sendChat(text, messages.slice(-8))
       setMessages(prev => [...prev, { role: 'assistant', content: reply, sources }])
     } catch {
       setMessages(prev => [...prev, { role: 'assistant', content: 'Sorry, something went wrong. Please try again.' }])
@@ -80,10 +80,10 @@ function WelcomeScreen({ onSelect }: { onSelect: (s: string) => void }) {
         </div>
 
         <div style={{ fontSize: 26, fontWeight: 800, color: 'var(--t-1)', letterSpacing: '-0.04em', marginBottom: 9 }}>
-          PL AI Analyst
+          PL Evidence Analyst
         </div>
         <div style={{ fontSize: 14, color: 'var(--t-2)', lineHeight: 1.65, maxWidth: 380, margin: '0 auto' }}>
-          Ask anything about Aston Villa &amp; Liverpool's<br />2025–26 Premier League season
+          Explore results and player statistics for<br />2025–26 Premier League season
         </div>
       </div>
 
@@ -181,6 +181,14 @@ function MessageBubble({ msg, idx }: { msg: ChatMessage; idx: number }) {
                   }}>
                     <span style={{ color: '#c87898', fontWeight: 700, marginRight: 7 }}>[{s.type}]</span>
                     {s.summary}
+                    {s.record_ids && <details style={{ marginTop: 4 }}>
+                      <summary>{s.record_ids.length} evidence records</summary>
+                      <pre style={{ maxHeight: 120, overflow: 'auto', fontSize: 10 }}>
+                        {s.record_ids.join('\n')}
+                      </pre>
+                    </details>}
+                    {s.url && <a href={s.url} target="_blank" rel="noopener noreferrer"
+                      style={{ display: 'block', color: '#c87898', marginTop: 4 }}>View source</a>}
                   </div>
                 ))}
               </div>
@@ -239,6 +247,8 @@ function InputBar({ value, onChange, onSend, loading }: {
         }}>
           <input
             value={value}
+            maxLength={4096}
+            aria-label="Football statistics question"
             onChange={e => onChange(e.target.value)}
             onKeyDown={e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); onSend() } }}
             onFocus={() => setFocused(true)}
@@ -271,7 +281,7 @@ function InputBar({ value, onChange, onSend, loading }: {
           </button>
         </div>
         <div style={{ fontSize: 11, color: 'var(--t-3)', marginTop: 8, textAlign: 'center' }}>
-          Press Enter to send · Powered by Claude AI
+          Press Enter to send · Local evidence · 2025–26
         </div>
       </div>
     </div>
@@ -290,7 +300,7 @@ function Avatar({ assistant }: { assistant?: boolean }) {
       fontSize: 11, fontWeight: 800, color: 'rgba(255,255,255,0.9)', letterSpacing: '-0.02em',
       boxShadow: assistant ? '0 2px 10px rgba(103,14,54,0.45)' : '0 2px 10px rgba(29,78,216,0.35)',
     }}>
-      {assistant ? 'AI' : 'U'}
+      {assistant ? 'PL' : 'U'}
     </div>
   )
 }

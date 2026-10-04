@@ -50,5 +50,5 @@ export interface TopPlayer {
 export interface ChatMessage {
   role: 'user' | 'assistant'
   content: string
-  sources?: { type: string; summary: string }[]
+  sources?: { type: string; summary: string; url?: string; record_ids?: string[] }[]
 }

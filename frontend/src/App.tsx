@@ -93,7 +93,7 @@ export default function App() {
             </ViewTab>
             <ViewTab active={view === 'chat'} onClick={() => setView('chat')}>
               <ChatTabIcon />
-              AI Chat
+              Evidence Chat
             </ViewTab>
           </div>
         </div>
@@ -118,7 +118,7 @@ export default function App() {
               transition: 'all 0.3s ease',
             }} />
             <span style={{ fontSize: 14, fontWeight: 700, color: 'var(--t-1)', letterSpacing: '-0.025em' }}>
-              {view === 'graph' ? 'Knowledge Graph' : 'AI Analyst'}
+              {view === 'graph' ? 'Knowledge Graph' : 'Evidence Analyst'}
             </span>
           </div>
           <div style={{ display: 'flex', gap: 6, alignItems: 'center' }}>

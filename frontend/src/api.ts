@@ -37,7 +37,7 @@ export async function fetchTopPlayers(
 export async function sendChat(
   message: string,
   history: ChatMessage[],
-): Promise<{ reply: string; sources: { type: string; summary: string }[] }> {
+): Promise<{ reply: string; sources: { type: string; summary: string; url?: string; record_ids?: string[] }[] }> {
   const { data } = await api.post('/chat', {
     message,
     history: history.map(m => ({ role: m.role, content: m.content })),
