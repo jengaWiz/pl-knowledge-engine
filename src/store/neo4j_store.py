@@ -18,7 +18,7 @@ from src.utils.logger import get_logger
 
 logger = get_logger(__name__)
 
-SEASON_LABEL = "2025-26"
+SEASON_LABEL = settings.season
 
 
 class Neo4jStore:
@@ -42,6 +42,8 @@ class Neo4jStore:
             user: Neo4j username.
             password: Neo4j password.
         """
+        if not password.strip():
+            raise ValueError("Neo4j requires NEO4J_PASSWORD")
         self.driver: Driver = GraphDatabase.driver(uri, auth=(user, password))
         logger.info("neo4j driver opened", uri=uri)
 

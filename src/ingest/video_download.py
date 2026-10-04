@@ -75,6 +75,7 @@ class VideoHighlightDownloader:
     def __init__(self) -> None:
         """Initialise API client and output directories."""
         _check_ffmpeg()
+        settings.require_credentials("youtube_api_key")
         self.youtube = build(
             "youtube", "v3", developerKey=settings.youtube_api_key
         )

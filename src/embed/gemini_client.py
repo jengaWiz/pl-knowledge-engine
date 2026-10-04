@@ -45,6 +45,7 @@ class GeminiEmbedder:
 
     def __init__(self) -> None:
         """Initialise the Gemini client using the API key from settings."""
+        settings.require_credentials("gemini_api_key")
         self.client = genai.Client(api_key=settings.gemini_api_key)
         self.model = settings.gemini_model
         logger.info("gemini embedder initialised", model=self.model)
