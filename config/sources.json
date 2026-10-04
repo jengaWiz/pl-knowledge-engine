@@ -70,5 +70,2209 @@
       "assists"
     ],
     "schema_note": "Repeated cumulative snapshots by player and gameweek; not discrete match appearances. Select last valid snapshot for season totals, never sum snapshots."
+  },
+  {
+    "id": "gw_1_appearances",
+    "season": "2025-26",
+    "url": "https://raw.githubusercontent.com/olbauday/FPL-Core-Insights/644585b17f8db653fae9d877316b47025125e63f/data/2025-2026/By%20Tournament/Premier%20League/GW1/playermatchstats.csv",
+    "publisher": "olbauday / FPL-Core-Insights",
+    "reference_url": "https://github.com/olbauday/FPL-Core-Insights/blob/644585b17f8db653fae9d877316b47025125e63f/README.md#using-the-data",
+    "reuse_terms": "README permits project use and requests a source backlink; no SPDX license is declared. Raw downloads remain local.",
+    "revision": "644585b17f8db653fae9d877316b47025125e63f",
+    "sha256": "6bb92a50657056d41085ac42721b2b562f74cd116f91a217f8c28b8bb1cd761e",
+    "required_columns": [
+      "player_id",
+      "match_id",
+      "minutes_played",
+      "goals",
+      "assists",
+      "xg",
+      "xa"
+    ],
+    "schema_note": "Discrete player-match statistics; minutes_played is authoritative, not start_min/finish_min. FPL points are not present."
+  },
+  {
+    "id": "gw_1_lineups",
+    "season": "2025-26",
+    "url": "https://raw.githubusercontent.com/olbauday/FPL-Core-Insights/644585b17f8db653fae9d877316b47025125e63f/data/2025-2026/By%20Tournament/Premier%20League/GW1/lineups.csv",
+    "publisher": "olbauday / FPL-Core-Insights",
+    "reference_url": "https://github.com/olbauday/FPL-Core-Insights/blob/644585b17f8db653fae9d877316b47025125e63f/README.md#using-the-data",
+    "reuse_terms": "README permits project use and requests a source backlink; no SPDX license is declared. Raw downloads remain local.",
+    "revision": "644585b17f8db653fae9d877316b47025125e63f",
+    "sha256": "0824d1985f302349356d2e13c9bf7088d0ec7a7cbff35205c344e9a17b77fcbe",
+    "required_columns": [
+      "match_id",
+      "team_code",
+      "player_id",
+      "team_side"
+    ],
+    "schema_note": "Actual match-team attribution, including bench and transfer histories."
+  },
+  {
+    "id": "gw_1_matches",
+    "season": "2025-26",
+    "url": "https://raw.githubusercontent.com/olbauday/FPL-Core-Insights/644585b17f8db653fae9d877316b47025125e63f/data/2025-2026/By%20Tournament/Premier%20League/GW1/matches.csv",
+    "publisher": "olbauday / FPL-Core-Insights",
+    "reference_url": "https://github.com/olbauday/FPL-Core-Insights/blob/644585b17f8db653fae9d877316b47025125e63f/README.md#using-the-data",
+    "reuse_terms": "README permits project use and requests a source backlink; no SPDX license is declared. Raw downloads remain local.",
+    "revision": "644585b17f8db653fae9d877316b47025125e63f",
+    "sha256": "5549d2572a5e77faff51c713c23df73b1196a432db2376c450ec290d27cdbf9e",
+    "required_columns": [
+      "gameweek",
+      "kickoff_time",
+      "home_team",
+      "away_team",
+      "home_score",
+      "away_score",
+      "match_id",
+      "tournament"
+    ],
+    "schema_note": "Completed Premier League match metadata; team references use persistent team codes."
+  },
+  {
+    "id": "gw_2_appearances",
+    "season": "2025-26",
+    "url": "https://raw.githubusercontent.com/olbauday/FPL-Core-Insights/644585b17f8db653fae9d877316b47025125e63f/data/2025-2026/By%20Tournament/Premier%20League/GW2/playermatchstats.csv",
+    "publisher": "olbauday / FPL-Core-Insights",
+    "reference_url": "https://github.com/olbauday/FPL-Core-Insights/blob/644585b17f8db653fae9d877316b47025125e63f/README.md#using-the-data",
+    "reuse_terms": "README permits project use and requests a source backlink; no SPDX license is declared. Raw downloads remain local.",
+    "revision": "644585b17f8db653fae9d877316b47025125e63f",
+    "sha256": "b7eff1368430ea85dde2df21353003cf633d2aa69a017b40292efbf1830d9c71",
+    "required_columns": [
+      "player_id",
+      "match_id",
+      "minutes_played",
+      "goals",
+      "assists",
+      "xg",
+      "xa"
+    ],
+    "schema_note": "Discrete player-match statistics; minutes_played is authoritative, not start_min/finish_min. FPL points are not present."
+  },
+  {
+    "id": "gw_2_lineups",
+    "season": "2025-26",
+    "url": "https://raw.githubusercontent.com/olbauday/FPL-Core-Insights/644585b17f8db653fae9d877316b47025125e63f/data/2025-2026/By%20Tournament/Premier%20League/GW2/lineups.csv",
+    "publisher": "olbauday / FPL-Core-Insights",
+    "reference_url": "https://github.com/olbauday/FPL-Core-Insights/blob/644585b17f8db653fae9d877316b47025125e63f/README.md#using-the-data",
+    "reuse_terms": "README permits project use and requests a source backlink; no SPDX license is declared. Raw downloads remain local.",
+    "revision": "644585b17f8db653fae9d877316b47025125e63f",
+    "sha256": "5fcb94ec38ae87854571eb1cf35c7c2e5a93d6bd302e4b521c0d69b2c39fe605",
+    "required_columns": [
+      "match_id",
+      "team_code",
+      "player_id",
+      "team_side"
+    ],
+    "schema_note": "Actual match-team attribution, including bench and transfer histories."
+  },
+  {
+    "id": "gw_2_matches",
+    "season": "2025-26",
+    "url": "https://raw.githubusercontent.com/olbauday/FPL-Core-Insights/644585b17f8db653fae9d877316b47025125e63f/data/2025-2026/By%20Tournament/Premier%20League/GW2/matches.csv",
+    "publisher": "olbauday / FPL-Core-Insights",
+    "reference_url": "https://github.com/olbauday/FPL-Core-Insights/blob/644585b17f8db653fae9d877316b47025125e63f/README.md#using-the-data",
+    "reuse_terms": "README permits project use and requests a source backlink; no SPDX license is declared. Raw downloads remain local.",
+    "revision": "644585b17f8db653fae9d877316b47025125e63f",
+    "sha256": "1ed769e2fcaecd6728bc77baf189cfb1631fd62cb7ad6eaa39345fc3f438652a",
+    "required_columns": [
+      "gameweek",
+      "kickoff_time",
+      "home_team",
+      "away_team",
+      "home_score",
+      "away_score",
+      "match_id",
+      "tournament"
+    ],
+    "schema_note": "Completed Premier League match metadata; team references use persistent team codes."
+  },
+  {
+    "id": "gw_3_appearances",
+    "season": "2025-26",
+    "url": "https://raw.githubusercontent.com/olbauday/FPL-Core-Insights/644585b17f8db653fae9d877316b47025125e63f/data/2025-2026/By%20Tournament/Premier%20League/GW3/playermatchstats.csv",
+    "publisher": "olbauday / FPL-Core-Insights",
+    "reference_url": "https://github.com/olbauday/FPL-Core-Insights/blob/644585b17f8db653fae9d877316b47025125e63f/README.md#using-the-data",
+    "reuse_terms": "README permits project use and requests a source backlink; no SPDX license is declared. Raw downloads remain local.",
+    "revision": "644585b17f8db653fae9d877316b47025125e63f",
+    "sha256": "fae77e1bcfab538111f4b5f8b7496546283112a73ac1c4c053baa7d74b185fe1",
+    "required_columns": [
+      "player_id",
+      "match_id",
+      "minutes_played",
+      "goals",
+      "assists",
+      "xg",
+      "xa"
+    ],
+    "schema_note": "Discrete player-match statistics; minutes_played is authoritative, not start_min/finish_min. FPL points are not present."
+  },
+  {
+    "id": "gw_3_lineups",
+    "season": "2025-26",
+    "url": "https://raw.githubusercontent.com/olbauday/FPL-Core-Insights/644585b17f8db653fae9d877316b47025125e63f/data/2025-2026/By%20Tournament/Premier%20League/GW3/lineups.csv",
+    "publisher": "olbauday / FPL-Core-Insights",
+    "reference_url": "https://github.com/olbauday/FPL-Core-Insights/blob/644585b17f8db653fae9d877316b47025125e63f/README.md#using-the-data",
+    "reuse_terms": "README permits project use and requests a source backlink; no SPDX license is declared. Raw downloads remain local.",
+    "revision": "644585b17f8db653fae9d877316b47025125e63f",
+    "sha256": "52ff828a1a930c6dd3e6b0c4aa330ed60925a731017be7b942c6b6fef3257d63",
+    "required_columns": [
+      "match_id",
+      "team_code",
+      "player_id",
+      "team_side"
+    ],
+    "schema_note": "Actual match-team attribution, including bench and transfer histories."
+  },
+  {
+    "id": "gw_3_matches",
+    "season": "2025-26",
+    "url": "https://raw.githubusercontent.com/olbauday/FPL-Core-Insights/644585b17f8db653fae9d877316b47025125e63f/data/2025-2026/By%20Tournament/Premier%20League/GW3/matches.csv",
+    "publisher": "olbauday / FPL-Core-Insights",
+    "reference_url": "https://github.com/olbauday/FPL-Core-Insights/blob/644585b17f8db653fae9d877316b47025125e63f/README.md#using-the-data",
+    "reuse_terms": "README permits project use and requests a source backlink; no SPDX license is declared. Raw downloads remain local.",
+    "revision": "644585b17f8db653fae9d877316b47025125e63f",
+    "sha256": "249cadaaa3201c0171618f55d01bbb0363d76142189acacc8357abd63d329a16",
+    "required_columns": [
+      "gameweek",
+      "kickoff_time",
+      "home_team",
+      "away_team",
+      "home_score",
+      "away_score",
+      "match_id",
+      "tournament"
+    ],
+    "schema_note": "Completed Premier League match metadata; team references use persistent team codes."
+  },
+  {
+    "id": "gw_4_appearances",
+    "season": "2025-26",
+    "url": "https://raw.githubusercontent.com/olbauday/FPL-Core-Insights/644585b17f8db653fae9d877316b47025125e63f/data/2025-2026/By%20Tournament/Premier%20League/GW4/playermatchstats.csv",
+    "publisher": "olbauday / FPL-Core-Insights",
+    "reference_url": "https://github.com/olbauday/FPL-Core-Insights/blob/644585b17f8db653fae9d877316b47025125e63f/README.md#using-the-data",
+    "reuse_terms": "README permits project use and requests a source backlink; no SPDX license is declared. Raw downloads remain local.",
+    "revision": "644585b17f8db653fae9d877316b47025125e63f",
+    "sha256": "453f60b475e0e9ce34d73aa95a2803d984fadd42b48bd778180a50d7177c5f17",
+    "required_columns": [
+      "player_id",
+      "match_id",
+      "minutes_played",
+      "goals",
+      "assists",
+      "xg",
+      "xa"
+    ],
+    "schema_note": "Discrete player-match statistics; minutes_played is authoritative, not start_min/finish_min. FPL points are not present."
+  },
+  {
+    "id": "gw_4_lineups",
+    "season": "2025-26",
+    "url": "https://raw.githubusercontent.com/olbauday/FPL-Core-Insights/644585b17f8db653fae9d877316b47025125e63f/data/2025-2026/By%20Tournament/Premier%20League/GW4/lineups.csv",
+    "publisher": "olbauday / FPL-Core-Insights",
+    "reference_url": "https://github.com/olbauday/FPL-Core-Insights/blob/644585b17f8db653fae9d877316b47025125e63f/README.md#using-the-data",
+    "reuse_terms": "README permits project use and requests a source backlink; no SPDX license is declared. Raw downloads remain local.",
+    "revision": "644585b17f8db653fae9d877316b47025125e63f",
+    "sha256": "2e9740c1da9a90f8a8da282f58177280f46a4b0070bfdfef72d9e85d0c92811f",
+    "required_columns": [
+      "match_id",
+      "team_code",
+      "player_id",
+      "team_side"
+    ],
+    "schema_note": "Actual match-team attribution, including bench and transfer histories."
+  },
+  {
+    "id": "gw_4_matches",
+    "season": "2025-26",
+    "url": "https://raw.githubusercontent.com/olbauday/FPL-Core-Insights/644585b17f8db653fae9d877316b47025125e63f/data/2025-2026/By%20Tournament/Premier%20League/GW4/matches.csv",
+    "publisher": "olbauday / FPL-Core-Insights",
+    "reference_url": "https://github.com/olbauday/FPL-Core-Insights/blob/644585b17f8db653fae9d877316b47025125e63f/README.md#using-the-data",
+    "reuse_terms": "README permits project use and requests a source backlink; no SPDX license is declared. Raw downloads remain local.",
+    "revision": "644585b17f8db653fae9d877316b47025125e63f",
+    "sha256": "7063fe7ddfa9ae4211f2ab5bd0dd796aea732a8b786589517db6ec8d274b3a4a",
+    "required_columns": [
+      "gameweek",
+      "kickoff_time",
+      "home_team",
+      "away_team",
+      "home_score",
+      "away_score",
+      "match_id",
+      "tournament"
+    ],
+    "schema_note": "Completed Premier League match metadata; team references use persistent team codes."
+  },
+  {
+    "id": "gw_5_appearances",
+    "season": "2025-26",
+    "url": "https://raw.githubusercontent.com/olbauday/FPL-Core-Insights/644585b17f8db653fae9d877316b47025125e63f/data/2025-2026/By%20Tournament/Premier%20League/GW5/playermatchstats.csv",
+    "publisher": "olbauday / FPL-Core-Insights",
+    "reference_url": "https://github.com/olbauday/FPL-Core-Insights/blob/644585b17f8db653fae9d877316b47025125e63f/README.md#using-the-data",
+    "reuse_terms": "README permits project use and requests a source backlink; no SPDX license is declared. Raw downloads remain local.",
+    "revision": "644585b17f8db653fae9d877316b47025125e63f",
+    "sha256": "5ed565becaf71351e89fb159aba06939ead9b9643c7e90592746100bd1a1ec82",
+    "required_columns": [
+      "player_id",
+      "match_id",
+      "minutes_played",
+      "goals",
+      "assists",
+      "xg",
+      "xa"
+    ],
+    "schema_note": "Discrete player-match statistics; minutes_played is authoritative, not start_min/finish_min. FPL points are not present."
+  },
+  {
+    "id": "gw_5_lineups",
+    "season": "2025-26",
+    "url": "https://raw.githubusercontent.com/olbauday/FPL-Core-Insights/644585b17f8db653fae9d877316b47025125e63f/data/2025-2026/By%20Tournament/Premier%20League/GW5/lineups.csv",
+    "publisher": "olbauday / FPL-Core-Insights",
+    "reference_url": "https://github.com/olbauday/FPL-Core-Insights/blob/644585b17f8db653fae9d877316b47025125e63f/README.md#using-the-data",
+    "reuse_terms": "README permits project use and requests a source backlink; no SPDX license is declared. Raw downloads remain local.",
+    "revision": "644585b17f8db653fae9d877316b47025125e63f",
+    "sha256": "b137da1b67206252df180c26b4543c362921d1beae7841e6f97ca79472e20700",
+    "required_columns": [
+      "match_id",
+      "team_code",
+      "player_id",
+      "team_side"
+    ],
+    "schema_note": "Actual match-team attribution, including bench and transfer histories."
+  },
+  {
+    "id": "gw_5_matches",
+    "season": "2025-26",
+    "url": "https://raw.githubusercontent.com/olbauday/FPL-Core-Insights/644585b17f8db653fae9d877316b47025125e63f/data/2025-2026/By%20Tournament/Premier%20League/GW5/matches.csv",
+    "publisher": "olbauday / FPL-Core-Insights",
+    "reference_url": "https://github.com/olbauday/FPL-Core-Insights/blob/644585b17f8db653fae9d877316b47025125e63f/README.md#using-the-data",
+    "reuse_terms": "README permits project use and requests a source backlink; no SPDX license is declared. Raw downloads remain local.",
+    "revision": "644585b17f8db653fae9d877316b47025125e63f",
+    "sha256": "6f1b60a34f196224fcb4975f21d5c89996a999914689b16432981fc57ab24352",
+    "required_columns": [
+      "gameweek",
+      "kickoff_time",
+      "home_team",
+      "away_team",
+      "home_score",
+      "away_score",
+      "match_id",
+      "tournament"
+    ],
+    "schema_note": "Completed Premier League match metadata; team references use persistent team codes."
+  },
+  {
+    "id": "gw_6_appearances",
+    "season": "2025-26",
+    "url": "https://raw.githubusercontent.com/olbauday/FPL-Core-Insights/644585b17f8db653fae9d877316b47025125e63f/data/2025-2026/By%20Tournament/Premier%20League/GW6/playermatchstats.csv",
+    "publisher": "olbauday / FPL-Core-Insights",
+    "reference_url": "https://github.com/olbauday/FPL-Core-Insights/blob/644585b17f8db653fae9d877316b47025125e63f/README.md#using-the-data",
+    "reuse_terms": "README permits project use and requests a source backlink; no SPDX license is declared. Raw downloads remain local.",
+    "revision": "644585b17f8db653fae9d877316b47025125e63f",
+    "sha256": "73cde0b044dfe78ec4e0c8a2166deb46a4969cea65ea1f1972790146eb10152b",
+    "required_columns": [
+      "player_id",
+      "match_id",
+      "minutes_played",
+      "goals",
+      "assists",
+      "xg",
+      "xa"
+    ],
+    "schema_note": "Discrete player-match statistics; minutes_played is authoritative, not start_min/finish_min. FPL points are not present."
+  },
+  {
+    "id": "gw_6_lineups",
+    "season": "2025-26",
+    "url": "https://raw.githubusercontent.com/olbauday/FPL-Core-Insights/644585b17f8db653fae9d877316b47025125e63f/data/2025-2026/By%20Tournament/Premier%20League/GW6/lineups.csv",
+    "publisher": "olbauday / FPL-Core-Insights",
+    "reference_url": "https://github.com/olbauday/FPL-Core-Insights/blob/644585b17f8db653fae9d877316b47025125e63f/README.md#using-the-data",
+    "reuse_terms": "README permits project use and requests a source backlink; no SPDX license is declared. Raw downloads remain local.",
+    "revision": "644585b17f8db653fae9d877316b47025125e63f",
+    "sha256": "16a0afe51b3f834a3b084ff2be2614d629706ce63976dd9eb5dc781da2667e8e",
+    "required_columns": [
+      "match_id",
+      "team_code",
+      "player_id",
+      "team_side"
+    ],
+    "schema_note": "Actual match-team attribution, including bench and transfer histories."
+  },
+  {
+    "id": "gw_6_matches",
+    "season": "2025-26",
+    "url": "https://raw.githubusercontent.com/olbauday/FPL-Core-Insights/644585b17f8db653fae9d877316b47025125e63f/data/2025-2026/By%20Tournament/Premier%20League/GW6/matches.csv",
+    "publisher": "olbauday / FPL-Core-Insights",
+    "reference_url": "https://github.com/olbauday/FPL-Core-Insights/blob/644585b17f8db653fae9d877316b47025125e63f/README.md#using-the-data",
+    "reuse_terms": "README permits project use and requests a source backlink; no SPDX license is declared. Raw downloads remain local.",
+    "revision": "644585b17f8db653fae9d877316b47025125e63f",
+    "sha256": "3b134055a9b7b80a32d220b861d9f9a8e9ffad661057b856530b08b7869bfec2",
+    "required_columns": [
+      "gameweek",
+      "kickoff_time",
+      "home_team",
+      "away_team",
+      "home_score",
+      "away_score",
+      "match_id",
+      "tournament"
+    ],
+    "schema_note": "Completed Premier League match metadata; team references use persistent team codes."
+  },
+  {
+    "id": "gw_7_appearances",
+    "season": "2025-26",
+    "url": "https://raw.githubusercontent.com/olbauday/FPL-Core-Insights/644585b17f8db653fae9d877316b47025125e63f/data/2025-2026/By%20Tournament/Premier%20League/GW7/playermatchstats.csv",
+    "publisher": "olbauday / FPL-Core-Insights",
+    "reference_url": "https://github.com/olbauday/FPL-Core-Insights/blob/644585b17f8db653fae9d877316b47025125e63f/README.md#using-the-data",
+    "reuse_terms": "README permits project use and requests a source backlink; no SPDX license is declared. Raw downloads remain local.",
+    "revision": "644585b17f8db653fae9d877316b47025125e63f",
+    "sha256": "be659f9058b0006650700490dc73c3c45aa50ec17d3fe84a13b67ceaf289a580",
+    "required_columns": [
+      "player_id",
+      "match_id",
+      "minutes_played",
+      "goals",
+      "assists",
+      "xg",
+      "xa"
+    ],
+    "schema_note": "Discrete player-match statistics; minutes_played is authoritative, not start_min/finish_min. FPL points are not present."
+  },
+  {
+    "id": "gw_7_lineups",
+    "season": "2025-26",
+    "url": "https://raw.githubusercontent.com/olbauday/FPL-Core-Insights/644585b17f8db653fae9d877316b47025125e63f/data/2025-2026/By%20Tournament/Premier%20League/GW7/lineups.csv",
+    "publisher": "olbauday / FPL-Core-Insights",
+    "reference_url": "https://github.com/olbauday/FPL-Core-Insights/blob/644585b17f8db653fae9d877316b47025125e63f/README.md#using-the-data",
+    "reuse_terms": "README permits project use and requests a source backlink; no SPDX license is declared. Raw downloads remain local.",
+    "revision": "644585b17f8db653fae9d877316b47025125e63f",
+    "sha256": "1c1d35202f755efb442007dbf465bbb42c2e42c13a486379fedbcf6b424c7254",
+    "required_columns": [
+      "match_id",
+      "team_code",
+      "player_id",
+      "team_side"
+    ],
+    "schema_note": "Actual match-team attribution, including bench and transfer histories."
+  },
+  {
+    "id": "gw_7_matches",
+    "season": "2025-26",
+    "url": "https://raw.githubusercontent.com/olbauday/FPL-Core-Insights/644585b17f8db653fae9d877316b47025125e63f/data/2025-2026/By%20Tournament/Premier%20League/GW7/matches.csv",
+    "publisher": "olbauday / FPL-Core-Insights",
+    "reference_url": "https://github.com/olbauday/FPL-Core-Insights/blob/644585b17f8db653fae9d877316b47025125e63f/README.md#using-the-data",
+    "reuse_terms": "README permits project use and requests a source backlink; no SPDX license is declared. Raw downloads remain local.",
+    "revision": "644585b17f8db653fae9d877316b47025125e63f",
+    "sha256": "af487fa4e2ec16c4323eea2505c3930c6ad06e4716d9844f0c65a2117d0ad823",
+    "required_columns": [
+      "gameweek",
+      "kickoff_time",
+      "home_team",
+      "away_team",
+      "home_score",
+      "away_score",
+      "match_id",
+      "tournament"
+    ],
+    "schema_note": "Completed Premier League match metadata; team references use persistent team codes."
+  },
+  {
+    "id": "gw_8_appearances",
+    "season": "2025-26",
+    "url": "https://raw.githubusercontent.com/olbauday/FPL-Core-Insights/644585b17f8db653fae9d877316b47025125e63f/data/2025-2026/By%20Tournament/Premier%20League/GW8/playermatchstats.csv",
+    "publisher": "olbauday / FPL-Core-Insights",
+    "reference_url": "https://github.com/olbauday/FPL-Core-Insights/blob/644585b17f8db653fae9d877316b47025125e63f/README.md#using-the-data",
+    "reuse_terms": "README permits project use and requests a source backlink; no SPDX license is declared. Raw downloads remain local.",
+    "revision": "644585b17f8db653fae9d877316b47025125e63f",
+    "sha256": "9c719e8c598ea17c17c8c5014c820764b8b7cf20a60df924e1d8123af3d68c2e",
+    "required_columns": [
+      "player_id",
+      "match_id",
+      "minutes_played",
+      "goals",
+      "assists",
+      "xg",
+      "xa"
+    ],
+    "schema_note": "Discrete player-match statistics; minutes_played is authoritative, not start_min/finish_min. FPL points are not present."
+  },
+  {
+    "id": "gw_8_lineups",
+    "season": "2025-26",
+    "url": "https://raw.githubusercontent.com/olbauday/FPL-Core-Insights/644585b17f8db653fae9d877316b47025125e63f/data/2025-2026/By%20Tournament/Premier%20League/GW8/lineups.csv",
+    "publisher": "olbauday / FPL-Core-Insights",
+    "reference_url": "https://github.com/olbauday/FPL-Core-Insights/blob/644585b17f8db653fae9d877316b47025125e63f/README.md#using-the-data",
+    "reuse_terms": "README permits project use and requests a source backlink; no SPDX license is declared. Raw downloads remain local.",
+    "revision": "644585b17f8db653fae9d877316b47025125e63f",
+    "sha256": "d6e6bffa04492d7165b4b46cb4c72530003c9ac47a50f30a499df64cedf2d85b",
+    "required_columns": [
+      "match_id",
+      "team_code",
+      "player_id",
+      "team_side"
+    ],
+    "schema_note": "Actual match-team attribution, including bench and transfer histories."
+  },
+  {
+    "id": "gw_8_matches",
+    "season": "2025-26",
+    "url": "https://raw.githubusercontent.com/olbauday/FPL-Core-Insights/644585b17f8db653fae9d877316b47025125e63f/data/2025-2026/By%20Tournament/Premier%20League/GW8/matches.csv",
+    "publisher": "olbauday / FPL-Core-Insights",
+    "reference_url": "https://github.com/olbauday/FPL-Core-Insights/blob/644585b17f8db653fae9d877316b47025125e63f/README.md#using-the-data",
+    "reuse_terms": "README permits project use and requests a source backlink; no SPDX license is declared. Raw downloads remain local.",
+    "revision": "644585b17f8db653fae9d877316b47025125e63f",
+    "sha256": "1d0930b113c8ce07d963f978f170c800b2e07253e8ec38c83118d6638811cc97",
+    "required_columns": [
+      "gameweek",
+      "kickoff_time",
+      "home_team",
+      "away_team",
+      "home_score",
+      "away_score",
+      "match_id",
+      "tournament"
+    ],
+    "schema_note": "Completed Premier League match metadata; team references use persistent team codes."
+  },
+  {
+    "id": "gw_9_appearances",
+    "season": "2025-26",
+    "url": "https://raw.githubusercontent.com/olbauday/FPL-Core-Insights/644585b17f8db653fae9d877316b47025125e63f/data/2025-2026/By%20Tournament/Premier%20League/GW9/playermatchstats.csv",
+    "publisher": "olbauday / FPL-Core-Insights",
+    "reference_url": "https://github.com/olbauday/FPL-Core-Insights/blob/644585b17f8db653fae9d877316b47025125e63f/README.md#using-the-data",
+    "reuse_terms": "README permits project use and requests a source backlink; no SPDX license is declared. Raw downloads remain local.",
+    "revision": "644585b17f8db653fae9d877316b47025125e63f",
+    "sha256": "c580bae7f6a0ccd8c9b4575055aadf8213714b52d5f76ac5383858dffdc0c4e3",
+    "required_columns": [
+      "player_id",
+      "match_id",
+      "minutes_played",
+      "goals",
+      "assists",
+      "xg",
+      "xa"
+    ],
+    "schema_note": "Discrete player-match statistics; minutes_played is authoritative, not start_min/finish_min. FPL points are not present."
+  },
+  {
+    "id": "gw_9_lineups",
+    "season": "2025-26",
+    "url": "https://raw.githubusercontent.com/olbauday/FPL-Core-Insights/644585b17f8db653fae9d877316b47025125e63f/data/2025-2026/By%20Tournament/Premier%20League/GW9/lineups.csv",
+    "publisher": "olbauday / FPL-Core-Insights",
+    "reference_url": "https://github.com/olbauday/FPL-Core-Insights/blob/644585b17f8db653fae9d877316b47025125e63f/README.md#using-the-data",
+    "reuse_terms": "README permits project use and requests a source backlink; no SPDX license is declared. Raw downloads remain local.",
+    "revision": "644585b17f8db653fae9d877316b47025125e63f",
+    "sha256": "41ab661379abaa85596b4f902106d83bc0612e0610b0e6b220137c67bb1143e4",
+    "required_columns": [
+      "match_id",
+      "team_code",
+      "player_id",
+      "team_side"
+    ],
+    "schema_note": "Actual match-team attribution, including bench and transfer histories."
+  },
+  {
+    "id": "gw_9_matches",
+    "season": "2025-26",
+    "url": "https://raw.githubusercontent.com/olbauday/FPL-Core-Insights/644585b17f8db653fae9d877316b47025125e63f/data/2025-2026/By%20Tournament/Premier%20League/GW9/matches.csv",
+    "publisher": "olbauday / FPL-Core-Insights",
+    "reference_url": "https://github.com/olbauday/FPL-Core-Insights/blob/644585b17f8db653fae9d877316b47025125e63f/README.md#using-the-data",
+    "reuse_terms": "README permits project use and requests a source backlink; no SPDX license is declared. Raw downloads remain local.",
+    "revision": "644585b17f8db653fae9d877316b47025125e63f",
+    "sha256": "0aeb07c2e8c8cbb433faf3d37f48f4c837dc09d6a2bbd26b1d1d05942be718b5",
+    "required_columns": [
+      "gameweek",
+      "kickoff_time",
+      "home_team",
+      "away_team",
+      "home_score",
+      "away_score",
+      "match_id",
+      "tournament"
+    ],
+    "schema_note": "Completed Premier League match metadata; team references use persistent team codes."
+  },
+  {
+    "id": "gw_10_appearances",
+    "season": "2025-26",
+    "url": "https://raw.githubusercontent.com/olbauday/FPL-Core-Insights/644585b17f8db653fae9d877316b47025125e63f/data/2025-2026/By%20Tournament/Premier%20League/GW10/playermatchstats.csv",
+    "publisher": "olbauday / FPL-Core-Insights",
+    "reference_url": "https://github.com/olbauday/FPL-Core-Insights/blob/644585b17f8db653fae9d877316b47025125e63f/README.md#using-the-data",
+    "reuse_terms": "README permits project use and requests a source backlink; no SPDX license is declared. Raw downloads remain local.",
+    "revision": "644585b17f8db653fae9d877316b47025125e63f",
+    "sha256": "e061903bff01d5de6325c38ff489384d134acb385f304726da36d6031ab05a1c",
+    "required_columns": [
+      "player_id",
+      "match_id",
+      "minutes_played",
+      "goals",
+      "assists",
+      "xg",
+      "xa"
+    ],
+    "schema_note": "Discrete player-match statistics; minutes_played is authoritative, not start_min/finish_min. FPL points are not present."
+  },
+  {
+    "id": "gw_10_lineups",
+    "season": "2025-26",
+    "url": "https://raw.githubusercontent.com/olbauday/FPL-Core-Insights/644585b17f8db653fae9d877316b47025125e63f/data/2025-2026/By%20Tournament/Premier%20League/GW10/lineups.csv",
+    "publisher": "olbauday / FPL-Core-Insights",
+    "reference_url": "https://github.com/olbauday/FPL-Core-Insights/blob/644585b17f8db653fae9d877316b47025125e63f/README.md#using-the-data",
+    "reuse_terms": "README permits project use and requests a source backlink; no SPDX license is declared. Raw downloads remain local.",
+    "revision": "644585b17f8db653fae9d877316b47025125e63f",
+    "sha256": "6d3a6d85127578ef8b3ec5c61af3d3c8999752ace5074855c4281552b25f141c",
+    "required_columns": [
+      "match_id",
+      "team_code",
+      "player_id",
+      "team_side"
+    ],
+    "schema_note": "Actual match-team attribution, including bench and transfer histories."
+  },
+  {
+    "id": "gw_10_matches",
+    "season": "2025-26",
+    "url": "https://raw.githubusercontent.com/olbauday/FPL-Core-Insights/644585b17f8db653fae9d877316b47025125e63f/data/2025-2026/By%20Tournament/Premier%20League/GW10/matches.csv",
+    "publisher": "olbauday / FPL-Core-Insights",
+    "reference_url": "https://github.com/olbauday/FPL-Core-Insights/blob/644585b17f8db653fae9d877316b47025125e63f/README.md#using-the-data",
+    "reuse_terms": "README permits project use and requests a source backlink; no SPDX license is declared. Raw downloads remain local.",
+    "revision": "644585b17f8db653fae9d877316b47025125e63f",
+    "sha256": "741ce25519abd3deb69668e44ff7096e6e751154e28430d91e3393c5ce84f097",
+    "required_columns": [
+      "gameweek",
+      "kickoff_time",
+      "home_team",
+      "away_team",
+      "home_score",
+      "away_score",
+      "match_id",
+      "tournament"
+    ],
+    "schema_note": "Completed Premier League match metadata; team references use persistent team codes."
+  },
+  {
+    "id": "gw_11_appearances",
+    "season": "2025-26",
+    "url": "https://raw.githubusercontent.com/olbauday/FPL-Core-Insights/644585b17f8db653fae9d877316b47025125e63f/data/2025-2026/By%20Tournament/Premier%20League/GW11/playermatchstats.csv",
+    "publisher": "olbauday / FPL-Core-Insights",
+    "reference_url": "https://github.com/olbauday/FPL-Core-Insights/blob/644585b17f8db653fae9d877316b47025125e63f/README.md#using-the-data",
+    "reuse_terms": "README permits project use and requests a source backlink; no SPDX license is declared. Raw downloads remain local.",
+    "revision": "644585b17f8db653fae9d877316b47025125e63f",
+    "sha256": "cce3e28a646c4f88ab4da548111de07e4cd2f5a698c22406518eea16613bc7f9",
+    "required_columns": [
+      "player_id",
+      "match_id",
+      "minutes_played",
+      "goals",
+      "assists",
+      "xg",
+      "xa"
+    ],
+    "schema_note": "Discrete player-match statistics; minutes_played is authoritative, not start_min/finish_min. FPL points are not present."
+  },
+  {
+    "id": "gw_11_lineups",
+    "season": "2025-26",
+    "url": "https://raw.githubusercontent.com/olbauday/FPL-Core-Insights/644585b17f8db653fae9d877316b47025125e63f/data/2025-2026/By%20Tournament/Premier%20League/GW11/lineups.csv",
+    "publisher": "olbauday / FPL-Core-Insights",
+    "reference_url": "https://github.com/olbauday/FPL-Core-Insights/blob/644585b17f8db653fae9d877316b47025125e63f/README.md#using-the-data",
+    "reuse_terms": "README permits project use and requests a source backlink; no SPDX license is declared. Raw downloads remain local.",
+    "revision": "644585b17f8db653fae9d877316b47025125e63f",
+    "sha256": "fa86283d8b8379bfe1835140f27c0135a72a6f087a0b2c9c217648b9318e328b",
+    "required_columns": [
+      "match_id",
+      "team_code",
+      "player_id",
+      "team_side"
+    ],
+    "schema_note": "Actual match-team attribution, including bench and transfer histories."
+  },
+  {
+    "id": "gw_11_matches",
+    "season": "2025-26",
+    "url": "https://raw.githubusercontent.com/olbauday/FPL-Core-Insights/644585b17f8db653fae9d877316b47025125e63f/data/2025-2026/By%20Tournament/Premier%20League/GW11/matches.csv",
+    "publisher": "olbauday / FPL-Core-Insights",
+    "reference_url": "https://github.com/olbauday/FPL-Core-Insights/blob/644585b17f8db653fae9d877316b47025125e63f/README.md#using-the-data",
+    "reuse_terms": "README permits project use and requests a source backlink; no SPDX license is declared. Raw downloads remain local.",
+    "revision": "644585b17f8db653fae9d877316b47025125e63f",
+    "sha256": "206ce02f820ee1c2ef7f17887337b3b06733a49dd5cf1df74bf529d2f175e2cb",
+    "required_columns": [
+      "gameweek",
+      "kickoff_time",
+      "home_team",
+      "away_team",
+      "home_score",
+      "away_score",
+      "match_id",
+      "tournament"
+    ],
+    "schema_note": "Completed Premier League match metadata; team references use persistent team codes."
+  },
+  {
+    "id": "gw_12_appearances",
+    "season": "2025-26",
+    "url": "https://raw.githubusercontent.com/olbauday/FPL-Core-Insights/644585b17f8db653fae9d877316b47025125e63f/data/2025-2026/By%20Tournament/Premier%20League/GW12/playermatchstats.csv",
+    "publisher": "olbauday / FPL-Core-Insights",
+    "reference_url": "https://github.com/olbauday/FPL-Core-Insights/blob/644585b17f8db653fae9d877316b47025125e63f/README.md#using-the-data",
+    "reuse_terms": "README permits project use and requests a source backlink; no SPDX license is declared. Raw downloads remain local.",
+    "revision": "644585b17f8db653fae9d877316b47025125e63f",
+    "sha256": "d96f0ec0b5f401637e57681572833d51031011f15c1bfdbdd49ca9de8d3d3f74",
+    "required_columns": [
+      "player_id",
+      "match_id",
+      "minutes_played",
+      "goals",
+      "assists",
+      "xg",
+      "xa"
+    ],
+    "schema_note": "Discrete player-match statistics; minutes_played is authoritative, not start_min/finish_min. FPL points are not present."
+  },
+  {
+    "id": "gw_12_lineups",
+    "season": "2025-26",
+    "url": "https://raw.githubusercontent.com/olbauday/FPL-Core-Insights/644585b17f8db653fae9d877316b47025125e63f/data/2025-2026/By%20Tournament/Premier%20League/GW12/lineups.csv",
+    "publisher": "olbauday / FPL-Core-Insights",
+    "reference_url": "https://github.com/olbauday/FPL-Core-Insights/blob/644585b17f8db653fae9d877316b47025125e63f/README.md#using-the-data",
+    "reuse_terms": "README permits project use and requests a source backlink; no SPDX license is declared. Raw downloads remain local.",
+    "revision": "644585b17f8db653fae9d877316b47025125e63f",
+    "sha256": "c1d76f9d5457848d585de09775b9738929200c7567b9be9852ff7cf7cfbf7fd1",
+    "required_columns": [
+      "match_id",
+      "team_code",
+      "player_id",
+      "team_side"
+    ],
+    "schema_note": "Actual match-team attribution, including bench and transfer histories."
+  },
+  {
+    "id": "gw_12_matches",
+    "season": "2025-26",
+    "url": "https://raw.githubusercontent.com/olbauday/FPL-Core-Insights/644585b17f8db653fae9d877316b47025125e63f/data/2025-2026/By%20Tournament/Premier%20League/GW12/matches.csv",
+    "publisher": "olbauday / FPL-Core-Insights",
+    "reference_url": "https://github.com/olbauday/FPL-Core-Insights/blob/644585b17f8db653fae9d877316b47025125e63f/README.md#using-the-data",
+    "reuse_terms": "README permits project use and requests a source backlink; no SPDX license is declared. Raw downloads remain local.",
+    "revision": "644585b17f8db653fae9d877316b47025125e63f",
+    "sha256": "cbae95721d2718f5941547831abd6770b13a47fb3bf59314a9795282e6c6d40d",
+    "required_columns": [
+      "gameweek",
+      "kickoff_time",
+      "home_team",
+      "away_team",
+      "home_score",
+      "away_score",
+      "match_id",
+      "tournament"
+    ],
+    "schema_note": "Completed Premier League match metadata; team references use persistent team codes."
+  },
+  {
+    "id": "gw_13_appearances",
+    "season": "2025-26",
+    "url": "https://raw.githubusercontent.com/olbauday/FPL-Core-Insights/644585b17f8db653fae9d877316b47025125e63f/data/2025-2026/By%20Tournament/Premier%20League/GW13/playermatchstats.csv",
+    "publisher": "olbauday / FPL-Core-Insights",
+    "reference_url": "https://github.com/olbauday/FPL-Core-Insights/blob/644585b17f8db653fae9d877316b47025125e63f/README.md#using-the-data",
+    "reuse_terms": "README permits project use and requests a source backlink; no SPDX license is declared. Raw downloads remain local.",
+    "revision": "644585b17f8db653fae9d877316b47025125e63f",
+    "sha256": "ace489d0910d27cd630d0cc11616e357a9c4014066a9a8fb5ca5a8db81513b3b",
+    "required_columns": [
+      "player_id",
+      "match_id",
+      "minutes_played",
+      "goals",
+      "assists",
+      "xg",
+      "xa"
+    ],
+    "schema_note": "Discrete player-match statistics; minutes_played is authoritative, not start_min/finish_min. FPL points are not present."
+  },
+  {
+    "id": "gw_13_lineups",
+    "season": "2025-26",
+    "url": "https://raw.githubusercontent.com/olbauday/FPL-Core-Insights/644585b17f8db653fae9d877316b47025125e63f/data/2025-2026/By%20Tournament/Premier%20League/GW13/lineups.csv",
+    "publisher": "olbauday / FPL-Core-Insights",
+    "reference_url": "https://github.com/olbauday/FPL-Core-Insights/blob/644585b17f8db653fae9d877316b47025125e63f/README.md#using-the-data",
+    "reuse_terms": "README permits project use and requests a source backlink; no SPDX license is declared. Raw downloads remain local.",
+    "revision": "644585b17f8db653fae9d877316b47025125e63f",
+    "sha256": "2237d25c743d8e74b94d75c081272c53ea1872a5b229cdc6eac8dc1db03d5579",
+    "required_columns": [
+      "match_id",
+      "team_code",
+      "player_id",
+      "team_side"
+    ],
+    "schema_note": "Actual match-team attribution, including bench and transfer histories."
+  },
+  {
+    "id": "gw_13_matches",
+    "season": "2025-26",
+    "url": "https://raw.githubusercontent.com/olbauday/FPL-Core-Insights/644585b17f8db653fae9d877316b47025125e63f/data/2025-2026/By%20Tournament/Premier%20League/GW13/matches.csv",
+    "publisher": "olbauday / FPL-Core-Insights",
+    "reference_url": "https://github.com/olbauday/FPL-Core-Insights/blob/644585b17f8db653fae9d877316b47025125e63f/README.md#using-the-data",
+    "reuse_terms": "README permits project use and requests a source backlink; no SPDX license is declared. Raw downloads remain local.",
+    "revision": "644585b17f8db653fae9d877316b47025125e63f",
+    "sha256": "d7ccb8bad05a3de7c9ee42d03368ae303ae91a205f6b7e318bda4f232e853462",
+    "required_columns": [
+      "gameweek",
+      "kickoff_time",
+      "home_team",
+      "away_team",
+      "home_score",
+      "away_score",
+      "match_id",
+      "tournament"
+    ],
+    "schema_note": "Completed Premier League match metadata; team references use persistent team codes."
+  },
+  {
+    "id": "gw_14_appearances",
+    "season": "2025-26",
+    "url": "https://raw.githubusercontent.com/olbauday/FPL-Core-Insights/644585b17f8db653fae9d877316b47025125e63f/data/2025-2026/By%20Tournament/Premier%20League/GW14/playermatchstats.csv",
+    "publisher": "olbauday / FPL-Core-Insights",
+    "reference_url": "https://github.com/olbauday/FPL-Core-Insights/blob/644585b17f8db653fae9d877316b47025125e63f/README.md#using-the-data",
+    "reuse_terms": "README permits project use and requests a source backlink; no SPDX license is declared. Raw downloads remain local.",
+    "revision": "644585b17f8db653fae9d877316b47025125e63f",
+    "sha256": "7a7b969509a5aa652e6f3ed234eacf4e4867b153b33ffceceee534d649d2f031",
+    "required_columns": [
+      "player_id",
+      "match_id",
+      "minutes_played",
+      "goals",
+      "assists",
+      "xg",
+      "xa"
+    ],
+    "schema_note": "Discrete player-match statistics; minutes_played is authoritative, not start_min/finish_min. FPL points are not present."
+  },
+  {
+    "id": "gw_14_lineups",
+    "season": "2025-26",
+    "url": "https://raw.githubusercontent.com/olbauday/FPL-Core-Insights/644585b17f8db653fae9d877316b47025125e63f/data/2025-2026/By%20Tournament/Premier%20League/GW14/lineups.csv",
+    "publisher": "olbauday / FPL-Core-Insights",
+    "reference_url": "https://github.com/olbauday/FPL-Core-Insights/blob/644585b17f8db653fae9d877316b47025125e63f/README.md#using-the-data",
+    "reuse_terms": "README permits project use and requests a source backlink; no SPDX license is declared. Raw downloads remain local.",
+    "revision": "644585b17f8db653fae9d877316b47025125e63f",
+    "sha256": "ed1a2ba118ad13c664d7bb460cf623773e600383bfba2a687ed8ce1ee1d0f8cd",
+    "required_columns": [
+      "match_id",
+      "team_code",
+      "player_id",
+      "team_side"
+    ],
+    "schema_note": "Actual match-team attribution, including bench and transfer histories."
+  },
+  {
+    "id": "gw_14_matches",
+    "season": "2025-26",
+    "url": "https://raw.githubusercontent.com/olbauday/FPL-Core-Insights/644585b17f8db653fae9d877316b47025125e63f/data/2025-2026/By%20Tournament/Premier%20League/GW14/matches.csv",
+    "publisher": "olbauday / FPL-Core-Insights",
+    "reference_url": "https://github.com/olbauday/FPL-Core-Insights/blob/644585b17f8db653fae9d877316b47025125e63f/README.md#using-the-data",
+    "reuse_terms": "README permits project use and requests a source backlink; no SPDX license is declared. Raw downloads remain local.",
+    "revision": "644585b17f8db653fae9d877316b47025125e63f",
+    "sha256": "5109c1665a9c3c6dd50a6fe224dc8f4483f9e7257ac58b00bd7d6f6cb140b0fc",
+    "required_columns": [
+      "gameweek",
+      "kickoff_time",
+      "home_team",
+      "away_team",
+      "home_score",
+      "away_score",
+      "match_id",
+      "tournament"
+    ],
+    "schema_note": "Completed Premier League match metadata; team references use persistent team codes."
+  },
+  {
+    "id": "gw_15_appearances",
+    "season": "2025-26",
+    "url": "https://raw.githubusercontent.com/olbauday/FPL-Core-Insights/644585b17f8db653fae9d877316b47025125e63f/data/2025-2026/By%20Tournament/Premier%20League/GW15/playermatchstats.csv",
+    "publisher": "olbauday / FPL-Core-Insights",
+    "reference_url": "https://github.com/olbauday/FPL-Core-Insights/blob/644585b17f8db653fae9d877316b47025125e63f/README.md#using-the-data",
+    "reuse_terms": "README permits project use and requests a source backlink; no SPDX license is declared. Raw downloads remain local.",
+    "revision": "644585b17f8db653fae9d877316b47025125e63f",
+    "sha256": "a82d26231d324b45cd34674cdc6e0bb49e6da00849eaad0702f218e2efba1a73",
+    "required_columns": [
+      "player_id",
+      "match_id",
+      "minutes_played",
+      "goals",
+      "assists",
+      "xg",
+      "xa"
+    ],
+    "schema_note": "Discrete player-match statistics; minutes_played is authoritative, not start_min/finish_min. FPL points are not present."
+  },
+  {
+    "id": "gw_15_lineups",
+    "season": "2025-26",
+    "url": "https://raw.githubusercontent.com/olbauday/FPL-Core-Insights/644585b17f8db653fae9d877316b47025125e63f/data/2025-2026/By%20Tournament/Premier%20League/GW15/lineups.csv",
+    "publisher": "olbauday / FPL-Core-Insights",
+    "reference_url": "https://github.com/olbauday/FPL-Core-Insights/blob/644585b17f8db653fae9d877316b47025125e63f/README.md#using-the-data",
+    "reuse_terms": "README permits project use and requests a source backlink; no SPDX license is declared. Raw downloads remain local.",
+    "revision": "644585b17f8db653fae9d877316b47025125e63f",
+    "sha256": "d53773b654623c548aa9911024a120ed326cb3d343ee3d1dacd72956b94feb5e",
+    "required_columns": [
+      "match_id",
+      "team_code",
+      "player_id",
+      "team_side"
+    ],
+    "schema_note": "Actual match-team attribution, including bench and transfer histories."
+  },
+  {
+    "id": "gw_15_matches",
+    "season": "2025-26",
+    "url": "https://raw.githubusercontent.com/olbauday/FPL-Core-Insights/644585b17f8db653fae9d877316b47025125e63f/data/2025-2026/By%20Tournament/Premier%20League/GW15/matches.csv",
+    "publisher": "olbauday / FPL-Core-Insights",
+    "reference_url": "https://github.com/olbauday/FPL-Core-Insights/blob/644585b17f8db653fae9d877316b47025125e63f/README.md#using-the-data",
+    "reuse_terms": "README permits project use and requests a source backlink; no SPDX license is declared. Raw downloads remain local.",
+    "revision": "644585b17f8db653fae9d877316b47025125e63f",
+    "sha256": "a2d9ae0c6effe2d34d32c4515b0cae2f3fa2702b27fe189f669335b15f062542",
+    "required_columns": [
+      "gameweek",
+      "kickoff_time",
+      "home_team",
+      "away_team",
+      "home_score",
+      "away_score",
+      "match_id",
+      "tournament"
+    ],
+    "schema_note": "Completed Premier League match metadata; team references use persistent team codes."
+  },
+  {
+    "id": "gw_16_appearances",
+    "season": "2025-26",
+    "url": "https://raw.githubusercontent.com/olbauday/FPL-Core-Insights/644585b17f8db653fae9d877316b47025125e63f/data/2025-2026/By%20Tournament/Premier%20League/GW16/playermatchstats.csv",
+    "publisher": "olbauday / FPL-Core-Insights",
+    "reference_url": "https://github.com/olbauday/FPL-Core-Insights/blob/644585b17f8db653fae9d877316b47025125e63f/README.md#using-the-data",
+    "reuse_terms": "README permits project use and requests a source backlink; no SPDX license is declared. Raw downloads remain local.",
+    "revision": "644585b17f8db653fae9d877316b47025125e63f",
+    "sha256": "f9b4fc50213e9d8d641c2e68701da82226f87c31d08a8b0c3ae420b51ac30e64",
+    "required_columns": [
+      "player_id",
+      "match_id",
+      "minutes_played",
+      "goals",
+      "assists",
+      "xg",
+      "xa"
+    ],
+    "schema_note": "Discrete player-match statistics; minutes_played is authoritative, not start_min/finish_min. FPL points are not present."
+  },
+  {
+    "id": "gw_16_lineups",
+    "season": "2025-26",
+    "url": "https://raw.githubusercontent.com/olbauday/FPL-Core-Insights/644585b17f8db653fae9d877316b47025125e63f/data/2025-2026/By%20Tournament/Premier%20League/GW16/lineups.csv",
+    "publisher": "olbauday / FPL-Core-Insights",
+    "reference_url": "https://github.com/olbauday/FPL-Core-Insights/blob/644585b17f8db653fae9d877316b47025125e63f/README.md#using-the-data",
+    "reuse_terms": "README permits project use and requests a source backlink; no SPDX license is declared. Raw downloads remain local.",
+    "revision": "644585b17f8db653fae9d877316b47025125e63f",
+    "sha256": "f7007af1dff106fe045fbb94dccc47b6a800965372f55388118b50e470e0ad4d",
+    "required_columns": [
+      "match_id",
+      "team_code",
+      "player_id",
+      "team_side"
+    ],
+    "schema_note": "Actual match-team attribution, including bench and transfer histories."
+  },
+  {
+    "id": "gw_16_matches",
+    "season": "2025-26",
+    "url": "https://raw.githubusercontent.com/olbauday/FPL-Core-Insights/644585b17f8db653fae9d877316b47025125e63f/data/2025-2026/By%20Tournament/Premier%20League/GW16/matches.csv",
+    "publisher": "olbauday / FPL-Core-Insights",
+    "reference_url": "https://github.com/olbauday/FPL-Core-Insights/blob/644585b17f8db653fae9d877316b47025125e63f/README.md#using-the-data",
+    "reuse_terms": "README permits project use and requests a source backlink; no SPDX license is declared. Raw downloads remain local.",
+    "revision": "644585b17f8db653fae9d877316b47025125e63f",
+    "sha256": "ed77a51a517735946f2dd36f6debcc0550693a97b95ec3f7157fb913fbfecbd6",
+    "required_columns": [
+      "gameweek",
+      "kickoff_time",
+      "home_team",
+      "away_team",
+      "home_score",
+      "away_score",
+      "match_id",
+      "tournament"
+    ],
+    "schema_note": "Completed Premier League match metadata; team references use persistent team codes."
+  },
+  {
+    "id": "gw_17_appearances",
+    "season": "2025-26",
+    "url": "https://raw.githubusercontent.com/olbauday/FPL-Core-Insights/644585b17f8db653fae9d877316b47025125e63f/data/2025-2026/By%20Tournament/Premier%20League/GW17/playermatchstats.csv",
+    "publisher": "olbauday / FPL-Core-Insights",
+    "reference_url": "https://github.com/olbauday/FPL-Core-Insights/blob/644585b17f8db653fae9d877316b47025125e63f/README.md#using-the-data",
+    "reuse_terms": "README permits project use and requests a source backlink; no SPDX license is declared. Raw downloads remain local.",
+    "revision": "644585b17f8db653fae9d877316b47025125e63f",
+    "sha256": "6e2c85f463698108ccd4b78d8da05041845d4c58c687c7d3263118c9a2bcba1b",
+    "required_columns": [
+      "player_id",
+      "match_id",
+      "minutes_played",
+      "goals",
+      "assists",
+      "xg",
+      "xa"
+    ],
+    "schema_note": "Discrete player-match statistics; minutes_played is authoritative, not start_min/finish_min. FPL points are not present."
+  },
+  {
+    "id": "gw_17_lineups",
+    "season": "2025-26",
+    "url": "https://raw.githubusercontent.com/olbauday/FPL-Core-Insights/644585b17f8db653fae9d877316b47025125e63f/data/2025-2026/By%20Tournament/Premier%20League/GW17/lineups.csv",
+    "publisher": "olbauday / FPL-Core-Insights",
+    "reference_url": "https://github.com/olbauday/FPL-Core-Insights/blob/644585b17f8db653fae9d877316b47025125e63f/README.md#using-the-data",
+    "reuse_terms": "README permits project use and requests a source backlink; no SPDX license is declared. Raw downloads remain local.",
+    "revision": "644585b17f8db653fae9d877316b47025125e63f",
+    "sha256": "811a512dd51efddf5673b545abd00619fcbc765d839905b97b1135b57e96bd72",
+    "required_columns": [
+      "match_id",
+      "team_code",
+      "player_id",
+      "team_side"
+    ],
+    "schema_note": "Actual match-team attribution, including bench and transfer histories."
+  },
+  {
+    "id": "gw_17_matches",
+    "season": "2025-26",
+    "url": "https://raw.githubusercontent.com/olbauday/FPL-Core-Insights/644585b17f8db653fae9d877316b47025125e63f/data/2025-2026/By%20Tournament/Premier%20League/GW17/matches.csv",
+    "publisher": "olbauday / FPL-Core-Insights",
+    "reference_url": "https://github.com/olbauday/FPL-Core-Insights/blob/644585b17f8db653fae9d877316b47025125e63f/README.md#using-the-data",
+    "reuse_terms": "README permits project use and requests a source backlink; no SPDX license is declared. Raw downloads remain local.",
+    "revision": "644585b17f8db653fae9d877316b47025125e63f",
+    "sha256": "1767be9305727f851be5e6b67cd8495b5cd8b0f0e43a8ec3a1db8d7814e193c9",
+    "required_columns": [
+      "gameweek",
+      "kickoff_time",
+      "home_team",
+      "away_team",
+      "home_score",
+      "away_score",
+      "match_id",
+      "tournament"
+    ],
+    "schema_note": "Completed Premier League match metadata; team references use persistent team codes."
+  },
+  {
+    "id": "gw_18_appearances",
+    "season": "2025-26",
+    "url": "https://raw.githubusercontent.com/olbauday/FPL-Core-Insights/644585b17f8db653fae9d877316b47025125e63f/data/2025-2026/By%20Tournament/Premier%20League/GW18/playermatchstats.csv",
+    "publisher": "olbauday / FPL-Core-Insights",
+    "reference_url": "https://github.com/olbauday/FPL-Core-Insights/blob/644585b17f8db653fae9d877316b47025125e63f/README.md#using-the-data",
+    "reuse_terms": "README permits project use and requests a source backlink; no SPDX license is declared. Raw downloads remain local.",
+    "revision": "644585b17f8db653fae9d877316b47025125e63f",
+    "sha256": "87c50585f36dcd170684cb373f3ed1a978363d2bd6feb143270e3ceff213e629",
+    "required_columns": [
+      "player_id",
+      "match_id",
+      "minutes_played",
+      "goals",
+      "assists",
+      "xg",
+      "xa"
+    ],
+    "schema_note": "Discrete player-match statistics; minutes_played is authoritative, not start_min/finish_min. FPL points are not present."
+  },
+  {
+    "id": "gw_18_lineups",
+    "season": "2025-26",
+    "url": "https://raw.githubusercontent.com/olbauday/FPL-Core-Insights/644585b17f8db653fae9d877316b47025125e63f/data/2025-2026/By%20Tournament/Premier%20League/GW18/lineups.csv",
+    "publisher": "olbauday / FPL-Core-Insights",
+    "reference_url": "https://github.com/olbauday/FPL-Core-Insights/blob/644585b17f8db653fae9d877316b47025125e63f/README.md#using-the-data",
+    "reuse_terms": "README permits project use and requests a source backlink; no SPDX license is declared. Raw downloads remain local.",
+    "revision": "644585b17f8db653fae9d877316b47025125e63f",
+    "sha256": "863bd13ad8f7be91e5a42063697942c0b4a48025183d5ba063f06817fdce7921",
+    "required_columns": [
+      "match_id",
+      "team_code",
+      "player_id",
+      "team_side"
+    ],
+    "schema_note": "Actual match-team attribution, including bench and transfer histories."
+  },
+  {
+    "id": "gw_18_matches",
+    "season": "2025-26",
+    "url": "https://raw.githubusercontent.com/olbauday/FPL-Core-Insights/644585b17f8db653fae9d877316b47025125e63f/data/2025-2026/By%20Tournament/Premier%20League/GW18/matches.csv",
+    "publisher": "olbauday / FPL-Core-Insights",
+    "reference_url": "https://github.com/olbauday/FPL-Core-Insights/blob/644585b17f8db653fae9d877316b47025125e63f/README.md#using-the-data",
+    "reuse_terms": "README permits project use and requests a source backlink; no SPDX license is declared. Raw downloads remain local.",
+    "revision": "644585b17f8db653fae9d877316b47025125e63f",
+    "sha256": "9696f26d09394a74b0265e1be7bbca0c10b8069f98d71deb3bc02bd029af5819",
+    "required_columns": [
+      "gameweek",
+      "kickoff_time",
+      "home_team",
+      "away_team",
+      "home_score",
+      "away_score",
+      "match_id",
+      "tournament"
+    ],
+    "schema_note": "Completed Premier League match metadata; team references use persistent team codes."
+  },
+  {
+    "id": "gw_19_appearances",
+    "season": "2025-26",
+    "url": "https://raw.githubusercontent.com/olbauday/FPL-Core-Insights/644585b17f8db653fae9d877316b47025125e63f/data/2025-2026/By%20Tournament/Premier%20League/GW19/playermatchstats.csv",
+    "publisher": "olbauday / FPL-Core-Insights",
+    "reference_url": "https://github.com/olbauday/FPL-Core-Insights/blob/644585b17f8db653fae9d877316b47025125e63f/README.md#using-the-data",
+    "reuse_terms": "README permits project use and requests a source backlink; no SPDX license is declared. Raw downloads remain local.",
+    "revision": "644585b17f8db653fae9d877316b47025125e63f",
+    "sha256": "35eed02c3cb78c19cba72c3394bbbe31a8e30fa64d6191cebb692268db356479",
+    "required_columns": [
+      "player_id",
+      "match_id",
+      "minutes_played",
+      "goals",
+      "assists",
+      "xg",
+      "xa"
+    ],
+    "schema_note": "Discrete player-match statistics; minutes_played is authoritative, not start_min/finish_min. FPL points are not present."
+  },
+  {
+    "id": "gw_19_lineups",
+    "season": "2025-26",
+    "url": "https://raw.githubusercontent.com/olbauday/FPL-Core-Insights/644585b17f8db653fae9d877316b47025125e63f/data/2025-2026/By%20Tournament/Premier%20League/GW19/lineups.csv",
+    "publisher": "olbauday / FPL-Core-Insights",
+    "reference_url": "https://github.com/olbauday/FPL-Core-Insights/blob/644585b17f8db653fae9d877316b47025125e63f/README.md#using-the-data",
+    "reuse_terms": "README permits project use and requests a source backlink; no SPDX license is declared. Raw downloads remain local.",
+    "revision": "644585b17f8db653fae9d877316b47025125e63f",
+    "sha256": "8ff9b22cb1c732383807604c06c64e494027e180ee2213a8ec979d15ff5864cf",
+    "required_columns": [
+      "match_id",
+      "team_code",
+      "player_id",
+      "team_side"
+    ],
+    "schema_note": "Actual match-team attribution, including bench and transfer histories."
+  },
+  {
+    "id": "gw_19_matches",
+    "season": "2025-26",
+    "url": "https://raw.githubusercontent.com/olbauday/FPL-Core-Insights/644585b17f8db653fae9d877316b47025125e63f/data/2025-2026/By%20Tournament/Premier%20League/GW19/matches.csv",
+    "publisher": "olbauday / FPL-Core-Insights",
+    "reference_url": "https://github.com/olbauday/FPL-Core-Insights/blob/644585b17f8db653fae9d877316b47025125e63f/README.md#using-the-data",
+    "reuse_terms": "README permits project use and requests a source backlink; no SPDX license is declared. Raw downloads remain local.",
+    "revision": "644585b17f8db653fae9d877316b47025125e63f",
+    "sha256": "ddbdc5e6c06a2a86616f5ab42ed6cb014f70c4e5d32061705c35547ddcf0c52b",
+    "required_columns": [
+      "gameweek",
+      "kickoff_time",
+      "home_team",
+      "away_team",
+      "home_score",
+      "away_score",
+      "match_id",
+      "tournament"
+    ],
+    "schema_note": "Completed Premier League match metadata; team references use persistent team codes."
+  },
+  {
+    "id": "gw_20_appearances",
+    "season": "2025-26",
+    "url": "https://raw.githubusercontent.com/olbauday/FPL-Core-Insights/644585b17f8db653fae9d877316b47025125e63f/data/2025-2026/By%20Tournament/Premier%20League/GW20/playermatchstats.csv",
+    "publisher": "olbauday / FPL-Core-Insights",
+    "reference_url": "https://github.com/olbauday/FPL-Core-Insights/blob/644585b17f8db653fae9d877316b47025125e63f/README.md#using-the-data",
+    "reuse_terms": "README permits project use and requests a source backlink; no SPDX license is declared. Raw downloads remain local.",
+    "revision": "644585b17f8db653fae9d877316b47025125e63f",
+    "sha256": "6d1beb472e97a64aee0cf4c7931ce4309eb8900e24c471d4646b2c7e63d028b8",
+    "required_columns": [
+      "player_id",
+      "match_id",
+      "minutes_played",
+      "goals",
+      "assists",
+      "xg",
+      "xa"
+    ],
+    "schema_note": "Discrete player-match statistics; minutes_played is authoritative, not start_min/finish_min. FPL points are not present."
+  },
+  {
+    "id": "gw_20_lineups",
+    "season": "2025-26",
+    "url": "https://raw.githubusercontent.com/olbauday/FPL-Core-Insights/644585b17f8db653fae9d877316b47025125e63f/data/2025-2026/By%20Tournament/Premier%20League/GW20/lineups.csv",
+    "publisher": "olbauday / FPL-Core-Insights",
+    "reference_url": "https://github.com/olbauday/FPL-Core-Insights/blob/644585b17f8db653fae9d877316b47025125e63f/README.md#using-the-data",
+    "reuse_terms": "README permits project use and requests a source backlink; no SPDX license is declared. Raw downloads remain local.",
+    "revision": "644585b17f8db653fae9d877316b47025125e63f",
+    "sha256": "ee43150843977b6c5234cdbb69336677c05fa2702408334f7ef6477bc87a6f3c",
+    "required_columns": [
+      "match_id",
+      "team_code",
+      "player_id",
+      "team_side"
+    ],
+    "schema_note": "Actual match-team attribution, including bench and transfer histories."
+  },
+  {
+    "id": "gw_20_matches",
+    "season": "2025-26",
+    "url": "https://raw.githubusercontent.com/olbauday/FPL-Core-Insights/644585b17f8db653fae9d877316b47025125e63f/data/2025-2026/By%20Tournament/Premier%20League/GW20/matches.csv",
+    "publisher": "olbauday / FPL-Core-Insights",
+    "reference_url": "https://github.com/olbauday/FPL-Core-Insights/blob/644585b17f8db653fae9d877316b47025125e63f/README.md#using-the-data",
+    "reuse_terms": "README permits project use and requests a source backlink; no SPDX license is declared. Raw downloads remain local.",
+    "revision": "644585b17f8db653fae9d877316b47025125e63f",
+    "sha256": "3248f45151951ff44159e02721b6af6adea95449dfe215cd4507d03e4b933d4d",
+    "required_columns": [
+      "gameweek",
+      "kickoff_time",
+      "home_team",
+      "away_team",
+      "home_score",
+      "away_score",
+      "match_id",
+      "tournament"
+    ],
+    "schema_note": "Completed Premier League match metadata; team references use persistent team codes."
+  },
+  {
+    "id": "gw_21_appearances",
+    "season": "2025-26",
+    "url": "https://raw.githubusercontent.com/olbauday/FPL-Core-Insights/644585b17f8db653fae9d877316b47025125e63f/data/2025-2026/By%20Tournament/Premier%20League/GW21/playermatchstats.csv",
+    "publisher": "olbauday / FPL-Core-Insights",
+    "reference_url": "https://github.com/olbauday/FPL-Core-Insights/blob/644585b17f8db653fae9d877316b47025125e63f/README.md#using-the-data",
+    "reuse_terms": "README permits project use and requests a source backlink; no SPDX license is declared. Raw downloads remain local.",
+    "revision": "644585b17f8db653fae9d877316b47025125e63f",
+    "sha256": "5e1a8999be36a6f9b39b3a57cb8eb8f7aee915ae5a57eb60d897a11c61dc536b",
+    "required_columns": [
+      "player_id",
+      "match_id",
+      "minutes_played",
+      "goals",
+      "assists",
+      "xg",
+      "xa"
+    ],
+    "schema_note": "Discrete player-match statistics; minutes_played is authoritative, not start_min/finish_min. FPL points are not present."
+  },
+  {
+    "id": "gw_21_lineups",
+    "season": "2025-26",
+    "url": "https://raw.githubusercontent.com/olbauday/FPL-Core-Insights/644585b17f8db653fae9d877316b47025125e63f/data/2025-2026/By%20Tournament/Premier%20League/GW21/lineups.csv",
+    "publisher": "olbauday / FPL-Core-Insights",
+    "reference_url": "https://github.com/olbauday/FPL-Core-Insights/blob/644585b17f8db653fae9d877316b47025125e63f/README.md#using-the-data",
+    "reuse_terms": "README permits project use and requests a source backlink; no SPDX license is declared. Raw downloads remain local.",
+    "revision": "644585b17f8db653fae9d877316b47025125e63f",
+    "sha256": "0aa0cf7e741a7598e7f6f82202986bc9401d84a8fe68232b3aee05e01bb9330e",
+    "required_columns": [
+      "match_id",
+      "team_code",
+      "player_id",
+      "team_side"
+    ],
+    "schema_note": "Actual match-team attribution, including bench and transfer histories."
+  },
+  {
+    "id": "gw_21_matches",
+    "season": "2025-26",
+    "url": "https://raw.githubusercontent.com/olbauday/FPL-Core-Insights/644585b17f8db653fae9d877316b47025125e63f/data/2025-2026/By%20Tournament/Premier%20League/GW21/matches.csv",
+    "publisher": "olbauday / FPL-Core-Insights",
+    "reference_url": "https://github.com/olbauday/FPL-Core-Insights/blob/644585b17f8db653fae9d877316b47025125e63f/README.md#using-the-data",
+    "reuse_terms": "README permits project use and requests a source backlink; no SPDX license is declared. Raw downloads remain local.",
+    "revision": "644585b17f8db653fae9d877316b47025125e63f",
+    "sha256": "01e3e82c627ccf32857834db53c0e960cd9021ae46e1eb15eafeb9f74258e24d",
+    "required_columns": [
+      "gameweek",
+      "kickoff_time",
+      "home_team",
+      "away_team",
+      "home_score",
+      "away_score",
+      "match_id",
+      "tournament"
+    ],
+    "schema_note": "Completed Premier League match metadata; team references use persistent team codes."
+  },
+  {
+    "id": "gw_22_appearances",
+    "season": "2025-26",
+    "url": "https://raw.githubusercontent.com/olbauday/FPL-Core-Insights/644585b17f8db653fae9d877316b47025125e63f/data/2025-2026/By%20Tournament/Premier%20League/GW22/playermatchstats.csv",
+    "publisher": "olbauday / FPL-Core-Insights",
+    "reference_url": "https://github.com/olbauday/FPL-Core-Insights/blob/644585b17f8db653fae9d877316b47025125e63f/README.md#using-the-data",
+    "reuse_terms": "README permits project use and requests a source backlink; no SPDX license is declared. Raw downloads remain local.",
+    "revision": "644585b17f8db653fae9d877316b47025125e63f",
+    "sha256": "3c4c1d3aea2424906c3e5031bf3185c5ed24136302b66378fe93f32d80c41be2",
+    "required_columns": [
+      "player_id",
+      "match_id",
+      "minutes_played",
+      "goals",
+      "assists",
+      "xg",
+      "xa"
+    ],
+    "schema_note": "Discrete player-match statistics; minutes_played is authoritative, not start_min/finish_min. FPL points are not present."
+  },
+  {
+    "id": "gw_22_lineups",
+    "season": "2025-26",
+    "url": "https://raw.githubusercontent.com/olbauday/FPL-Core-Insights/644585b17f8db653fae9d877316b47025125e63f/data/2025-2026/By%20Tournament/Premier%20League/GW22/lineups.csv",
+    "publisher": "olbauday / FPL-Core-Insights",
+    "reference_url": "https://github.com/olbauday/FPL-Core-Insights/blob/644585b17f8db653fae9d877316b47025125e63f/README.md#using-the-data",
+    "reuse_terms": "README permits project use and requests a source backlink; no SPDX license is declared. Raw downloads remain local.",
+    "revision": "644585b17f8db653fae9d877316b47025125e63f",
+    "sha256": "e2336f5d78c8769c102a47f27ba5018602f3eee5233a9a1d349579c12cf319a4",
+    "required_columns": [
+      "match_id",
+      "team_code",
+      "player_id",
+      "team_side"
+    ],
+    "schema_note": "Actual match-team attribution, including bench and transfer histories."
+  },
+  {
+    "id": "gw_22_matches",
+    "season": "2025-26",
+    "url": "https://raw.githubusercontent.com/olbauday/FPL-Core-Insights/644585b17f8db653fae9d877316b47025125e63f/data/2025-2026/By%20Tournament/Premier%20League/GW22/matches.csv",
+    "publisher": "olbauday / FPL-Core-Insights",
+    "reference_url": "https://github.com/olbauday/FPL-Core-Insights/blob/644585b17f8db653fae9d877316b47025125e63f/README.md#using-the-data",
+    "reuse_terms": "README permits project use and requests a source backlink; no SPDX license is declared. Raw downloads remain local.",
+    "revision": "644585b17f8db653fae9d877316b47025125e63f",
+    "sha256": "b3be587273d9565f458de306bff41e8001e83a8d95e58bb60f349bd463bddbbb",
+    "required_columns": [
+      "gameweek",
+      "kickoff_time",
+      "home_team",
+      "away_team",
+      "home_score",
+      "away_score",
+      "match_id",
+      "tournament"
+    ],
+    "schema_note": "Completed Premier League match metadata; team references use persistent team codes."
+  },
+  {
+    "id": "gw_23_appearances",
+    "season": "2025-26",
+    "url": "https://raw.githubusercontent.com/olbauday/FPL-Core-Insights/644585b17f8db653fae9d877316b47025125e63f/data/2025-2026/By%20Tournament/Premier%20League/GW23/playermatchstats.csv",
+    "publisher": "olbauday / FPL-Core-Insights",
+    "reference_url": "https://github.com/olbauday/FPL-Core-Insights/blob/644585b17f8db653fae9d877316b47025125e63f/README.md#using-the-data",
+    "reuse_terms": "README permits project use and requests a source backlink; no SPDX license is declared. Raw downloads remain local.",
+    "revision": "644585b17f8db653fae9d877316b47025125e63f",
+    "sha256": "dbfdf052dae962e3440295900088d7ee4443ef181ec5c65e40a87d2926b1cadb",
+    "required_columns": [
+      "player_id",
+      "match_id",
+      "minutes_played",
+      "goals",
+      "assists",
+      "xg",
+      "xa"
+    ],
+    "schema_note": "Discrete player-match statistics; minutes_played is authoritative, not start_min/finish_min. FPL points are not present."
+  },
+  {
+    "id": "gw_23_lineups",
+    "season": "2025-26",
+    "url": "https://raw.githubusercontent.com/olbauday/FPL-Core-Insights/644585b17f8db653fae9d877316b47025125e63f/data/2025-2026/By%20Tournament/Premier%20League/GW23/lineups.csv",
+    "publisher": "olbauday / FPL-Core-Insights",
+    "reference_url": "https://github.com/olbauday/FPL-Core-Insights/blob/644585b17f8db653fae9d877316b47025125e63f/README.md#using-the-data",
+    "reuse_terms": "README permits project use and requests a source backlink; no SPDX license is declared. Raw downloads remain local.",
+    "revision": "644585b17f8db653fae9d877316b47025125e63f",
+    "sha256": "b30b88823784cbd6eaa8ca61c0cf85f754e6e7074eecc08127979f47446d2f73",
+    "required_columns": [
+      "match_id",
+      "team_code",
+      "player_id",
+      "team_side"
+    ],
+    "schema_note": "Actual match-team attribution, including bench and transfer histories."
+  },
+  {
+    "id": "gw_23_matches",
+    "season": "2025-26",
+    "url": "https://raw.githubusercontent.com/olbauday/FPL-Core-Insights/644585b17f8db653fae9d877316b47025125e63f/data/2025-2026/By%20Tournament/Premier%20League/GW23/matches.csv",
+    "publisher": "olbauday / FPL-Core-Insights",
+    "reference_url": "https://github.com/olbauday/FPL-Core-Insights/blob/644585b17f8db653fae9d877316b47025125e63f/README.md#using-the-data",
+    "reuse_terms": "README permits project use and requests a source backlink; no SPDX license is declared. Raw downloads remain local.",
+    "revision": "644585b17f8db653fae9d877316b47025125e63f",
+    "sha256": "eefeedfff43f4971410421dbebfd04a52f29cdec2cb3ae9a68da056d0ccf3f17",
+    "required_columns": [
+      "gameweek",
+      "kickoff_time",
+      "home_team",
+      "away_team",
+      "home_score",
+      "away_score",
+      "match_id",
+      "tournament"
+    ],
+    "schema_note": "Completed Premier League match metadata; team references use persistent team codes."
+  },
+  {
+    "id": "gw_24_appearances",
+    "season": "2025-26",
+    "url": "https://raw.githubusercontent.com/olbauday/FPL-Core-Insights/644585b17f8db653fae9d877316b47025125e63f/data/2025-2026/By%20Tournament/Premier%20League/GW24/playermatchstats.csv",
+    "publisher": "olbauday / FPL-Core-Insights",
+    "reference_url": "https://github.com/olbauday/FPL-Core-Insights/blob/644585b17f8db653fae9d877316b47025125e63f/README.md#using-the-data",
+    "reuse_terms": "README permits project use and requests a source backlink; no SPDX license is declared. Raw downloads remain local.",
+    "revision": "644585b17f8db653fae9d877316b47025125e63f",
+    "sha256": "de252fbcd6ce0a7ba5e602bff8d3ec2a29c779961bbc71ebc8e7dceee33bb8ac",
+    "required_columns": [
+      "player_id",
+      "match_id",
+      "minutes_played",
+      "goals",
+      "assists",
+      "xg",
+      "xa"
+    ],
+    "schema_note": "Discrete player-match statistics; minutes_played is authoritative, not start_min/finish_min. FPL points are not present."
+  },
+  {
+    "id": "gw_24_lineups",
+    "season": "2025-26",
+    "url": "https://raw.githubusercontent.com/olbauday/FPL-Core-Insights/644585b17f8db653fae9d877316b47025125e63f/data/2025-2026/By%20Tournament/Premier%20League/GW24/lineups.csv",
+    "publisher": "olbauday / FPL-Core-Insights",
+    "reference_url": "https://github.com/olbauday/FPL-Core-Insights/blob/644585b17f8db653fae9d877316b47025125e63f/README.md#using-the-data",
+    "reuse_terms": "README permits project use and requests a source backlink; no SPDX license is declared. Raw downloads remain local.",
+    "revision": "644585b17f8db653fae9d877316b47025125e63f",
+    "sha256": "9cf8755feda8c587ba13637b8aa322fae14d59813ae1475d92022dc7c07e3702",
+    "required_columns": [
+      "match_id",
+      "team_code",
+      "player_id",
+      "team_side"
+    ],
+    "schema_note": "Actual match-team attribution, including bench and transfer histories."
+  },
+  {
+    "id": "gw_24_matches",
+    "season": "2025-26",
+    "url": "https://raw.githubusercontent.com/olbauday/FPL-Core-Insights/644585b17f8db653fae9d877316b47025125e63f/data/2025-2026/By%20Tournament/Premier%20League/GW24/matches.csv",
+    "publisher": "olbauday / FPL-Core-Insights",
+    "reference_url": "https://github.com/olbauday/FPL-Core-Insights/blob/644585b17f8db653fae9d877316b47025125e63f/README.md#using-the-data",
+    "reuse_terms": "README permits project use and requests a source backlink; no SPDX license is declared. Raw downloads remain local.",
+    "revision": "644585b17f8db653fae9d877316b47025125e63f",
+    "sha256": "20c977cc9db95e374872a82e65c2800bd30b24ef291fa57a8419492cfecd0de1",
+    "required_columns": [
+      "gameweek",
+      "kickoff_time",
+      "home_team",
+      "away_team",
+      "home_score",
+      "away_score",
+      "match_id",
+      "tournament"
+    ],
+    "schema_note": "Completed Premier League match metadata; team references use persistent team codes."
+  },
+  {
+    "id": "gw_25_appearances",
+    "season": "2025-26",
+    "url": "https://raw.githubusercontent.com/olbauday/FPL-Core-Insights/644585b17f8db653fae9d877316b47025125e63f/data/2025-2026/By%20Tournament/Premier%20League/GW25/playermatchstats.csv",
+    "publisher": "olbauday / FPL-Core-Insights",
+    "reference_url": "https://github.com/olbauday/FPL-Core-Insights/blob/644585b17f8db653fae9d877316b47025125e63f/README.md#using-the-data",
+    "reuse_terms": "README permits project use and requests a source backlink; no SPDX license is declared. Raw downloads remain local.",
+    "revision": "644585b17f8db653fae9d877316b47025125e63f",
+    "sha256": "a110d1ed9e8992da3184d8017b49d542efd2175f4679e6012b13a00e4e82d3b6",
+    "required_columns": [
+      "player_id",
+      "match_id",
+      "minutes_played",
+      "goals",
+      "assists",
+      "xg",
+      "xa"
+    ],
+    "schema_note": "Discrete player-match statistics; minutes_played is authoritative, not start_min/finish_min. FPL points are not present."
+  },
+  {
+    "id": "gw_25_lineups",
+    "season": "2025-26",
+    "url": "https://raw.githubusercontent.com/olbauday/FPL-Core-Insights/644585b17f8db653fae9d877316b47025125e63f/data/2025-2026/By%20Tournament/Premier%20League/GW25/lineups.csv",
+    "publisher": "olbauday / FPL-Core-Insights",
+    "reference_url": "https://github.com/olbauday/FPL-Core-Insights/blob/644585b17f8db653fae9d877316b47025125e63f/README.md#using-the-data",
+    "reuse_terms": "README permits project use and requests a source backlink; no SPDX license is declared. Raw downloads remain local.",
+    "revision": "644585b17f8db653fae9d877316b47025125e63f",
+    "sha256": "3dbdce8af8f5e535329f646aa52585021a60d09edc3d8717061118c764ed6a23",
+    "required_columns": [
+      "match_id",
+      "team_code",
+      "player_id",
+      "team_side"
+    ],
+    "schema_note": "Actual match-team attribution, including bench and transfer histories."
+  },
+  {
+    "id": "gw_25_matches",
+    "season": "2025-26",
+    "url": "https://raw.githubusercontent.com/olbauday/FPL-Core-Insights/644585b17f8db653fae9d877316b47025125e63f/data/2025-2026/By%20Tournament/Premier%20League/GW25/matches.csv",
+    "publisher": "olbauday / FPL-Core-Insights",
+    "reference_url": "https://github.com/olbauday/FPL-Core-Insights/blob/644585b17f8db653fae9d877316b47025125e63f/README.md#using-the-data",
+    "reuse_terms": "README permits project use and requests a source backlink; no SPDX license is declared. Raw downloads remain local.",
+    "revision": "644585b17f8db653fae9d877316b47025125e63f",
+    "sha256": "674b73371fece1d4421256dcf570c939bf5e19d24cbdc247a352290b3f0571ac",
+    "required_columns": [
+      "gameweek",
+      "kickoff_time",
+      "home_team",
+      "away_team",
+      "home_score",
+      "away_score",
+      "match_id",
+      "tournament"
+    ],
+    "schema_note": "Completed Premier League match metadata; team references use persistent team codes."
+  },
+  {
+    "id": "gw_26_appearances",
+    "season": "2025-26",
+    "url": "https://raw.githubusercontent.com/olbauday/FPL-Core-Insights/644585b17f8db653fae9d877316b47025125e63f/data/2025-2026/By%20Tournament/Premier%20League/GW26/playermatchstats.csv",
+    "publisher": "olbauday / FPL-Core-Insights",
+    "reference_url": "https://github.com/olbauday/FPL-Core-Insights/blob/644585b17f8db653fae9d877316b47025125e63f/README.md#using-the-data",
+    "reuse_terms": "README permits project use and requests a source backlink; no SPDX license is declared. Raw downloads remain local.",
+    "revision": "644585b17f8db653fae9d877316b47025125e63f",
+    "sha256": "cabd7204291eee2476f64852d895def78759e8172e810005330b591f41e1b1b4",
+    "required_columns": [
+      "player_id",
+      "match_id",
+      "minutes_played",
+      "goals",
+      "assists",
+      "xg",
+      "xa"
+    ],
+    "schema_note": "Discrete player-match statistics; minutes_played is authoritative, not start_min/finish_min. FPL points are not present."
+  },
+  {
+    "id": "gw_26_lineups",
+    "season": "2025-26",
+    "url": "https://raw.githubusercontent.com/olbauday/FPL-Core-Insights/644585b17f8db653fae9d877316b47025125e63f/data/2025-2026/By%20Tournament/Premier%20League/GW26/lineups.csv",
+    "publisher": "olbauday / FPL-Core-Insights",
+    "reference_url": "https://github.com/olbauday/FPL-Core-Insights/blob/644585b17f8db653fae9d877316b47025125e63f/README.md#using-the-data",
+    "reuse_terms": "README permits project use and requests a source backlink; no SPDX license is declared. Raw downloads remain local.",
+    "revision": "644585b17f8db653fae9d877316b47025125e63f",
+    "sha256": "acd2f760d82ae090a88c932758d2e4f1c38c318fcb595f12e06ad1fc2d725eb9",
+    "required_columns": [
+      "match_id",
+      "team_code",
+      "player_id",
+      "team_side"
+    ],
+    "schema_note": "Actual match-team attribution, including bench and transfer histories."
+  },
+  {
+    "id": "gw_26_matches",
+    "season": "2025-26",
+    "url": "https://raw.githubusercontent.com/olbauday/FPL-Core-Insights/644585b17f8db653fae9d877316b47025125e63f/data/2025-2026/By%20Tournament/Premier%20League/GW26/matches.csv",
+    "publisher": "olbauday / FPL-Core-Insights",
+    "reference_url": "https://github.com/olbauday/FPL-Core-Insights/blob/644585b17f8db653fae9d877316b47025125e63f/README.md#using-the-data",
+    "reuse_terms": "README permits project use and requests a source backlink; no SPDX license is declared. Raw downloads remain local.",
+    "revision": "644585b17f8db653fae9d877316b47025125e63f",
+    "sha256": "8d55cd022736d6d0685b9e684b4866f6c9e0f18b7271d6c96c0c9d1eeb2c8d05",
+    "required_columns": [
+      "gameweek",
+      "kickoff_time",
+      "home_team",
+      "away_team",
+      "home_score",
+      "away_score",
+      "match_id",
+      "tournament"
+    ],
+    "schema_note": "Completed Premier League match metadata; team references use persistent team codes."
+  },
+  {
+    "id": "gw_27_appearances",
+    "season": "2025-26",
+    "url": "https://raw.githubusercontent.com/olbauday/FPL-Core-Insights/644585b17f8db653fae9d877316b47025125e63f/data/2025-2026/By%20Tournament/Premier%20League/GW27/playermatchstats.csv",
+    "publisher": "olbauday / FPL-Core-Insights",
+    "reference_url": "https://github.com/olbauday/FPL-Core-Insights/blob/644585b17f8db653fae9d877316b47025125e63f/README.md#using-the-data",
+    "reuse_terms": "README permits project use and requests a source backlink; no SPDX license is declared. Raw downloads remain local.",
+    "revision": "644585b17f8db653fae9d877316b47025125e63f",
+    "sha256": "8212ce5851866ff63eeb9d39d6cc26eae089b92d2aa50fbb0b4e01be06741f79",
+    "required_columns": [
+      "player_id",
+      "match_id",
+      "minutes_played",
+      "goals",
+      "assists",
+      "xg",
+      "xa"
+    ],
+    "schema_note": "Discrete player-match statistics; minutes_played is authoritative, not start_min/finish_min. FPL points are not present."
+  },
+  {
+    "id": "gw_27_lineups",
+    "season": "2025-26",
+    "url": "https://raw.githubusercontent.com/olbauday/FPL-Core-Insights/644585b17f8db653fae9d877316b47025125e63f/data/2025-2026/By%20Tournament/Premier%20League/GW27/lineups.csv",
+    "publisher": "olbauday / FPL-Core-Insights",
+    "reference_url": "https://github.com/olbauday/FPL-Core-Insights/blob/644585b17f8db653fae9d877316b47025125e63f/README.md#using-the-data",
+    "reuse_terms": "README permits project use and requests a source backlink; no SPDX license is declared. Raw downloads remain local.",
+    "revision": "644585b17f8db653fae9d877316b47025125e63f",
+    "sha256": "52b83de815ab8aa04d997501f5f13c7069261e58dc2531c8b303bba83bedc44b",
+    "required_columns": [
+      "match_id",
+      "team_code",
+      "player_id",
+      "team_side"
+    ],
+    "schema_note": "Actual match-team attribution, including bench and transfer histories."
+  },
+  {
+    "id": "gw_27_matches",
+    "season": "2025-26",
+    "url": "https://raw.githubusercontent.com/olbauday/FPL-Core-Insights/644585b17f8db653fae9d877316b47025125e63f/data/2025-2026/By%20Tournament/Premier%20League/GW27/matches.csv",
+    "publisher": "olbauday / FPL-Core-Insights",
+    "reference_url": "https://github.com/olbauday/FPL-Core-Insights/blob/644585b17f8db653fae9d877316b47025125e63f/README.md#using-the-data",
+    "reuse_terms": "README permits project use and requests a source backlink; no SPDX license is declared. Raw downloads remain local.",
+    "revision": "644585b17f8db653fae9d877316b47025125e63f",
+    "sha256": "e3a9f5044395ef1316dfc2a8afcc156431772ae8af5c7787eaeca713b03032ed",
+    "required_columns": [
+      "gameweek",
+      "kickoff_time",
+      "home_team",
+      "away_team",
+      "home_score",
+      "away_score",
+      "match_id",
+      "tournament"
+    ],
+    "schema_note": "Completed Premier League match metadata; team references use persistent team codes."
+  },
+  {
+    "id": "gw_28_appearances",
+    "season": "2025-26",
+    "url": "https://raw.githubusercontent.com/olbauday/FPL-Core-Insights/644585b17f8db653fae9d877316b47025125e63f/data/2025-2026/By%20Tournament/Premier%20League/GW28/playermatchstats.csv",
+    "publisher": "olbauday / FPL-Core-Insights",
+    "reference_url": "https://github.com/olbauday/FPL-Core-Insights/blob/644585b17f8db653fae9d877316b47025125e63f/README.md#using-the-data",
+    "reuse_terms": "README permits project use and requests a source backlink; no SPDX license is declared. Raw downloads remain local.",
+    "revision": "644585b17f8db653fae9d877316b47025125e63f",
+    "sha256": "271bacad5071f68d25cb6e826750260f477f10ad1f55e5c8007e9a5e479d7d14",
+    "required_columns": [
+      "player_id",
+      "match_id",
+      "minutes_played",
+      "goals",
+      "assists",
+      "xg",
+      "xa"
+    ],
+    "schema_note": "Discrete player-match statistics; minutes_played is authoritative, not start_min/finish_min. FPL points are not present."
+  },
+  {
+    "id": "gw_28_lineups",
+    "season": "2025-26",
+    "url": "https://raw.githubusercontent.com/olbauday/FPL-Core-Insights/644585b17f8db653fae9d877316b47025125e63f/data/2025-2026/By%20Tournament/Premier%20League/GW28/lineups.csv",
+    "publisher": "olbauday / FPL-Core-Insights",
+    "reference_url": "https://github.com/olbauday/FPL-Core-Insights/blob/644585b17f8db653fae9d877316b47025125e63f/README.md#using-the-data",
+    "reuse_terms": "README permits project use and requests a source backlink; no SPDX license is declared. Raw downloads remain local.",
+    "revision": "644585b17f8db653fae9d877316b47025125e63f",
+    "sha256": "c79a8954910a789c48dd9ed887e9b3ce54a0c721e1673325298aaf98e26a0f05",
+    "required_columns": [
+      "match_id",
+      "team_code",
+      "player_id",
+      "team_side"
+    ],
+    "schema_note": "Actual match-team attribution, including bench and transfer histories."
+  },
+  {
+    "id": "gw_28_matches",
+    "season": "2025-26",
+    "url": "https://raw.githubusercontent.com/olbauday/FPL-Core-Insights/644585b17f8db653fae9d877316b47025125e63f/data/2025-2026/By%20Tournament/Premier%20League/GW28/matches.csv",
+    "publisher": "olbauday / FPL-Core-Insights",
+    "reference_url": "https://github.com/olbauday/FPL-Core-Insights/blob/644585b17f8db653fae9d877316b47025125e63f/README.md#using-the-data",
+    "reuse_terms": "README permits project use and requests a source backlink; no SPDX license is declared. Raw downloads remain local.",
+    "revision": "644585b17f8db653fae9d877316b47025125e63f",
+    "sha256": "ea4889d3ef620ff7d328f4c7b4954c07ba7a3df4a0b1877b0ac3364ee5b2575b",
+    "required_columns": [
+      "gameweek",
+      "kickoff_time",
+      "home_team",
+      "away_team",
+      "home_score",
+      "away_score",
+      "match_id",
+      "tournament"
+    ],
+    "schema_note": "Completed Premier League match metadata; team references use persistent team codes."
+  },
+  {
+    "id": "gw_29_appearances",
+    "season": "2025-26",
+    "url": "https://raw.githubusercontent.com/olbauday/FPL-Core-Insights/644585b17f8db653fae9d877316b47025125e63f/data/2025-2026/By%20Tournament/Premier%20League/GW29/playermatchstats.csv",
+    "publisher": "olbauday / FPL-Core-Insights",
+    "reference_url": "https://github.com/olbauday/FPL-Core-Insights/blob/644585b17f8db653fae9d877316b47025125e63f/README.md#using-the-data",
+    "reuse_terms": "README permits project use and requests a source backlink; no SPDX license is declared. Raw downloads remain local.",
+    "revision": "644585b17f8db653fae9d877316b47025125e63f",
+    "sha256": "6ceac31b185461ce316c9387a55dc6ec963544aa54c0ffb020310e982fec186d",
+    "required_columns": [
+      "player_id",
+      "match_id",
+      "minutes_played",
+      "goals",
+      "assists",
+      "xg",
+      "xa"
+    ],
+    "schema_note": "Discrete player-match statistics; minutes_played is authoritative, not start_min/finish_min. FPL points are not present."
+  },
+  {
+    "id": "gw_29_lineups",
+    "season": "2025-26",
+    "url": "https://raw.githubusercontent.com/olbauday/FPL-Core-Insights/644585b17f8db653fae9d877316b47025125e63f/data/2025-2026/By%20Tournament/Premier%20League/GW29/lineups.csv",
+    "publisher": "olbauday / FPL-Core-Insights",
+    "reference_url": "https://github.com/olbauday/FPL-Core-Insights/blob/644585b17f8db653fae9d877316b47025125e63f/README.md#using-the-data",
+    "reuse_terms": "README permits project use and requests a source backlink; no SPDX license is declared. Raw downloads remain local.",
+    "revision": "644585b17f8db653fae9d877316b47025125e63f",
+    "sha256": "c62b67bc364d26d92ccddfe6d7593aa4b9ddb4109786f42f56d95582a13b6d5a",
+    "required_columns": [
+      "match_id",
+      "team_code",
+      "player_id",
+      "team_side"
+    ],
+    "schema_note": "Actual match-team attribution, including bench and transfer histories."
+  },
+  {
+    "id": "gw_29_matches",
+    "season": "2025-26",
+    "url": "https://raw.githubusercontent.com/olbauday/FPL-Core-Insights/644585b17f8db653fae9d877316b47025125e63f/data/2025-2026/By%20Tournament/Premier%20League/GW29/matches.csv",
+    "publisher": "olbauday / FPL-Core-Insights",
+    "reference_url": "https://github.com/olbauday/FPL-Core-Insights/blob/644585b17f8db653fae9d877316b47025125e63f/README.md#using-the-data",
+    "reuse_terms": "README permits project use and requests a source backlink; no SPDX license is declared. Raw downloads remain local.",
+    "revision": "644585b17f8db653fae9d877316b47025125e63f",
+    "sha256": "20000ecf5ccda29823abf0dce76c02762fb043e4f2e895d17e921c5a3a87c6f3",
+    "required_columns": [
+      "gameweek",
+      "kickoff_time",
+      "home_team",
+      "away_team",
+      "home_score",
+      "away_score",
+      "match_id",
+      "tournament"
+    ],
+    "schema_note": "Completed Premier League match metadata; team references use persistent team codes."
+  },
+  {
+    "id": "gw_30_appearances",
+    "season": "2025-26",
+    "url": "https://raw.githubusercontent.com/olbauday/FPL-Core-Insights/644585b17f8db653fae9d877316b47025125e63f/data/2025-2026/By%20Tournament/Premier%20League/GW30/playermatchstats.csv",
+    "publisher": "olbauday / FPL-Core-Insights",
+    "reference_url": "https://github.com/olbauday/FPL-Core-Insights/blob/644585b17f8db653fae9d877316b47025125e63f/README.md#using-the-data",
+    "reuse_terms": "README permits project use and requests a source backlink; no SPDX license is declared. Raw downloads remain local.",
+    "revision": "644585b17f8db653fae9d877316b47025125e63f",
+    "sha256": "db90b14d5081aef55f60e9b159c6057b0703027c6fc3dbc29a21108100152d66",
+    "required_columns": [
+      "player_id",
+      "match_id",
+      "minutes_played",
+      "goals",
+      "assists",
+      "xg",
+      "xa"
+    ],
+    "schema_note": "Discrete player-match statistics; minutes_played is authoritative, not start_min/finish_min. FPL points are not present."
+  },
+  {
+    "id": "gw_30_lineups",
+    "season": "2025-26",
+    "url": "https://raw.githubusercontent.com/olbauday/FPL-Core-Insights/644585b17f8db653fae9d877316b47025125e63f/data/2025-2026/By%20Tournament/Premier%20League/GW30/lineups.csv",
+    "publisher": "olbauday / FPL-Core-Insights",
+    "reference_url": "https://github.com/olbauday/FPL-Core-Insights/blob/644585b17f8db653fae9d877316b47025125e63f/README.md#using-the-data",
+    "reuse_terms": "README permits project use and requests a source backlink; no SPDX license is declared. Raw downloads remain local.",
+    "revision": "644585b17f8db653fae9d877316b47025125e63f",
+    "sha256": "dc6a19b9d59c30f19dd03663b6609dade664a9a63c76023d03b7ed697666b43b",
+    "required_columns": [
+      "match_id",
+      "team_code",
+      "player_id",
+      "team_side"
+    ],
+    "schema_note": "Actual match-team attribution, including bench and transfer histories."
+  },
+  {
+    "id": "gw_30_matches",
+    "season": "2025-26",
+    "url": "https://raw.githubusercontent.com/olbauday/FPL-Core-Insights/644585b17f8db653fae9d877316b47025125e63f/data/2025-2026/By%20Tournament/Premier%20League/GW30/matches.csv",
+    "publisher": "olbauday / FPL-Core-Insights",
+    "reference_url": "https://github.com/olbauday/FPL-Core-Insights/blob/644585b17f8db653fae9d877316b47025125e63f/README.md#using-the-data",
+    "reuse_terms": "README permits project use and requests a source backlink; no SPDX license is declared. Raw downloads remain local.",
+    "revision": "644585b17f8db653fae9d877316b47025125e63f",
+    "sha256": "983fd004198ec391df58f63709a937cdaf4d28ddcde19666da8870bef677c678",
+    "required_columns": [
+      "gameweek",
+      "kickoff_time",
+      "home_team",
+      "away_team",
+      "home_score",
+      "away_score",
+      "match_id",
+      "tournament"
+    ],
+    "schema_note": "Completed Premier League match metadata; team references use persistent team codes."
+  },
+  {
+    "id": "gw_31_appearances",
+    "season": "2025-26",
+    "url": "https://raw.githubusercontent.com/olbauday/FPL-Core-Insights/644585b17f8db653fae9d877316b47025125e63f/data/2025-2026/By%20Tournament/Premier%20League/GW31/playermatchstats.csv",
+    "publisher": "olbauday / FPL-Core-Insights",
+    "reference_url": "https://github.com/olbauday/FPL-Core-Insights/blob/644585b17f8db653fae9d877316b47025125e63f/README.md#using-the-data",
+    "reuse_terms": "README permits project use and requests a source backlink; no SPDX license is declared. Raw downloads remain local.",
+    "revision": "644585b17f8db653fae9d877316b47025125e63f",
+    "sha256": "6481381a6fc8fafb430b1c0cc351dbd58205bbd965147166e7095edf42a060c0",
+    "required_columns": [
+      "player_id",
+      "match_id",
+      "minutes_played",
+      "goals",
+      "assists",
+      "xg",
+      "xa"
+    ],
+    "schema_note": "Discrete player-match statistics; minutes_played is authoritative, not start_min/finish_min. FPL points are not present."
+  },
+  {
+    "id": "gw_31_lineups",
+    "season": "2025-26",
+    "url": "https://raw.githubusercontent.com/olbauday/FPL-Core-Insights/644585b17f8db653fae9d877316b47025125e63f/data/2025-2026/By%20Tournament/Premier%20League/GW31/lineups.csv",
+    "publisher": "olbauday / FPL-Core-Insights",
+    "reference_url": "https://github.com/olbauday/FPL-Core-Insights/blob/644585b17f8db653fae9d877316b47025125e63f/README.md#using-the-data",
+    "reuse_terms": "README permits project use and requests a source backlink; no SPDX license is declared. Raw downloads remain local.",
+    "revision": "644585b17f8db653fae9d877316b47025125e63f",
+    "sha256": "3f7d531c3cf7342daa28fe74482d9bfb8167c2e07e032bb9bcdbe3c72e94a1ae",
+    "required_columns": [
+      "match_id",
+      "team_code",
+      "player_id",
+      "team_side"
+    ],
+    "schema_note": "Actual match-team attribution, including bench and transfer histories."
+  },
+  {
+    "id": "gw_31_matches",
+    "season": "2025-26",
+    "url": "https://raw.githubusercontent.com/olbauday/FPL-Core-Insights/644585b17f8db653fae9d877316b47025125e63f/data/2025-2026/By%20Tournament/Premier%20League/GW31/matches.csv",
+    "publisher": "olbauday / FPL-Core-Insights",
+    "reference_url": "https://github.com/olbauday/FPL-Core-Insights/blob/644585b17f8db653fae9d877316b47025125e63f/README.md#using-the-data",
+    "reuse_terms": "README permits project use and requests a source backlink; no SPDX license is declared. Raw downloads remain local.",
+    "revision": "644585b17f8db653fae9d877316b47025125e63f",
+    "sha256": "7d5d7c2255e9f029489943c614c78e9987eb8e5ec3ac64bcd329becae54368e3",
+    "required_columns": [
+      "gameweek",
+      "kickoff_time",
+      "home_team",
+      "away_team",
+      "home_score",
+      "away_score",
+      "match_id",
+      "tournament"
+    ],
+    "schema_note": "Completed Premier League match metadata; team references use persistent team codes."
+  },
+  {
+    "id": "gw_32_appearances",
+    "season": "2025-26",
+    "url": "https://raw.githubusercontent.com/olbauday/FPL-Core-Insights/644585b17f8db653fae9d877316b47025125e63f/data/2025-2026/By%20Tournament/Premier%20League/GW32/playermatchstats.csv",
+    "publisher": "olbauday / FPL-Core-Insights",
+    "reference_url": "https://github.com/olbauday/FPL-Core-Insights/blob/644585b17f8db653fae9d877316b47025125e63f/README.md#using-the-data",
+    "reuse_terms": "README permits project use and requests a source backlink; no SPDX license is declared. Raw downloads remain local.",
+    "revision": "644585b17f8db653fae9d877316b47025125e63f",
+    "sha256": "be8dd521b064bf75d67c88108e2c54773e1caa006bac8285c066010c4af0ab7a",
+    "required_columns": [
+      "player_id",
+      "match_id",
+      "minutes_played",
+      "goals",
+      "assists",
+      "xg",
+      "xa"
+    ],
+    "schema_note": "Discrete player-match statistics; minutes_played is authoritative, not start_min/finish_min. FPL points are not present."
+  },
+  {
+    "id": "gw_32_lineups",
+    "season": "2025-26",
+    "url": "https://raw.githubusercontent.com/olbauday/FPL-Core-Insights/644585b17f8db653fae9d877316b47025125e63f/data/2025-2026/By%20Tournament/Premier%20League/GW32/lineups.csv",
+    "publisher": "olbauday / FPL-Core-Insights",
+    "reference_url": "https://github.com/olbauday/FPL-Core-Insights/blob/644585b17f8db653fae9d877316b47025125e63f/README.md#using-the-data",
+    "reuse_terms": "README permits project use and requests a source backlink; no SPDX license is declared. Raw downloads remain local.",
+    "revision": "644585b17f8db653fae9d877316b47025125e63f",
+    "sha256": "63462ad27a3e8923e9b52592cf4cf1e9f199bfaab9be49210a2814e48af08c2d",
+    "required_columns": [
+      "match_id",
+      "team_code",
+      "player_id",
+      "team_side"
+    ],
+    "schema_note": "Actual match-team attribution, including bench and transfer histories."
+  },
+  {
+    "id": "gw_32_matches",
+    "season": "2025-26",
+    "url": "https://raw.githubusercontent.com/olbauday/FPL-Core-Insights/644585b17f8db653fae9d877316b47025125e63f/data/2025-2026/By%20Tournament/Premier%20League/GW32/matches.csv",
+    "publisher": "olbauday / FPL-Core-Insights",
+    "reference_url": "https://github.com/olbauday/FPL-Core-Insights/blob/644585b17f8db653fae9d877316b47025125e63f/README.md#using-the-data",
+    "reuse_terms": "README permits project use and requests a source backlink; no SPDX license is declared. Raw downloads remain local.",
+    "revision": "644585b17f8db653fae9d877316b47025125e63f",
+    "sha256": "d9754d7183cf5ae3dac76cc7928dcfbe9efcfffcbbd8704c0154949ba6632176",
+    "required_columns": [
+      "gameweek",
+      "kickoff_time",
+      "home_team",
+      "away_team",
+      "home_score",
+      "away_score",
+      "match_id",
+      "tournament"
+    ],
+    "schema_note": "Completed Premier League match metadata; team references use persistent team codes."
+  },
+  {
+    "id": "gw_33_appearances",
+    "season": "2025-26",
+    "url": "https://raw.githubusercontent.com/olbauday/FPL-Core-Insights/644585b17f8db653fae9d877316b47025125e63f/data/2025-2026/By%20Tournament/Premier%20League/GW33/playermatchstats.csv",
+    "publisher": "olbauday / FPL-Core-Insights",
+    "reference_url": "https://github.com/olbauday/FPL-Core-Insights/blob/644585b17f8db653fae9d877316b47025125e63f/README.md#using-the-data",
+    "reuse_terms": "README permits project use and requests a source backlink; no SPDX license is declared. Raw downloads remain local.",
+    "revision": "644585b17f8db653fae9d877316b47025125e63f",
+    "sha256": "e064e0d314bccd948fb41b34d65cbbe1c03cb9cc975634ef7d5c179538384cca",
+    "required_columns": [
+      "player_id",
+      "match_id",
+      "minutes_played",
+      "goals",
+      "assists",
+      "xg",
+      "xa"
+    ],
+    "schema_note": "Discrete player-match statistics; minutes_played is authoritative, not start_min/finish_min. FPL points are not present."
+  },
+  {
+    "id": "gw_33_lineups",
+    "season": "2025-26",
+    "url": "https://raw.githubusercontent.com/olbauday/FPL-Core-Insights/644585b17f8db653fae9d877316b47025125e63f/data/2025-2026/By%20Tournament/Premier%20League/GW33/lineups.csv",
+    "publisher": "olbauday / FPL-Core-Insights",
+    "reference_url": "https://github.com/olbauday/FPL-Core-Insights/blob/644585b17f8db653fae9d877316b47025125e63f/README.md#using-the-data",
+    "reuse_terms": "README permits project use and requests a source backlink; no SPDX license is declared. Raw downloads remain local.",
+    "revision": "644585b17f8db653fae9d877316b47025125e63f",
+    "sha256": "b4335017b8d0c9935214ec282983b61a004e2e849c73dbeee4aa31308cd63500",
+    "required_columns": [
+      "match_id",
+      "team_code",
+      "player_id",
+      "team_side"
+    ],
+    "schema_note": "Actual match-team attribution, including bench and transfer histories."
+  },
+  {
+    "id": "gw_33_matches",
+    "season": "2025-26",
+    "url": "https://raw.githubusercontent.com/olbauday/FPL-Core-Insights/644585b17f8db653fae9d877316b47025125e63f/data/2025-2026/By%20Tournament/Premier%20League/GW33/matches.csv",
+    "publisher": "olbauday / FPL-Core-Insights",
+    "reference_url": "https://github.com/olbauday/FPL-Core-Insights/blob/644585b17f8db653fae9d877316b47025125e63f/README.md#using-the-data",
+    "reuse_terms": "README permits project use and requests a source backlink; no SPDX license is declared. Raw downloads remain local.",
+    "revision": "644585b17f8db653fae9d877316b47025125e63f",
+    "sha256": "a1eb6195bbe9ea57912c1b043d11886774add6aa4f937418537e211484b1383c",
+    "required_columns": [
+      "gameweek",
+      "kickoff_time",
+      "home_team",
+      "away_team",
+      "home_score",
+      "away_score",
+      "match_id",
+      "tournament"
+    ],
+    "schema_note": "Completed Premier League match metadata; team references use persistent team codes."
+  },
+  {
+    "id": "gw_34_appearances",
+    "season": "2025-26",
+    "url": "https://raw.githubusercontent.com/olbauday/FPL-Core-Insights/644585b17f8db653fae9d877316b47025125e63f/data/2025-2026/By%20Tournament/Premier%20League/GW34/playermatchstats.csv",
+    "publisher": "olbauday / FPL-Core-Insights",
+    "reference_url": "https://github.com/olbauday/FPL-Core-Insights/blob/644585b17f8db653fae9d877316b47025125e63f/README.md#using-the-data",
+    "reuse_terms": "README permits project use and requests a source backlink; no SPDX license is declared. Raw downloads remain local.",
+    "revision": "644585b17f8db653fae9d877316b47025125e63f",
+    "sha256": "c850738c91960968101fde72fd393c9e969bc53dc6d498bf0d6721c772d925b3",
+    "required_columns": [
+      "player_id",
+      "match_id",
+      "minutes_played",
+      "goals",
+      "assists",
+      "xg",
+      "xa"
+    ],
+    "schema_note": "Discrete player-match statistics; minutes_played is authoritative, not start_min/finish_min. FPL points are not present."
+  },
+  {
+    "id": "gw_34_lineups",
+    "season": "2025-26",
+    "url": "https://raw.githubusercontent.com/olbauday/FPL-Core-Insights/644585b17f8db653fae9d877316b47025125e63f/data/2025-2026/By%20Tournament/Premier%20League/GW34/lineups.csv",
+    "publisher": "olbauday / FPL-Core-Insights",
+    "reference_url": "https://github.com/olbauday/FPL-Core-Insights/blob/644585b17f8db653fae9d877316b47025125e63f/README.md#using-the-data",
+    "reuse_terms": "README permits project use and requests a source backlink; no SPDX license is declared. Raw downloads remain local.",
+    "revision": "644585b17f8db653fae9d877316b47025125e63f",
+    "sha256": "d43aba83015a8f8fdd5990d6ae3703d7a1d2e2f16812cd693e59631be3a0d92c",
+    "required_columns": [
+      "match_id",
+      "team_code",
+      "player_id",
+      "team_side"
+    ],
+    "schema_note": "Actual match-team attribution, including bench and transfer histories."
+  },
+  {
+    "id": "gw_34_matches",
+    "season": "2025-26",
+    "url": "https://raw.githubusercontent.com/olbauday/FPL-Core-Insights/644585b17f8db653fae9d877316b47025125e63f/data/2025-2026/By%20Tournament/Premier%20League/GW34/matches.csv",
+    "publisher": "olbauday / FPL-Core-Insights",
+    "reference_url": "https://github.com/olbauday/FPL-Core-Insights/blob/644585b17f8db653fae9d877316b47025125e63f/README.md#using-the-data",
+    "reuse_terms": "README permits project use and requests a source backlink; no SPDX license is declared. Raw downloads remain local.",
+    "revision": "644585b17f8db653fae9d877316b47025125e63f",
+    "sha256": "e38aacf1c8ecf7f2ebc520d25ce2e820cb1639560bbb30d5488c48d6df652848",
+    "required_columns": [
+      "gameweek",
+      "kickoff_time",
+      "home_team",
+      "away_team",
+      "home_score",
+      "away_score",
+      "match_id",
+      "tournament"
+    ],
+    "schema_note": "Completed Premier League match metadata; team references use persistent team codes."
+  },
+  {
+    "id": "gw_35_appearances",
+    "season": "2025-26",
+    "url": "https://raw.githubusercontent.com/olbauday/FPL-Core-Insights/644585b17f8db653fae9d877316b47025125e63f/data/2025-2026/By%20Tournament/Premier%20League/GW35/playermatchstats.csv",
+    "publisher": "olbauday / FPL-Core-Insights",
+    "reference_url": "https://github.com/olbauday/FPL-Core-Insights/blob/644585b17f8db653fae9d877316b47025125e63f/README.md#using-the-data",
+    "reuse_terms": "README permits project use and requests a source backlink; no SPDX license is declared. Raw downloads remain local.",
+    "revision": "644585b17f8db653fae9d877316b47025125e63f",
+    "sha256": "b45136460e7e3ddae89e3ce421b4dc84c79e1c197754457a476065ffbd0ddc3c",
+    "required_columns": [
+      "player_id",
+      "match_id",
+      "minutes_played",
+      "goals",
+      "assists",
+      "xg",
+      "xa"
+    ],
+    "schema_note": "Discrete player-match statistics; minutes_played is authoritative, not start_min/finish_min. FPL points are not present."
+  },
+  {
+    "id": "gw_35_lineups",
+    "season": "2025-26",
+    "url": "https://raw.githubusercontent.com/olbauday/FPL-Core-Insights/644585b17f8db653fae9d877316b47025125e63f/data/2025-2026/By%20Tournament/Premier%20League/GW35/lineups.csv",
+    "publisher": "olbauday / FPL-Core-Insights",
+    "reference_url": "https://github.com/olbauday/FPL-Core-Insights/blob/644585b17f8db653fae9d877316b47025125e63f/README.md#using-the-data",
+    "reuse_terms": "README permits project use and requests a source backlink; no SPDX license is declared. Raw downloads remain local.",
+    "revision": "644585b17f8db653fae9d877316b47025125e63f",
+    "sha256": "fcb667c0ea1ecf3e1bc06fe44a5f013c5194e4bf3f2238b3bac8d730591adc16",
+    "required_columns": [
+      "match_id",
+      "team_code",
+      "player_id",
+      "team_side"
+    ],
+    "schema_note": "Actual match-team attribution, including bench and transfer histories."
+  },
+  {
+    "id": "gw_35_matches",
+    "season": "2025-26",
+    "url": "https://raw.githubusercontent.com/olbauday/FPL-Core-Insights/644585b17f8db653fae9d877316b47025125e63f/data/2025-2026/By%20Tournament/Premier%20League/GW35/matches.csv",
+    "publisher": "olbauday / FPL-Core-Insights",
+    "reference_url": "https://github.com/olbauday/FPL-Core-Insights/blob/644585b17f8db653fae9d877316b47025125e63f/README.md#using-the-data",
+    "reuse_terms": "README permits project use and requests a source backlink; no SPDX license is declared. Raw downloads remain local.",
+    "revision": "644585b17f8db653fae9d877316b47025125e63f",
+    "sha256": "2603d16765786bf60a476d50a165e3a356ef7a64eefb825f848369788b8e2d60",
+    "required_columns": [
+      "gameweek",
+      "kickoff_time",
+      "home_team",
+      "away_team",
+      "home_score",
+      "away_score",
+      "match_id",
+      "tournament"
+    ],
+    "schema_note": "Completed Premier League match metadata; team references use persistent team codes."
+  },
+  {
+    "id": "gw_36_appearances",
+    "season": "2025-26",
+    "url": "https://raw.githubusercontent.com/olbauday/FPL-Core-Insights/644585b17f8db653fae9d877316b47025125e63f/data/2025-2026/By%20Tournament/Premier%20League/GW36/playermatchstats.csv",
+    "publisher": "olbauday / FPL-Core-Insights",
+    "reference_url": "https://github.com/olbauday/FPL-Core-Insights/blob/644585b17f8db653fae9d877316b47025125e63f/README.md#using-the-data",
+    "reuse_terms": "README permits project use and requests a source backlink; no SPDX license is declared. Raw downloads remain local.",
+    "revision": "644585b17f8db653fae9d877316b47025125e63f",
+    "sha256": "481e09b709e1d68913ab35b2ab563e599936ad45f03d4fa4044b391f8c656a12",
+    "required_columns": [
+      "player_id",
+      "match_id",
+      "minutes_played",
+      "goals",
+      "assists",
+      "xg",
+      "xa"
+    ],
+    "schema_note": "Discrete player-match statistics; minutes_played is authoritative, not start_min/finish_min. FPL points are not present."
+  },
+  {
+    "id": "gw_36_lineups",
+    "season": "2025-26",
+    "url": "https://raw.githubusercontent.com/olbauday/FPL-Core-Insights/644585b17f8db653fae9d877316b47025125e63f/data/2025-2026/By%20Tournament/Premier%20League/GW36/lineups.csv",
+    "publisher": "olbauday / FPL-Core-Insights",
+    "reference_url": "https://github.com/olbauday/FPL-Core-Insights/blob/644585b17f8db653fae9d877316b47025125e63f/README.md#using-the-data",
+    "reuse_terms": "README permits project use and requests a source backlink; no SPDX license is declared. Raw downloads remain local.",
+    "revision": "644585b17f8db653fae9d877316b47025125e63f",
+    "sha256": "ea860b952e1d2d3e985ee78b5aaa95230617f609bb64558c3eb2d2ed9319c040",
+    "required_columns": [
+      "match_id",
+      "team_code",
+      "player_id",
+      "team_side"
+    ],
+    "schema_note": "Actual match-team attribution, including bench and transfer histories."
+  },
+  {
+    "id": "gw_36_matches",
+    "season": "2025-26",
+    "url": "https://raw.githubusercontent.com/olbauday/FPL-Core-Insights/644585b17f8db653fae9d877316b47025125e63f/data/2025-2026/By%20Tournament/Premier%20League/GW36/matches.csv",
+    "publisher": "olbauday / FPL-Core-Insights",
+    "reference_url": "https://github.com/olbauday/FPL-Core-Insights/blob/644585b17f8db653fae9d877316b47025125e63f/README.md#using-the-data",
+    "reuse_terms": "README permits project use and requests a source backlink; no SPDX license is declared. Raw downloads remain local.",
+    "revision": "644585b17f8db653fae9d877316b47025125e63f",
+    "sha256": "8e788cb4bf377487d7cdd2cbb7a66b7f28d5256078635692f992c27e0fe4a0e7",
+    "required_columns": [
+      "gameweek",
+      "kickoff_time",
+      "home_team",
+      "away_team",
+      "home_score",
+      "away_score",
+      "match_id",
+      "tournament"
+    ],
+    "schema_note": "Completed Premier League match metadata; team references use persistent team codes."
+  },
+  {
+    "id": "gw_37_appearances",
+    "season": "2025-26",
+    "url": "https://raw.githubusercontent.com/olbauday/FPL-Core-Insights/644585b17f8db653fae9d877316b47025125e63f/data/2025-2026/By%20Tournament/Premier%20League/GW37/playermatchstats.csv",
+    "publisher": "olbauday / FPL-Core-Insights",
+    "reference_url": "https://github.com/olbauday/FPL-Core-Insights/blob/644585b17f8db653fae9d877316b47025125e63f/README.md#using-the-data",
+    "reuse_terms": "README permits project use and requests a source backlink; no SPDX license is declared. Raw downloads remain local.",
+    "revision": "644585b17f8db653fae9d877316b47025125e63f",
+    "sha256": "9c227e1a01c1beeab13a84dfecc6883d18bc12b5a1ccfc226e507e04c22fdded",
+    "required_columns": [
+      "player_id",
+      "match_id",
+      "minutes_played",
+      "goals",
+      "assists",
+      "xg",
+      "xa"
+    ],
+    "schema_note": "Discrete player-match statistics; minutes_played is authoritative, not start_min/finish_min. FPL points are not present."
+  },
+  {
+    "id": "gw_37_lineups",
+    "season": "2025-26",
+    "url": "https://raw.githubusercontent.com/olbauday/FPL-Core-Insights/644585b17f8db653fae9d877316b47025125e63f/data/2025-2026/By%20Tournament/Premier%20League/GW37/lineups.csv",
+    "publisher": "olbauday / FPL-Core-Insights",
+    "reference_url": "https://github.com/olbauday/FPL-Core-Insights/blob/644585b17f8db653fae9d877316b47025125e63f/README.md#using-the-data",
+    "reuse_terms": "README permits project use and requests a source backlink; no SPDX license is declared. Raw downloads remain local.",
+    "revision": "644585b17f8db653fae9d877316b47025125e63f",
+    "sha256": "44ab93410315ec198206109ecfbc8574c5873328e20ee0ecaca151b65859e8b9",
+    "required_columns": [
+      "match_id",
+      "team_code",
+      "player_id",
+      "team_side"
+    ],
+    "schema_note": "Actual match-team attribution, including bench and transfer histories."
+  },
+  {
+    "id": "gw_37_matches",
+    "season": "2025-26",
+    "url": "https://raw.githubusercontent.com/olbauday/FPL-Core-Insights/644585b17f8db653fae9d877316b47025125e63f/data/2025-2026/By%20Tournament/Premier%20League/GW37/matches.csv",
+    "publisher": "olbauday / FPL-Core-Insights",
+    "reference_url": "https://github.com/olbauday/FPL-Core-Insights/blob/644585b17f8db653fae9d877316b47025125e63f/README.md#using-the-data",
+    "reuse_terms": "README permits project use and requests a source backlink; no SPDX license is declared. Raw downloads remain local.",
+    "revision": "644585b17f8db653fae9d877316b47025125e63f",
+    "sha256": "fa31ff7fd0ef5481e1fa1addef722e3271d83824ffec93c62fa6b704620e8478",
+    "required_columns": [
+      "gameweek",
+      "kickoff_time",
+      "home_team",
+      "away_team",
+      "home_score",
+      "away_score",
+      "match_id",
+      "tournament"
+    ],
+    "schema_note": "Completed Premier League match metadata; team references use persistent team codes."
+  },
+  {
+    "id": "gw_38_appearances",
+    "season": "2025-26",
+    "url": "https://raw.githubusercontent.com/olbauday/FPL-Core-Insights/644585b17f8db653fae9d877316b47025125e63f/data/2025-2026/By%20Tournament/Premier%20League/GW38/playermatchstats.csv",
+    "publisher": "olbauday / FPL-Core-Insights",
+    "reference_url": "https://github.com/olbauday/FPL-Core-Insights/blob/644585b17f8db653fae9d877316b47025125e63f/README.md#using-the-data",
+    "reuse_terms": "README permits project use and requests a source backlink; no SPDX license is declared. Raw downloads remain local.",
+    "revision": "644585b17f8db653fae9d877316b47025125e63f",
+    "sha256": "4dd0cbe7e016d9fb3a207bb56f4716bd07a4c6b38754ada00bccc85619a1702d",
+    "required_columns": [
+      "player_id",
+      "match_id",
+      "minutes_played",
+      "goals",
+      "assists",
+      "xg",
+      "xa"
+    ],
+    "schema_note": "Discrete player-match statistics; minutes_played is authoritative, not start_min/finish_min. FPL points are not present."
+  },
+  {
+    "id": "gw_38_lineups",
+    "season": "2025-26",
+    "url": "https://raw.githubusercontent.com/olbauday/FPL-Core-Insights/644585b17f8db653fae9d877316b47025125e63f/data/2025-2026/By%20Tournament/Premier%20League/GW38/lineups.csv",
+    "publisher": "olbauday / FPL-Core-Insights",
+    "reference_url": "https://github.com/olbauday/FPL-Core-Insights/blob/644585b17f8db653fae9d877316b47025125e63f/README.md#using-the-data",
+    "reuse_terms": "README permits project use and requests a source backlink; no SPDX license is declared. Raw downloads remain local.",
+    "revision": "644585b17f8db653fae9d877316b47025125e63f",
+    "sha256": "1f7d6dc52852a6bc2aab08e3e39d87e4aaaf817d209fcbf14768a32e726fa145",
+    "required_columns": [
+      "match_id",
+      "team_code",
+      "player_id",
+      "team_side"
+    ],
+    "schema_note": "Actual match-team attribution, including bench and transfer histories."
+  },
+  {
+    "id": "gw_38_matches",
+    "season": "2025-26",
+    "url": "https://raw.githubusercontent.com/olbauday/FPL-Core-Insights/644585b17f8db653fae9d877316b47025125e63f/data/2025-2026/By%20Tournament/Premier%20League/GW38/matches.csv",
+    "publisher": "olbauday / FPL-Core-Insights",
+    "reference_url": "https://github.com/olbauday/FPL-Core-Insights/blob/644585b17f8db653fae9d877316b47025125e63f/README.md#using-the-data",
+    "reuse_terms": "README permits project use and requests a source backlink; no SPDX license is declared. Raw downloads remain local.",
+    "revision": "644585b17f8db653fae9d877316b47025125e63f",
+    "sha256": "840942f10839da6bbe29331b8f09638ae1d25ff8322ad02dfec74566511270e9",
+    "required_columns": [
+      "gameweek",
+      "kickoff_time",
+      "home_team",
+      "away_team",
+      "home_score",
+      "away_score",
+      "match_id",
+      "tournament"
+    ],
+    "schema_note": "Completed Premier League match metadata; team references use persistent team codes."
   }
 ]
