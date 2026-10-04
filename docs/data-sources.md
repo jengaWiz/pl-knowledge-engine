@@ -123,3 +123,19 @@ records, the source score conflict, and substitute/bench entries without statist
 Unattributed goals may reflect own goals or source omissions; no player totals are
 invented to force agreement. Archive FPL season metrics remain separate from
 match-stat provider metrics and club-specific appearance totals.
+
+## Repeatable collection (MVP05)
+
+`run_mvp.py` is the default no-key collection workflow. It serializes one writer per
+data directory, writes running/failed/completed stage manifests atomically, and
+stops before downstream stages on a mandatory failure. Restarting validates and
+reuses completed download caches, then deterministically rebuilds and checks the
+small derived artifacts. It never skips validation based only on a completed flag.
+Changed source hashes require explicit contract review; corrupt caches can be
+refetched with `--refresh`. Normalized IDs and bytes remain stable on a cache rerun.
+
+Shared legacy checkpoints are now atomic and restore their in-memory state if a
+write fails. Embedding output is flushed and fsynced before marking its checkpoint;
+this durability change does not invoke a provider. The legacy pipeline also stops
+when a stage raises. Stage completion and provider-specific data completeness are
+separate; the new MVP quality gates define the accepted corpus.

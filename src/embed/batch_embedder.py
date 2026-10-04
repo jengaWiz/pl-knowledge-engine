@@ -11,6 +11,7 @@ Output: data/embedded/{modality}/{stage_name}.jsonl
 from __future__ import annotations
 
 import json
+import os
 import time
 from typing import Any, Callable
 
@@ -66,6 +67,8 @@ class BatchEmbedder:
         """Append one embedded item to the JSONL output file."""
         with open(self.output_path, "a", encoding="utf-8") as f:
             f.write(json.dumps({"chunk_id": chunk_id, "vector": vector, "metadata": metadata}) + "\n")
+            f.flush()
+            os.fsync(f.fileno())
 
     def embed_all(self, items: list[dict[str, Any]], id_key: str = "chunk_id") -> int:
         """Embed all items, skipping already-checkpointed ones.

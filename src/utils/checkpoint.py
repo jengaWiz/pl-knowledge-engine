@@ -8,9 +8,12 @@ Usage:
     # ... process chunk_042 ...
     cp.mark_completed("chunk_042")
 """
+
 import json
-from src.utils.logger import get_logger
+
 from config.settings import settings
+from src.ingest.source_download import atomic_write
+from src.utils.logger import get_logger
 
 logger = get_logger(__name__)
 
@@ -41,9 +44,14 @@ class Checkpoint:
     def _load(self) -> None:
         """Load existing checkpoint from disk."""
         if self.filepath.exists():
-            with open(self.filepath, "r") as f:
+            with open(self.filepath) as f:
                 data = json.load(f)
-                self.completed = set(data.get("completed", []))
+                completed = data.get("completed", [])
+                if not isinstance(completed, list) or any(
+                    not isinstance(item, str) for item in completed
+                ):
+                    raise ValueError("Invalid checkpoint format")
+                self.completed = set(completed)
             logger.info(
                 "checkpoint loaded",
                 stage=self.stage_name,
@@ -53,8 +61,9 @@ class Checkpoint:
     def _save(self) -> None:
         """Persist checkpoint to disk."""
         self.filepath.parent.mkdir(parents=True, exist_ok=True)
-        with open(self.filepath, "w") as f:
-            json.dump({"completed": sorted(self.completed)}, f, indent=2)
+        atomic_write(
+            self.filepath, json.dumps({"completed": sorted(self.completed)}, indent=2).encode()
+        )
 
     def is_completed(self, item_id: str) -> bool:
         """Check if an item has already been processed.
@@ -73,8 +82,13 @@ class Checkpoint:
         Args:
             item_id: Unique identifier for the item to mark as completed.
         """
+        previous = self.completed.copy()
         self.completed.add(item_id)
-        self._save()
+        try:
+            self._save()
+        except BaseException:
+            self.completed = previous
+            raise
 
     def reset(self) -> None:
         """Clear all checkpoint data and remove the checkpoint file."""
