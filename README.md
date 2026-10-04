@@ -101,6 +101,7 @@ Collect the complete, validated match dataset:
 ```bash
 uv run --locked python scripts/collect_matches.py
 uv run --locked python scripts/collect_players.py
+uv run --locked python scripts/check_corpus.py
 ```
 
 The collector caches the pinned source, normalizes results and available match
@@ -108,7 +109,7 @@ statistics, and requires 380 unique fixtures across 20 teams with 38 matches per
 team. Missing statistics remain null. It writes
 `data/cleaned/mvp/2025-26/matches.jsonl` and a source-linked coverage report at
 `data/reports/mvp/2025-26/matches.json`. Reruns validate the cache; `--refresh`
-refetches the same pinned contract. The player collector then joins all 38 archived gameweeks to these canonical matches, attributes players through actual match lineups, and writes `players.jsonl`, `appearances.jsonl` and `players.json` coverage. Latest FPL season snapshots stay separate from discrete match statistics. Source score conflicts and unavailable bench statistics are disclosed in the report. These collectors do not yet load the graph or dashboard.
+refetches the same pinned contract. The player collector then joins all 38 archived gameweeks to these canonical matches, attributes players through actual match lineups, and writes `players.jsonl`, `appearances.jsonl` and `players.json` coverage. Latest FPL season snapshots stay separate from discrete match statistics. Source score conflicts and unavailable bench statistics are disclosed in the report. The corpus quality gate checks recorded artifact hashes, identifiers, source references, appearance joins and player-goal totals against primary match scores. It writes machine-readable `quality.json` and readable `quality.md`; changed artifacts require revalidation. These collectors do not yet load the graph or dashboard.
 Use `--output /path/to/data` to select persistent storage outside the checkout.
 
 Configure credentials only for features you use:
