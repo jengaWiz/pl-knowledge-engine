@@ -1,0 +1,1 @@
+"""Deterministic, traceable football analysis."""

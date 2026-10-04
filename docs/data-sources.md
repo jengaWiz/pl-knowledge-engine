@@ -179,9 +179,8 @@ Acceptance verification used the complete collected corpus and local Neo4j
 unmanaged sentinel node, and semantic search returned the Liverpool team
 summary with its primary CSV source. Automated tests also exercise persistent
 Chroma reloads, transferred-player filters, invalid vectors, model-contract
-changes, stale evidence and failed readiness publication. The current API chat
-still uses the legacy path; wiring these verified stores into evidence-backed
-answers is tracked in MVP08.
+changes, stale evidence and failed readiness publication. The current API offers local evidence-backed answers and filtered text retrieval;
+see MVP08 below.
 
 ## Optional public metadata and fallback (MVP07)
 
@@ -213,8 +212,8 @@ Use `--manifest path/to/sources.json`. Each entry requires `url`, `team` and
 `published_at` from its publication metadata. Only HTTPS URLs on the official
 club or YouTube hosts are accepted. Robots policy is checked before access;
 redirects and authentication are excluded. Requests have timeouts and a 2 MB
-content limit. Collection is bounded to 20 manifest sources, three requests per
-source, and ten retained items per focus team.
+content limit. Collection is bounded to 20 manifest sources, three content requests per
+source, each with a robots-policy check, and ten retained items per focus team.
 
 The stored corpus contains publication titles, dates, URLs, publishers, club
 attribution and response checksums. Whole articles, captions and audio/video
@@ -236,3 +235,50 @@ verified checksum participates in the index version, so adding, removing or
 changing commentary requires reloading stores. Missing or altered artifacts
 fail verification. Tests cover RSS/Atom and JSON-LD parsing, season filtering,
 deduplication, denied access, bounds, publisher provenance and stale indexes.
+
+## Local deductions and evidence API (MVP08)
+
+`POST /api/analysis` accepts a typed request, for example:
+
+```json
+{"operation":"player_rankings","teams":["Liverpool"],"metric":"goals_per90","min_minutes":450}
+```
+
+Supported operations are `team_stats`, `form`, `home_away` and `player_rankings`.
+Team metrics use canonical match results, with points calculated as three per
+win plus one per draw. Administrative deductions are excluded. Form uses the
+last five completed matches in chronological order, oldest to newest. Home/away
+splits disclose match counts and points per game. Player metrics are goals,
+archive assists, minutes, goals per 90 and assists per 90. Per-90 requests require
+a positive minutes threshold; chat defaults to 450 minutes and accepts an
+explicit `at least N minutes` or `minimum N minutes` threshold.
+
+Player totals include only appearances for requested focus clubs, even after
+transfers. Missing metrics exclude a player from that metric's ranking rather
+than inventing zeros. Player identity citations link the archive player list;
+metric citations identify appearance CSV rows and normalized record IDs. Every
+analysis response includes season, metric definition, sample size, date range,
+source IDs/URLs/checksums and excluded-player counts. League team results cover
+all 20 clubs; detailed player evidence covers Aston Villa and Liverpool only.
+
+`POST /api/chat` recognizes these supported questions and renders the same
+calculated evidence. Its default route has no Gemini calls and requires no
+provider credentials. Unsupported seasons, causal claims, predictions, external
+opinions and unavailable metrics return `insufficient_evidence`. Bounded message
+and history validation restrict roles to user/assistant; follow-up references
+are not inferred from conversation history. Use the typed endpoint for exact
+metric/team requests. Corrupt or missing evidence produces an unavailable
+response rather than a statistical answer.
+
+`GET /api/evidence/search?query=...&team=Liverpool` provides separately filtered
+source-linked retrieval using the verified local index. Publisher metadata is
+labeled separately and cannot establish opinions from titles alone. Search
+results are retrieved evidence, not generated conclusions.
+
+The real corpus validation returned Aston Villa's 65 result points and +7 goal
+difference, Liverpool's 60 result points and +10 goal difference, and all four
+UI starter questions passed. These are descriptive values from the pinned
+2025–26 source snapshot. Tests independently hand-calculate team-relative
+scores, last-five form, home/away splits, per-90 thresholds, unknown metrics,
+transfer scoping and abstention; API tests cover local default behavior,
+validation and missing-evidence responses.
