@@ -3,9 +3,7 @@ Tests for src/clean/stats_summarizer.py
 """
 from __future__ import annotations
 
-import json
 import pandas as pd
-import pytest
 
 from src.clean.stats_summarizer import (
     _summarize_match,
