@@ -12,12 +12,15 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from config.settings import settings
 from scripts.check_corpus import check_corpus
+from scripts.collect_commentary import collect_commentary
 from scripts.collect_matches import collect_matches
 from scripts.collect_players import collect_players
 from src.ingest.source_download import atomic_write
 
 
-def run_mvp(season: str, output: Path, *, refresh: bool = False, stages=None) -> dict:
+def run_mvp(
+    season: str, output: Path, *, refresh: bool = False, commentary: bool = False, stages=None
+) -> dict:
     """Resume verified source caches, recheck derived artifacts, and fail fast."""
     operations = (
         stages
@@ -28,6 +31,8 @@ def run_mvp(season: str, output: Path, *, refresh: bool = False, stages=None) ->
             "quality": lambda: check_corpus(season, output),
         }
     )
+    if commentary and stages is None:
+        operations["commentary"] = lambda: collect_commentary(season, output)
     target = output / "reports" / "mvp" / season
     target.mkdir(parents=True, exist_ok=True)
     report = {
@@ -64,8 +69,9 @@ def main() -> None:
     parser.add_argument("--season", default=settings.season)
     parser.add_argument("--output", type=Path, default=settings.data_dir)
     parser.add_argument("--refresh", action="store_true")
+    parser.add_argument("--commentary", action="store_true", help="Try bounded public metadata")
     args = parser.parse_args()
-    report = run_mvp(args.season, args.output, refresh=args.refresh)
+    report = run_mvp(args.season, args.output, refresh=args.refresh, commentary=args.commentary)
     print(f"MVP pipeline {report['status']}: {', '.join(report['stages'])}")
 
 

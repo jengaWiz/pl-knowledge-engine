@@ -182,3 +182,57 @@ Chroma reloads, transferred-player filters, invalid vectors, model-contract
 changes, stale evidence and failed readiness publication. The current API chat
 still uses the legacy path; wiring these verified stores into evidence-backed
 answers is tracked in MVP08.
+
+## Optional public metadata and fallback (MVP07)
+
+```bash
+uv run --locked python scripts/collect_commentary.py --output data
+# Or include this optional stage after the core quality gate:
+uv run --locked python scripts/run_mvp.py --output data --commentary
+# Reload stores after collecting or changing commentary:
+uv run --locked python scripts/load_mvp.py --output data
+```
+
+Discovery starts with the official Aston Villa and Liverpool news pages and
+follows at most two advertised RSS/Atom feed links per source. A curated JSON
+manifest supports official-club article URLs and YouTube episode/feed URLs
+without an API key:
+
+```json
+[
+  {
+    "url": "https://www.liverpoolfc.com/news",
+    "team": "Liverpool",
+    "publisher": "Liverpool FC"
+  }
+]
+```
+
+Use `--manifest path/to/sources.json`. Each entry requires `url`, `team` and
+`publisher`; an explicitly curated article may also supply `title` and
+`published_at` from its publication metadata. Only HTTPS URLs on the official
+club or YouTube hosts are accepted. Robots policy is checked before access;
+redirects and authentication are excluded. Requests have timeouts and a 2 MB
+content limit. Collection is bounded to 20 manifest sources, three requests per
+source, and ten retained items per focus team.
+
+The stored corpus contains publication titles, dates, URLs, publishers, club
+attribution and response checksums. Whole articles, captions and audio/video
+are excluded from this MVP collector. YouTube Atom feeds can contribute episode
+metadata; unavailable captions do not block statistics-based answers. An empty
+caption timestamp list and the report's caption status make this limit explicit.
+Titles and publisher opinion are labeled separately from measured statistics.
+
+The real discovery run reached both official news pages but found **zero usable
+dated 2025–26 items for each club** in their advertised metadata. This falls
+short of the ten-item enrichment target. The report therefore marks external
+commentary unavailable and retains all 457 verified match/team/player summaries
+as the MVP fallback. It does not invent quotations or infer that an episode
+contains a particular opinion from its title.
+
+`data/reports/mvp/2025-26/commentary.json` records each attempt and coverage;
+`data/cleaned/mvp/2025-26/commentary.jsonl` stores the accepted metadata. Its
+verified checksum participates in the index version, so adding, removing or
+changing commentary requires reloading stores. Missing or altered artifacts
+fail verification. Tests cover RSS/Atom and JSON-LD parsing, season filtering,
+deduplication, denied access, bounds, publisher provenance and stale indexes.
