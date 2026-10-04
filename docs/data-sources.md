@@ -139,3 +139,46 @@ write fails. Embedding output is flushed and fsynced before marking its checkpoi
 this durability change does not invoke a provider. The legacy pipeline also stops
 when a stage raises. Stage completion and provider-specific data completeness are
 separate; the new MVP quality gates define the accepted corpus.
+
+## Verified graph and local retrieval (MVP06)
+
+After collection and the quality gate, load the stores with:
+
+```bash
+# Set NEO4J_URI, NEO4J_USER and NEO4J_PASSWORD for your local database.
+uv run --locked python scripts/load_mvp.py --output data
+```
+
+The loader creates season-scoped, provenance-bearing nodes for all 20 clubs,
+380 fixtures, 38 gameweeks, 57 focus-club players and 1,284 appearance records.
+It checks node/relationship counts and rejects dangling appearances inside a
+single write transaction. Repeated loads use stable identities; cleanup only
+covers nodes and relationships marked as managed by this MVP for this season.
+Unrelated graph data is preserved. Use a dedicated Neo4j database for the demo.
+
+Chroma stores 457 source-linked summaries: 380 fixtures, 20 teams and 57 players.
+Team points are calculated from results, excluding administrative deductions.
+Player summaries explicitly distinguish archive assists from FPL assists and
+cover the retained focus-club appearances. Retrieval filters include both clubs
+when a player represented more than one team.
+
+The pinned local `all-MiniLM-L6-v2` ONNX model produces 384-dimensional vectors
+for both documents and queries. Its archive checksum is enforced by Chroma's
+model downloader and the application contract. The first run downloads the
+public model; inference then runs on the CPU without provider credentials.
+This index uses a separate collection from legacy Gemini embeddings. Artifact
+checksums and the summary schema version determine its collection namespace.
+
+`data/reports/mvp/2025-26/stores.json` exposes dataset/model versions and counts;
+readiness is published only after both stores load successfully. Failed loads
+replace the previous readiness report with an explicit error. Changed or failed
+quality evidence blocks loading; stale index manifests block retrieval.
+
+Acceptance verification used the complete collected corpus and local Neo4j
+5.26 Community: two consecutive loads retained identical counts, preserved an
+unmanaged sentinel node, and semantic search returned the Liverpool team
+summary with its primary CSV source. Automated tests also exercise persistent
+Chroma reloads, transferred-player filters, invalid vectors, model-contract
+changes, stale evidence and failed readiness publication. The current API chat
+still uses the legacy path; wiring these verified stores into evidence-backed
+answers is tracked in MVP08.
