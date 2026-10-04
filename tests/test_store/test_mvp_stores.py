@@ -93,3 +93,46 @@ def test_query_rejects_manifest_model_mismatch(tmp_path, monkeypatch):
 def test_query_bounds_checked_before_data_access(tmp_path, query, limit):
     with pytest.raises(ValueError, match="nonempty query"):
         mvp_index.search(tmp_path, "2025-26", query, limit=limit)
+
+
+def test_commentary_changes_index_version_and_retains_provenance(tmp_path, monkeypatch):
+    import hashlib
+
+    path = prepare(tmp_path, monkeypatch)
+    first = mvp_index.build_index(tmp_path, "2025-26", embed=vector)
+    row = {
+        "id": "commentary:example",
+        "season": "2025-26",
+        "title": "Match reaction",
+        "url": "https://www.liverpoolfc.com/news/reaction",
+        "published_at": "2026-03-01",
+        "publisher": "Liverpool FC",
+        "teams": ["Liverpool"],
+        "source_sha256": "abc",
+        "limitation": "Title metadata only; not measured statistics.",
+    }
+    artifact = tmp_path / "cleaned/mvp/2025-26/commentary.jsonl"
+    artifact.parent.mkdir(parents=True)
+    payload = (json.dumps(row) + "\n").encode()
+    artifact.write_bytes(payload)
+    (path / "commentary.json").write_text(
+        json.dumps(
+            {
+                "valid": True,
+                "season": "2025-26",
+                "artifact_sha256": hashlib.sha256(payload).hexdigest(),
+            }
+        )
+    )
+    second = mvp_index.build_index(tmp_path, "2025-26", embed=vector)
+    assert first["collection"] != second["collection"]
+    assert second["documents"] == 2 and second["commentary_documents"] == 1
+    (path / "stores.json").write_text(json.dumps({"valid": True, "index": second}))
+    monkeypatch.setattr(mvp_index, "embedding_function", lambda: vector)
+    hits = mvp_index.search(tmp_path, "2025-26", "Reaction", team="Liverpool")
+    context = next(hit for hit in hits if hit["metadata"]["type"] == "publisher_metadata")
+    assert context["metadata"]["publisher"] == "Liverpool FC"
+    assert context["metadata"]["url"] == row["url"]
+    artifact.write_bytes(payload + b"\n")
+    with pytest.raises(ValueError, match="unverified or changed"):
+        mvp_index.search(tmp_path, "2025-26", "Reaction")
