@@ -96,7 +96,15 @@ does not yet normalize the corpus or populate the databases. Follow the
 [MVP milestone](https://github.com/jengaWiz/pl-knowledge-engine/milestone/1) for the
 remaining collection, loading, and deduction work. See [source contracts](docs/data-sources.md).
 
-Collect the complete, validated match dataset:
+Collect, reconcile and validate the historical MVP corpus without provider keys:
+
+```bash
+uv run --locked python scripts/run_mvp.py
+```
+
+This runs match collection, player collection and corpus quality checks. It resumes verified download caches and rechecks derived data, stops on mandatory failure, and records durable stage status in `data/reports/mvp/2025-26/pipeline.json`. Only one collector can run in a data folder at a time. Use `--output /path/to/data` for persistent storage or `--refresh` to refetch the pinned sources.
+
+Individual stages remain available:
 
 ```bash
 uv run --locked python scripts/collect_matches.py
@@ -139,7 +147,7 @@ uv run --locked python scripts/run_pipeline.py --stage store
 uv run --locked python scripts/run_pipeline.py --stage graph
 ```
 
-Running stages separately makes failures easier to inspect. The all-in-one runner logs failed stages and continues, so a final completion message alone does not establish successful ingestion. Generated data and local stores are excluded from version control; a fresh clone starts without a populated dataset.
+Running stages separately makes failures easier to inspect. The legacy all-in-one runner now stops on a raised stage failure. The MVP runner additionally records durable stage status and applies explicit quality gates; do not treat legacy provider-stage logs as a verified MVP dataset. Generated data and local stores are excluded from version control; a fresh clone starts without a populated dataset.
 
 Optional media preparation scripts are `scripts/run_agent2.py` (audio), `scripts/run_agent3.py` (images), and `scripts/run_agent4.py` (video). Run relevant media preparation before embedding to include those assets.
 
