@@ -106,3 +106,20 @@ starters have evidence. It disclosed one score conflict and 36 unmatched appeara
 keys in non-focus fixtures. Cross-source completeness and per-team metric
 reconciliation are checked further in MVP04; these figures are coverage of the
 available corpus, not a claim that every possible source metric is complete.
+
+## Reconciled corpus gate (MVP04)
+
+Run `uv run --locked python scripts/check_corpus.py` after both collectors. Collection
+reports record hashes of normalized artifacts. The quality gate verifies them,
+season and identifier uniqueness, publisher contracts, player/fixture joins,
+match-team/date attribution, and recorded player goals against primary team scores.
+It produces `quality.json` and `quality.md`. Missing evidence or failed collection
+reports cannot pass; a loader must use `load_verified_corpus` to reject artifacts
+changed after validation.
+
+The initial real corpus passed with 380 matches, 57 players and 1,284 appearance
+records. Seven warnings disclose five fixtures with goals not attributed to player
+records, the source score conflict, and substitute/bench entries without statistics.
+Unattributed goals may reflect own goals or source omissions; no player totals are
+invented to force agreement. Archive FPL season metrics remain separate from
+match-stat provider metrics and club-specific appearance totals.
