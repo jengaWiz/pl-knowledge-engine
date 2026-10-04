@@ -55,3 +55,22 @@ graph/text loading → traceable deductions → acceptance questions and local D
 Public commentary is optional enrichment; unavailable captions do not block
 numerical deductions. Images, audio/video downloads, paid generation and hosted
 deployment are outside the MVP gate.
+
+## Match collection gate (MVP02)
+
+`uv run --locked python scripts/collect_matches.py` collects from the pinned CSV,
+with three bounded retries for transient network/server failures, timeouts, a
+20 MB download limit, verified caching and atomic file publication. A corrupt
+cache fails explicitly; `--refresh` refetches it under the same source contract.
+
+Normalization preserves publisher team labels and row numbers while assigning
+season-scoped home/away pair IDs and explicit canonical aliases. It verifies
+competition, dates, scores/result agreement and shot consistency. Optional
+statistics remain null; betting data is omitted. Each record carries its source
+URL, hash and revision, with field-to-CSV mappings in the coverage report.
+
+The mandatory gate requires 380 fixtures, 20 teams, 38 matches per team and
+exactly one match per ordered home/away pair. Failure writes a failed coverage
+report and exits nonzero before publishing normalized records. An older successful
+corpus, if present, is retained; consumers must require the latest report to be
+valid before loading. Multi-stage checkpoint coordination follows in MVP05.
