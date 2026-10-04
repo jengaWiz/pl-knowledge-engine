@@ -8,11 +8,12 @@ import chromadb
 from chromadb.utils.embedding_functions import ONNXMiniLM_L6_V2
 
 from src.clean.corpus_quality import load_verified_corpus
+from src.ingest.commentary import load_commentary
 
 MODEL = "all-MiniLM-L6-v2"
 MODEL_SHA256 = "913d7300ceae3b2dbc2c50d1de4baacab4be7b9380491c27fab7418616a16ec3"
 DIMENSIONS = 384
-INDEX_SCHEMA = 1
+INDEX_SCHEMA = 2
 
 
 def embedding_function():
@@ -25,7 +26,12 @@ def dataset_id(output: Path, season: str) -> str:
     report = json.loads((output / "reports" / "mvp" / season / "quality.json").read_text())
     return hashlib.sha256(
         json.dumps(
-            {"artifacts": report["artifact_sha256"], "schema": INDEX_SCHEMA}, sort_keys=True
+            {
+                "artifacts": report["artifact_sha256"],
+                "schema": INDEX_SCHEMA,
+                "commentary": load_commentary(output, season)[1],
+            },
+            sort_keys=True,
         ).encode()
     ).hexdigest()
 
@@ -121,6 +127,27 @@ def build_index(output: Path, season: str, *, embed=None) -> dict:
     version = dataset_id(output, season)
     embed = embed or embedding_function()
     docs = summaries(corpus)
+    commentary, _ = load_commentary(output, season)
+    docs.extend(
+        {
+            "id": row["id"],
+            "text": (
+                f"{season} external publisher metadata from {row['publisher']}, "
+                f"{row['published_at']}: {row['title']}. {row['limitation']}"
+            ),
+            "metadata": {
+                "season": season,
+                "type": "publisher_metadata",
+                "url": row["url"],
+                "team": row["teams"][0],
+                "other_team": row["teams"][-1],
+                "publisher": row["publisher"],
+                "published_at": row["published_at"],
+                "source_sha256": row["source_sha256"],
+            },
+        }
+        for row in commentary
+    )
     client = chromadb.PersistentClient(path=str(output / "stores" / "chroma"))
     collection_name = f"mvp_{season.replace('-', '_')}_{version[:16]}"
     collection = client.get_or_create_collection(
@@ -154,6 +181,7 @@ def build_index(output: Path, season: str, *, embed=None) -> dict:
         "dataset_id": version,
         "collection": collection_name,
         "documents": len(docs),
+        "commentary_documents": len(commentary),
         "model": MODEL,
         "model_sha256": MODEL_SHA256,
         "dimensions": DIMENSIONS,
