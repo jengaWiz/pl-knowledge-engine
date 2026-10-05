@@ -2,249 +2,199 @@
 
 # Premier League Knowledge Engine
 
-**Explore Premier League results through connected data and evidence-backed analysis.**
+**From public football data to connected evidence and reproducible answers.**
 
-![Python](https://img.shields.io/badge/Python-3.11+-3776AB?logo=python&logoColor=white)
+![Python](https://img.shields.io/badge/Python-3.11%20%7C%203.12-3776AB?logo=python&logoColor=white)
 ![React](https://img.shields.io/badge/React-18-61DAFB?logo=react&logoColor=black)
 ![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?logo=typescript&logoColor=white)
 ![FastAPI](https://img.shields.io/badge/FastAPI-009688?logo=fastapi&logoColor=white)
 ![Neo4j](https://img.shields.io/badge/Neo4j-4581C3?logo=neo4j&logoColor=white)
-![ChromaDB](https://img.shields.io/badge/Vector_store-ChromaDB-FF6B6B)
+![ChromaDB](https://img.shields.io/badge/ChromaDB-local%20search-FF6B6B)
+[![MVP CI](https://github.com/jengaWiz/pl-knowledge-engine/actions/workflows/ci.yml/badge.svg)](https://github.com/jengaWiz/pl-knowledge-engine/actions/workflows/ci.yml)
 
-A full-stack knowledge engine with **380 league matches**, a Neo4j graph, local semantic search and traceable numerical answers. Deep player coverage focuses on **Aston Villa and Liverpool, 2025–26**.
+**380 matches · 20 clubs · 1,780 graph nodes · 457 searchable summaries**
 
-[Experience](#experience) · [Architecture](#architecture) · [Engineering highlights](#engineering-highlights) · [Run locally](#run-locally) · [Code map](#code-map)
+[Demo](#demo) · [Quick start](#quick-start) · [Architecture](#architecture) · [Validation](#validation) · [Scope](#scope)
 
 </div>
 
 > [!IMPORTANT]
-> **Intentionally deployed locally to avoid recurring hosting costs.**
-> This project includes a reproducible Docker deployment with persistent Neo4j/Chroma storage, a non-root application image, health/readiness checks and backup tooling. Run `python3 scripts/demo.py` to collect the data and launch the complete demo. No cloud billing or paid API keys are required. [Deployment details](docs/local-demo.md).
+> **Why there is no public hosted demo: a deliberate choice to avoid recurring infrastructure costs.**
+> The complete application is deployed locally with Docker: a non-root API/frontend image, persistent Neo4j and Chroma storage, loopback networking, health/readiness checks and verified backup/restart workflows. Public hosting would add ongoing compute and database costs. You can run the same populated demo without a cloud account or paid API keys. [Deployment and operations guide](docs/local-demo.md).
 
-## Overview
+## What it does
 
-Collect a fresh historical corpus, verify its coverage and provenance, then explore it through a React dashboard. Neo4j connects clubs, fixtures and player appearances. Chroma provides local semantic retrieval. The default analyst computes descriptive statistics directly from verified records and returns their sources, definitions and sample sizes. It runs without paid API calls.
+The engine collects historical Premier League data from public sources, verifies its provenance and coverage, then makes it explorable through a React dashboard. Neo4j connects clubs, fixtures and player appearances; Chroma indexes source-linked summaries using a local CPU embedding model.
 
-## Experience
+The evidence analyst calculates supported statistics from verified records. Each answer includes its season, sample size, metric definitions and source references. Unsupported predictions, causal explanations and unavailable commentary receive an explicit insufficient-evidence response.
 
-![Actual local demo: source-backed Aston Villa and Liverpool comparison](docs/images/demo-analysis.png)
+The [fresh-data MVP milestone](https://github.com/jengaWiz/pl-knowledge-engine/milestone/1) is complete: **all 10 implementation tickets are closed**.
+
+## Demo
+
+![Actual Docker demo comparing Aston Villa and Liverpool with verified season statistics](docs/images/demo-analysis.png)
+
+- **Evidence analyst:** compare points, goals and goal difference; inspect last-five form, home/away splits and goal/assist rankings, including per-90 rates with a minutes threshold.
+- **Connected graph:** explore season, club, gameweek, fixture and player relationships, with player search and match views.
+- **Fixture browser:** filter the full league schedule and navigate results using mouse or keyboard.
+- **Evidence retrieval API:** search local summaries by club and inspect source URLs, record IDs and provenance.
 
 <details>
-<summary>Match graph and mobile screenshots</summary>
+<summary>See the match graph and mobile experience</summary>
 
 ![Actual Liverpool–Bournemouth match graph](docs/images/demo-match.png)
 
-<img src="docs/images/demo-mobile.png" width="390" alt="Actual mobile evidence analyst with verified season statistics" />
+<img src="docs/images/demo-mobile.png" width="390" alt="Mobile analyst showing the verified Aston Villa and Liverpool comparison" />
 
 </details>
 
-Screenshots show the populated Docker demo, captured with [Playwright](frontend/scripts/capture-demo.mjs).
+These are screenshots of the populated application, captured with [Playwright](frontend/scripts/capture-demo.mjs).
 
-- **Explore the knowledge graph:** navigate season, team, player, match, and gameweek relationships, with dedicated player and match views.
-- **Browse fixtures and statistics:** inspect match results and query player rankings by supported statistics.
-- **Ask supported football questions:** get deterministic points, goal difference, last-five form, home/away splits and goal/assist rankings, including per-90 rates with an explicit minutes threshold. Source links accompany each answer; unsupported claims receive an insufficient-evidence response.
-- **Inspect evidence:** filter local text retrieval by club and inspect record IDs, source URLs, dates and checksums. Optional public publisher metadata is labeled separately; the current discovery run found no usable season-relevant commentary, so verified statistics remain the fallback. Legacy media modules remain available separately.
+Try these questions:
 
-Example questions for a populated dataset:
-
-> Who are the top scorers across Aston Villa and Liverpool?
->
 > Compare Aston Villa and Liverpool's season statistics.
 >
+> Who are Liverpool's top scorers this season?
+>
 > Which players score most per 90 with at least 450 minutes?
+
+## Quick start
+
+Prerequisites: Docker with Compose running, Python **3.11 or newer** for the launcher, and internet access for the initial build and public data/model downloads.
+
+```bash
+git clone https://github.com/jengaWiz/pl-knowledge-engine.git
+cd pl-knowledge-engine
+python3 scripts/demo.py
+```
+
+Open **http://127.0.0.1:8010** when the launcher reports ready. Interactive API docs are at **http://127.0.0.1:8010/docs**.
+
+The command starts from empty storage, collects pinned sources, validates the corpus, loads the graph and vector index, and runs the numerical acceptance gate. It creates private database credentials automatically and persists data across restarts. Gemini and YouTube API keys are disabled in this deployment.
+
+Allow several minutes for the first run, at least 4 GB of Docker memory and several GB of available disk. The local embedding-model archive is approximately 80 MB; later runs reuse verified downloads and the model cache.
+
+```bash
+python3 scripts/demo.py status  # verify corpus, graph, index and cached model
+python3 scripts/demo.py stop    # stop only this project; keep its data
+python3 scripts/demo.py backup  # consistent private backup, then restart
+```
+
+If Docker Desktop's credential helper stalls before the build starts, use `python3 scripts/demo.py --public-images`. This tested option uses a temporary client configuration while preserving your existing Docker login and context.
+
+See the [operations guide](docs/local-demo.md) for recollection, attribution, storage, ports, backup and explicit reset instructions.
 
 ## Architecture
 
 ```mermaid
 flowchart LR
-    A[Pinned historical CSV sources] --> B[Collect and normalize]
+    A[Pinned public CSV sources] --> B[Resumable collection and normalization]
     B --> C[Coverage and provenance gates]
-    C --> D[Neo4j graph]
-    C --> E[Verified numerical analysis]
+    C --> D[Neo4j relationship graph]
+    C --> E[Deterministic statistical analysis]
     C --> F[Source-linked summaries]
-    G[Optional public publisher metadata] --> F
-    F --> H[Local ONNX embeddings / Chroma]
+    G[Optional publisher metadata] --> F
+    F --> H[Local ONNX embeddings and Chroma]
     D --> I[FastAPI]
     E --> I
     H --> I
-    I --> J[React dashboard]
+    I --> J[React and TypeScript dashboard]
 ```
 
-The default analyst uses deterministic calculations rather than billed generation.
-Local search uses the same pinned 384-dimensional model for documents and queries;
-its versioned collection is separate from legacy Gemini embeddings. External
-publisher metadata never establishes numerical facts or causal explanations.
+Numerical answers come from deterministic calculations. Semantic retrieval uses the same pinned, 384-dimensional `all-MiniLM-L6-v2` model for documents and queries. Publisher metadata is separate from statistical evidence.
 
-## Engineering highlights
-
-| Area | Implementation |
+| Engineering decision | Why it matters |
 | --- | --- |
-| Data engineering | Separate ingestion, cleaning, embedding, and storage stages with individual CLI entry points. |
-| Repeatable processing | File-based checkpoints track completed work; retry utilities handle transient failures. |
-| Knowledge graph | Constraints and indexes, player appearances, fixture relationships, and parameterized graph queries. |
-| Vector storage | Persistent ChromaDB collections for text, images, audio, video, and unified embeddings; upserts use stable IDs. |
-| Evidence-backed analysis | Deterministic calculations expose source record IDs, URLs, sample sizes, dates and metric definitions; unsupported claims abstain. |
-| Full-stack delivery | FastAPI endpoints serve a React/TypeScript dashboard with a force-directed graph, match browser, and chat. |
+| Pinned source contracts and checksums | Detect changed inputs and preserve source identity. |
+| Atomic writes, bounded retries and checkpoints | Recover from interrupted collection without silently accepting partial data. |
+| Coverage, join and provenance gates | Reject incomplete or inconsistent mandatory inputs before loading stores. |
+| Fixture-based player attribution | Handle transfers using the club in each match; keep cumulative FPL snapshots separate. |
+| Versioned graph and vector collections | Detect stale stores and incompatible embedding metadata. |
+| Independent raw-CSV numerical oracle | Validate answers against a separate SQLite calculation. |
+| Persistent Docker deployment | Reproduce collection, loading and serving without paid infrastructure. |
+| Separate liveness and readiness | A responsive API only reports ready when verified data and stores are available. |
 
-## Run locally
+## Validation
 
-### Recommended: complete Docker demo
+Verified against pinned **2025–26** sources. [Acceptance evidence and reproduction steps](docs/mvp-acceptance.md).
 
-With Docker running and Python 3.11+ installed, execute from the repository root:
+| Check | Result |
+| --- | --- |
+| Python suite | **264 tests passed**; CI covers Python 3.11 and 3.12. |
+| Independent numerical references | **42/42 passed**, plus five insufficient-evidence cases. |
+| Real-store/API acceptance | **Seven checks passed**, including all 42 live numerical references. |
+| Desktop/mobile browser flows | **8/8 passed** against the Docker-served production dashboard. |
+| Empty-storage Docker setup | Public collection, validation, graph/index loading and readiness passed. |
+| Backup and restart | All four volumes backed up privately; versions, counts and live answers preserved without recollection. |
+| CI | Python checks, wheel packaging, frontend build, Docker build and cold-storage readiness checks. |
+
+Generated data, model files, credentials and local reports are excluded from Git. A fresh clone collects its own corpus.
+
+## Scope
+
+| Dataset | Verified coverage |
+| --- | --- |
+| Season | **2025–26**, match dates 15 August 2025 through 24 May 2026. |
+| Match results | **380 fixtures**, all **20 clubs**, 38 matches per club. |
+| Detailed players | **Aston Villa and Liverpool**: 57 players, 1,284 appearance records; 1,162 with positive minutes. |
+| Knowledge graph | **1,780 nodes** covering season, clubs, gameweeks, fixtures, players and appearances. |
+| Local retrieval | **457 source-linked statistical summaries**. |
+| External commentary | Discovery found **zero usable season-dated items**; statistical evidence remains the fallback. |
+
+Sources include [Football-Data](https://www.football-data.co.uk/) and [FPL-Core-Insights](https://github.com/olbauday/FPL-Core-Insights). [Source contracts and attribution](docs/data-sources.md) document the pinned archive revision, URLs, checksums and usage terms.
+
+Quality reports disclose one conflicting score, five team goals unattributed to player records and unavailable bench statistics. Primary match results determine team deductions; missing values remain unknown.
+
+Broader seasons and player coverage, public hosting with authentication, production hardening and exposed multimodal retrieval remain future work. Separate legacy media/provider pipelines exist in the repository and may require FFmpeg or billed provider credentials.
+
+## Development
+
+<details>
+<summary>Native setup and checks</summary>
+
+Use Python 3.11 or 3.12, uv, Node.js 22.12+ and a configured local Neo4j instance. Set `NEO4J_URI`, `NEO4J_USER` and `NEO4J_PASSWORD` in `.env` before loading the graph. The default analyst needs no paid provider keys.
 
 ```bash
-python3 scripts/demo.py
-```
-
-Open **http://127.0.0.1:8010** when setup reports ready. The command collects and validates data from empty storage, loads the graph and local vector index, and runs numerical acceptance checks. Storage persists across restarts; optional provider keys are explicitly disabled. See [resources, attribution, readiness, backup and reset](docs/local-demo.md).
-
-### Native development
-
-### 1. Prepare the backend
-
-Prerequisites: Python 3.11 or 3.12, uv, Node.js 22.12+ with npm, a running Neo4j instance for graph operations, and optional provider credentials. Audio and video processing additionally require FFmpeg.
-
-```bash
-git clone https://github.com/jengaWiz/pl-knowledge-engine.git
-cd pl-knowledge-engine
 uv sync --locked --extra dev
 cp .env.example .env
-```
-
-Python dependencies are locked in `uv.lock`, with explicit package discovery. Python
-3.12 is the default; 3.11 is also tested. Audio processing currently relies on
-`audioop`, so Python 3.13+ is not supported yet. Notebook dependencies are optional:
-`uv sync --locked --extra dev --extra notebooks`.
-
-Public historical source checks require **no API keys or database**:
-
-```bash
-uv run --locked python scripts/check_sources.py
-```
-
-This downloads pinned 2025–26 source snapshots to `data/raw/source_checks/` and
-writes `data/reports/source_checks.json` with hashes, schemas, counts, attribution,
-and available date evidence. It validates accessibility and source identity. The collection and loading
-commands below populate the completed
-[MVP milestone](https://github.com/jengaWiz/pl-knowledge-engine/milestone/1).
-See [source contracts](docs/data-sources.md).
-
-Collect, reconcile and validate the historical MVP corpus without provider keys:
-
-```bash
-uv run --locked python scripts/run_mvp.py
-```
-
-This runs match collection, player collection and corpus quality checks. It resumes verified download caches and rechecks derived data, stops on mandatory failure, and records durable stage status in `data/reports/mvp/2025-26/pipeline.json`. Only one collector can run in a data folder at a time. Use `--output /path/to/data` for persistent storage or `--refresh` to refetch the pinned sources.
-
-Individual stages remain available:
-
-```bash
-uv run --locked python scripts/collect_matches.py
-uv run --locked python scripts/collect_players.py
-uv run --locked python scripts/check_corpus.py
-```
-
-The collector caches the pinned source, normalizes results and available match
-statistics, and requires 380 unique fixtures across 20 teams with 38 matches per
-team. Missing statistics remain null. It writes
-`data/cleaned/mvp/2025-26/matches.jsonl` and a source-linked coverage report at
-`data/reports/mvp/2025-26/matches.json`. Reruns validate the cache; `--refresh`
-refetches the same pinned contract. The player collector then joins all 38 archived gameweeks to these canonical matches, attributes players through actual match lineups, and writes `players.jsonl`, `appearances.jsonl` and `players.json` coverage. Latest FPL season snapshots stay separate from discrete match statistics. Source score conflicts and unavailable bench statistics are disclosed in the report. The corpus quality gate checks recorded artifact hashes, identifiers, source references, appearance joins and player-goal totals against primary match scores. It writes machine-readable `quality.json` and readable `quality.md`; changed artifacts require revalidation. Load the verified graph and local index with `scripts/load_mvp.py` after collection.
-Use `--output /path/to/data` to select persistent storage outside the checkout.
-
-Configure credentials only for features you use:
-
-| Variable | Required for |
-| --- | --- |
-| `SEASON` | Historical scope, default `2025-26`. Unknown source-contract seasons fail explicitly. |
-| `GEMINI_API_KEY` | Optional legacy Gemini embedding pipelines. The default chat does not use Gemini. |
-| `YOUTUBE_API_KEY` | Optional YouTube API discovery. |
-| `NEO4J_URI`, `NEO4J_USER`, `NEO4J_PASSWORD` | Graph operations. |
-
-The backend can import and serve liveness without provider keys. Operations that
-need a credential validate it when invoked. Public source checks do not call paid
-providers. Live FPL adapters reject dated records outside the configured season
-and resolve focus-team IDs from source names rather than fixed IDs.
-
-### 2. Populate the stores
-
-After the corpus passes its quality gate and local Neo4j is configured:
-
-```bash
-uv run --locked python scripts/collect_commentary.py  # optional enrichment
+# Configure local Neo4j in .env, then:
+uv run --locked python scripts/run_mvp.py --commentary
 uv run --locked python scripts/load_mvp.py
-```
-
-The first index build downloads the public local embedding model; subsequent
-inference needs no provider key. Loading publishes dataset/model metadata only
-after graph and index validation. See [source and operational details](docs/data-sources.md).
-Generated data, local stores and credentials are excluded from Git. A fresh clone
-starts with empty storage. The separate legacy `run_pipeline.py` media/provider
-stages are outside this verified MVP and may require billed provider credentials.
-
-### 3. Start the API and dashboard
-
-From the repository root:
-
-```bash
+uv run --locked python scripts/accept_mvp.py
 uv run --locked python -m uvicorn backend.main:app --reload --port 8000
 ```
 
-In a second terminal:
+In another terminal:
 
 ```bash
 cd frontend
-npm ci
+npm ci --ignore-scripts
 npm run dev
 ```
 
-Open **http://localhost:5173** for the dashboard or **http://localhost:8000/docs** for the API explorer. Vite proxies `/api` requests to port 8000.
-
-## API at a glance
-
-| Method | Route | Purpose |
-| --- | --- | --- |
-| `GET` | `/api/graph/overview` | Season overview nodes and edges. |
-| `GET` | `/api/graph/player/{web_name}` | Player-centered subgraph. |
-| `GET` | `/api/graph/match/{match_id}` | Match-centered subgraph. |
-| `GET` | `/api/stats/top-players` | Rankings with team, stat, and limit filters. |
-| `GET` | `/api/matches` | Stored fixtures and results. |
-| `POST` | `/api/analysis` | Typed numerical deductions with evidence and definitions. |
-| `GET` | `/api/evidence/search` | Source-linked local text retrieval with club filters. |
-| `POST` | `/api/chat` | Local supported answers with source links and explicit abstention. |
-| `GET` | `/api/health` | API liveness; does not verify external dependencies. |
-| `GET` | `/api/readiness` | Verified corpus, current graph/index and cached-model readiness. |
-
-## Code map
-
-| Path | Responsibility |
-| --- | --- |
-| [src/ingest/](src/ingest/) | Statistics, FPL, YouTube transcripts, and media ingestion. |
-| [src/clean/](src/clean/) | Data cleanup, statistical summaries, transcript chunks, and audio segments. |
-| [src/embed/](src/embed/) | Gemini client and embedding pipelines. |
-| [src/store/](src/store/) | ChromaDB collections and Neo4j operations. |
-| [src/utils/](src/utils/) | Checkpoints, retry handling, and structured logging. |
-| [backend/main.py](backend/main.py) | Graph, statistics, fixture, and chat endpoints. |
-| [frontend/src/](frontend/src/) | Dashboard components, API client, and types. |
-| [scripts/](scripts/) | Stage runners and graph initialization. |
-| [tests/](tests/) | Ingestion, cleaning, embedding, and vector-store tests. |
-
-## Development checks
+Open **http://localhost:5173**. Vite proxies `/api` to port 8000.
 
 ```bash
+# From the repository root:
 make test
 make lint
 cd frontend
 npm run build
 ```
 
-GitHub Actions runs offline tests and Python correctness checks on 3.11 and 3.12, builds a wheel, verifies a clean frontend build, and builds the Docker image with cold-storage liveness/readiness checks. Strict style checks cover the new MVP foundation modules; legacy style cleanup remains separate. The root `conftest.py` supplies test credentials, and a subprocess regression verifies backend liveness without any provider keys. Live API calls and database integrations require separately configured services.
+For browser and real-store checks, follow [acceptance reproduction](docs/mvp-acceptance.md). Optional notebook dependencies use `uv sync --locked --extra dev --extra notebooks`. The backend currently supports Python 3.11/3.12; the standalone Docker launcher also works on newer Python versions.
 
-## Scope and next steps
+</details>
 
-The MVP starts from empty storage and delivers a verified 2025–26 corpus, repeatable loading, source-linked numerical deductions and a persistent local Docker demo. [Acceptance evidence](docs/mvp-acceptance.md) covers independent numerical references, real-store API checks and desktop/mobile browser flows.
+| Code | Responsibility |
+| --- | --- |
+| [src/ingest/](src/ingest/) | Public collection, source verification and normalization. |
+| [src/clean/corpus_quality.py](src/clean/corpus_quality.py) | Coverage, joins, integrity and provenance gates. |
+| [src/analysis/](src/analysis/) | Supported deductions and evidence-backed answers. |
+| [src/store/](src/store/) | Managed graph and local vector-index loading/search. |
+| [backend/](backend/) | Graph, fixture, analysis, retrieval and readiness APIs. |
+| [frontend/src/](frontend/src/) | Responsive graph, fixture browser and evidence analyst. |
+| [scripts/](scripts/) | Collection, acceptance and deployment entry points. |
+| [tests/](tests/) | Regression tests and independent numerical references. |
 
-Detailed player coverage is limited to Aston Villa and Liverpool. Optional commentary discovery yielded no usable season-dated items; unsupported evidence claims abstain. Broader seasons/clubs, authenticated public hosting, production hardening and exposing multimodal retrieval remain future work.
-
-For deeper design context, see the [implementation guide](IMPLEMENTATION_GUIDE.md) and [graph improvement plan](GRAPH_IMPROVEMENT_PLAN.md). These documents include planning material; the source code defines current behavior.
+Design history: [implementation guide](IMPLEMENTATION_GUIDE.md) and [graph improvement plan](GRAPH_IMPROVEMENT_PLAN.md). These include planning material; the implemented MVP and acceptance evidence define current behavior.
