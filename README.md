@@ -120,7 +120,7 @@ Verified against pinned **2025–26** sources. [Acceptance evidence and reproduc
 
 | Check | Result |
 | --- | --- |
-| Python suite | **330 tests passed**; CI covers Python 3.11 and 3.12. |
+| Python suite | **341 tests passed**; CI covers Python 3.11 and 3.12. |
 | Independent numerical references | **42/42 passed**, plus five insufficient-evidence cases. |
 | Real-store/API acceptance | **Seven checks passed**, including all 42 live numerical references. |
 | Desktop/mobile browser flows | **8/8 passed** against the Docker-served production dashboard. |
@@ -149,7 +149,7 @@ Broader seasons and player coverage, public hosting with authentication, product
 
 ## Development
 
-An [optional public-media collector](docs/public-media-collection.md) downloads reviewed, licensed image/audio/video samples with checksum, attribution and decoding checks. These are background assets; bounded extraction prepares 106 verified media documents. [Statistical text preparation](docs/statistical-text-documents.md) adds 1,542 source-backed match and appearance documents. These optional artifacts are not yet embedded or exposed through the demo index.
+An [optional public-media collector](docs/public-media-collection.md) downloads reviewed, licensed image/audio/video samples with checksum, attribution and decoding checks. These are background assets; bounded extraction prepares 106 verified media documents. [Statistical text preparation](docs/statistical-text-documents.md) adds 1,542 source-backed match and appearance documents. [Combined corpus acceptance](docs/multimodal-acceptance.md) verifies **1,648 prepared documents** across all four modalities, from 120 original source files. The 2,500-document target remains unmet; these artifacts are not yet embedded or exposed through the demo index.
 
 <details>
 <summary>Native setup and checks</summary>
