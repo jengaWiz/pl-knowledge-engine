@@ -49,3 +49,29 @@ def test_status_does_not_create_credentials(tmp_path, monkeypatch, capsys):
     demo.run_demo("status")
     assert not (tmp_path / "data").exists()
     assert "not_ready" in capsys.readouterr().out
+
+
+def test_stale_graph_is_not_ready(tmp_path, monkeypatch):
+    import json
+    from contextlib import nullcontext
+
+    monkeypatch.setattr(readiness.settings, "data_dir", tmp_path)
+    monkeypatch.setattr(readiness, "load_verified_corpus", lambda *args: {"matches": []})
+    folder = tmp_path / "reports/mvp" / readiness.settings.season
+    folder.mkdir(parents=True)
+    (folder / "quality.json").write_text(json.dumps({"artifact_sha256": {"matches": "current"}}))
+    (folder / "stores.json").write_text(
+        json.dumps({"valid": True, "graph": {"counts": {"Match": 380}}})
+    )
+
+    class Driver:
+        def session(self):
+            return nullcontext(object())
+
+    monkeypatch.setattr(readiness, "connect", lambda: nullcontext(Driver()))
+    monkeypatch.setattr(
+        readiness, "query", lambda *args: [{"label": "Match", "count": 380, "versions": ["old"]}]
+    )
+    response = TestClient(app).get("/api/readiness")
+    assert response.status_code == 503
+    assert response.json()["checks"] == {"corpus": True, "graph": False, "index": False}

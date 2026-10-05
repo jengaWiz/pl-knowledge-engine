@@ -65,7 +65,7 @@ jobs:
           done
           docker exec pl-demo-ci python -c 'import os; assert os.getuid() == 10001'
           docker exec pl-demo-ci python -c 'import urllib.request; assert urllib.request.urlopen("http://127.0.0.1:8000/").status == 200'
-          docker exec pl-demo-ci python -c 'import urllib.request; response=urllib.request.urlopen("http://127.0.0.1:8000/api/readiness"); raise AssertionError("Empty storage advertised ready")' 2>/tmp/readiness-error && exit 1 || test "$(docker exec pl-demo-ci python -c 'import http.client; c=http.client.HTTPConnection("127.0.0.1",8000); c.request("GET","/api/readiness"); print(c.getresponse().status)')" = 503
+          docker exec pl-demo-ci python -c 'import http.client,json; c=http.client.HTTPConnection("127.0.0.1",8000); c.request("GET","/api/readiness"); r=c.getresponse(); assert r.status == 503; assert json.load(r)["status"] == "not_ready"'
       - name: Stop the CI container
         if: always()
         run: docker rm -f pl-demo-ci || true
