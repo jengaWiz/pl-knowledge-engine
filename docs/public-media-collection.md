@@ -71,3 +71,41 @@ assets separately; this stage creates **zero retrieval documents or embeddings**
 Media, snapshots and reports stay outside Git and the Docker image context.
 The default demo image does not include FFmpeg; this optional collector currently
 runs in native development. No Gemini or YouTube calls occur.
+
+## Prepare retrieval documents
+
+After collection succeeds, run:
+
+```bash
+uv run --locked python scripts/extract_media.py
+# Use the same --output directory as the collector, if customized.
+```
+
+This stage creates whole-image documents and consecutive 20-second audio/video
+segments, including the final shorter segment. Audio becomes mono 16 kHz PCM WAV.
+Video becomes H.264 at two frames per second, at most 480 pixels wide, without
+audio. These are retrieval payloads, not transcripts or embeddings. The original
+files and attribution remain available through each document's parent asset ID.
+Video coverage comes from visual packet timestamps rather than the container's
+audio tail. Output duration is checked within encoding/frame-rate tolerance, and
+every produced audio/video segment is fully decoded before acceptance.
+
+Defaults cap output at 500 documents and 100,000,000 payload bytes. Use
+`--segment-seconds` (5–60), `--document-budget` or `--byte-budget` to change these
+limits. A profile hash includes segment length, FFmpeg version and source
+contracts. Successful chunks are checkpointed individually; interrupted runs
+resume verified chunks from that profile. Changed or corrupt payloads fail
+validation. A different profile creates a new extraction; previous content is
+retained, so disk usage can exceed a single run's payload budget.
+
+Accepted outputs are `cleaned/multimodal/media_documents.jsonl`, content-addressed
+payloads under `cleaned/multimodal/content/`, and the report
+`reports/multimodal/extraction.json`. `load_media_documents(output)` checks source
+provenance, profile, payload hashes, ranges and counts before downstream use.
+The manifest is withdrawn during a run and published only when the entire
+extraction passes. Per-chunk checkpoints stay under `checkpoints/media/`.
+
+The source remains historical/background evidence after segmentation. More
+segments do not mean more original sources or current tactical coverage. This
+stage makes no network requests, creates no vectors and does not change the
+default demo index.
