@@ -1,0 +1,2533 @@
+{
+  "season": "2025-26",
+  "method": "Independent raw CSV SQLite oracle",
+  "source_sha256": {
+    "matches": "3e3a8352f9ada6789c508d6ca184424421fed56a30400904a4a327c583407e62",
+    "teams": "8bf02fae3e246d6540a925ff4c1011d9656a8dad20ec19545dbfefb741cb93ce",
+    "players": "20621e5a365a5ab5ed4f787345b75975f2b32e79fab5d219235c6060084ccee4",
+    "gw_1_lineups": "0824d1985f302349356d2e13c9bf7088d0ec7a7cbff35205c344e9a17b77fcbe",
+    "gw_1_appearances": "6bb92a50657056d41085ac42721b2b562f74cd116f91a217f8c28b8bb1cd761e",
+    "gw_2_lineups": "5fcb94ec38ae87854571eb1cf35c7c2e5a93d6bd302e4b521c0d69b2c39fe605",
+    "gw_2_appearances": "b7eff1368430ea85dde2df21353003cf633d2aa69a017b40292efbf1830d9c71",
+    "gw_3_lineups": "52ff828a1a930c6dd3e6b0c4aa330ed60925a731017be7b942c6b6fef3257d63",
+    "gw_3_appearances": "fae77e1bcfab538111f4b5f8b7496546283112a73ac1c4c053baa7d74b185fe1",
+    "gw_4_lineups": "2e9740c1da9a90f8a8da282f58177280f46a4b0070bfdfef72d9e85d0c92811f",
+    "gw_4_appearances": "453f60b475e0e9ce34d73aa95a2803d984fadd42b48bd778180a50d7177c5f17",
+    "gw_5_lineups": "b137da1b67206252df180c26b4543c362921d1beae7841e6f97ca79472e20700",
+    "gw_5_appearances": "5ed565becaf71351e89fb159aba06939ead9b9643c7e90592746100bd1a1ec82",
+    "gw_6_lineups": "16a0afe51b3f834a3b084ff2be2614d629706ce63976dd9eb5dc781da2667e8e",
+    "gw_6_appearances": "73cde0b044dfe78ec4e0c8a2166deb46a4969cea65ea1f1972790146eb10152b",
+    "gw_7_lineups": "1c1d35202f755efb442007dbf465bbb42c2e42c13a486379fedbcf6b424c7254",
+    "gw_7_appearances": "be659f9058b0006650700490dc73c3c45aa50ec17d3fe84a13b67ceaf289a580",
+    "gw_8_lineups": "d6e6bffa04492d7165b4b46cb4c72530003c9ac47a50f30a499df64cedf2d85b",
+    "gw_8_appearances": "9c719e8c598ea17c17c8c5014c820764b8b7cf20a60df924e1d8123af3d68c2e",
+    "gw_9_lineups": "41ab661379abaa85596b4f902106d83bc0612e0610b0e6b220137c67bb1143e4",
+    "gw_9_appearances": "c580bae7f6a0ccd8c9b4575055aadf8213714b52d5f76ac5383858dffdc0c4e3",
+    "gw_10_lineups": "6d3a6d85127578ef8b3ec5c61af3d3c8999752ace5074855c4281552b25f141c",
+    "gw_10_appearances": "e061903bff01d5de6325c38ff489384d134acb385f304726da36d6031ab05a1c",
+    "gw_11_lineups": "fa86283d8b8379bfe1835140f27c0135a72a6f087a0b2c9c217648b9318e328b",
+    "gw_11_appearances": "cce3e28a646c4f88ab4da548111de07e4cd2f5a698c22406518eea16613bc7f9",
+    "gw_12_lineups": "c1d76f9d5457848d585de09775b9738929200c7567b9be9852ff7cf7cfbf7fd1",
+    "gw_12_appearances": "d96f0ec0b5f401637e57681572833d51031011f15c1bfdbdd49ca9de8d3d3f74",
+    "gw_13_lineups": "2237d25c743d8e74b94d75c081272c53ea1872a5b229cdc6eac8dc1db03d5579",
+    "gw_13_appearances": "ace489d0910d27cd630d0cc11616e357a9c4014066a9a8fb5ca5a8db81513b3b",
+    "gw_14_lineups": "ed1a2ba118ad13c664d7bb460cf623773e600383bfba2a687ed8ce1ee1d0f8cd",
+    "gw_14_appearances": "7a7b969509a5aa652e6f3ed234eacf4e4867b153b33ffceceee534d649d2f031",
+    "gw_15_lineups": "d53773b654623c548aa9911024a120ed326cb3d343ee3d1dacd72956b94feb5e",
+    "gw_15_appearances": "a82d26231d324b45cd34674cdc6e0bb49e6da00849eaad0702f218e2efba1a73",
+    "gw_16_lineups": "f7007af1dff106fe045fbb94dccc47b6a800965372f55388118b50e470e0ad4d",
+    "gw_16_appearances": "f9b4fc50213e9d8d641c2e68701da82226f87c31d08a8b0c3ae420b51ac30e64",
+    "gw_17_lineups": "811a512dd51efddf5673b545abd00619fcbc765d839905b97b1135b57e96bd72",
+    "gw_17_appearances": "6e2c85f463698108ccd4b78d8da05041845d4c58c687c7d3263118c9a2bcba1b",
+    "gw_18_lineups": "863bd13ad8f7be91e5a42063697942c0b4a48025183d5ba063f06817fdce7921",
+    "gw_18_appearances": "87c50585f36dcd170684cb373f3ed1a978363d2bd6feb143270e3ceff213e629",
+    "gw_19_lineups": "8ff9b22cb1c732383807604c06c64e494027e180ee2213a8ec979d15ff5864cf",
+    "gw_19_appearances": "35eed02c3cb78c19cba72c3394bbbe31a8e30fa64d6191cebb692268db356479",
+    "gw_20_lineups": "ee43150843977b6c5234cdbb69336677c05fa2702408334f7ef6477bc87a6f3c",
+    "gw_20_appearances": "6d1beb472e97a64aee0cf4c7931ce4309eb8900e24c471d4646b2c7e63d028b8",
+    "gw_21_lineups": "0aa0cf7e741a7598e7f6f82202986bc9401d84a8fe68232b3aee05e01bb9330e",
+    "gw_21_appearances": "5e1a8999be36a6f9b39b3a57cb8eb8f7aee915ae5a57eb60d897a11c61dc536b",
+    "gw_22_lineups": "e2336f5d78c8769c102a47f27ba5018602f3eee5233a9a1d349579c12cf319a4",
+    "gw_22_appearances": "3c4c1d3aea2424906c3e5031bf3185c5ed24136302b66378fe93f32d80c41be2",
+    "gw_23_lineups": "b30b88823784cbd6eaa8ca61c0cf85f754e6e7074eecc08127979f47446d2f73",
+    "gw_23_appearances": "dbfdf052dae962e3440295900088d7ee4443ef181ec5c65e40a87d2926b1cadb",
+    "gw_24_lineups": "9cf8755feda8c587ba13637b8aa322fae14d59813ae1475d92022dc7c07e3702",
+    "gw_24_appearances": "de252fbcd6ce0a7ba5e602bff8d3ec2a29c779961bbc71ebc8e7dceee33bb8ac",
+    "gw_25_lineups": "3dbdce8af8f5e535329f646aa52585021a60d09edc3d8717061118c764ed6a23",
+    "gw_25_appearances": "a110d1ed9e8992da3184d8017b49d542efd2175f4679e6012b13a00e4e82d3b6",
+    "gw_26_lineups": "acd2f760d82ae090a88c932758d2e4f1c38c318fcb595f12e06ad1fc2d725eb9",
+    "gw_26_appearances": "cabd7204291eee2476f64852d895def78759e8172e810005330b591f41e1b1b4",
+    "gw_27_lineups": "52b83de815ab8aa04d997501f5f13c7069261e58dc2531c8b303bba83bedc44b",
+    "gw_27_appearances": "8212ce5851866ff63eeb9d39d6cc26eae089b92d2aa50fbb0b4e01be06741f79",
+    "gw_28_lineups": "c79a8954910a789c48dd9ed887e9b3ce54a0c721e1673325298aaf98e26a0f05",
+    "gw_28_appearances": "271bacad5071f68d25cb6e826750260f477f10ad1f55e5c8007e9a5e479d7d14",
+    "gw_29_lineups": "c62b67bc364d26d92ccddfe6d7593aa4b9ddb4109786f42f56d95582a13b6d5a",
+    "gw_29_appearances": "6ceac31b185461ce316c9387a55dc6ec963544aa54c0ffb020310e982fec186d",
+    "gw_30_lineups": "dc6a19b9d59c30f19dd03663b6609dade664a9a63c76023d03b7ed697666b43b",
+    "gw_30_appearances": "db90b14d5081aef55f60e9b159c6057b0703027c6fc3dbc29a21108100152d66",
+    "gw_31_lineups": "3f7d531c3cf7342daa28fe74482d9bfb8167c2e07e032bb9bcdbe3c72e94a1ae",
+    "gw_31_appearances": "6481381a6fc8fafb430b1c0cc351dbd58205bbd965147166e7095edf42a060c0",
+    "gw_32_lineups": "63462ad27a3e8923e9b52592cf4cf1e9f199bfaab9be49210a2814e48af08c2d",
+    "gw_32_appearances": "be8dd521b064bf75d67c88108e2c54773e1caa006bac8285c066010c4af0ab7a",
+    "gw_33_lineups": "b4335017b8d0c9935214ec282983b61a004e2e849c73dbeee4aa31308cd63500",
+    "gw_33_appearances": "e064e0d314bccd948fb41b34d65cbbe1c03cb9cc975634ef7d5c179538384cca",
+    "gw_34_lineups": "d43aba83015a8f8fdd5990d6ae3703d7a1d2e2f16812cd693e59631be3a0d92c",
+    "gw_34_appearances": "c850738c91960968101fde72fd393c9e969bc53dc6d498bf0d6721c772d925b3",
+    "gw_35_lineups": "fcb667c0ea1ecf3e1bc06fe44a5f013c5194e4bf3f2238b3bac8d730591adc16",
+    "gw_35_appearances": "b45136460e7e3ddae89e3ce421b4dc84c79e1c197754457a476065ffbd0ddc3c",
+    "gw_36_lineups": "ea860b952e1d2d3e985ee78b5aaa95230617f609bb64558c3eb2d2ed9319c040",
+    "gw_36_appearances": "481e09b709e1d68913ab35b2ab563e599936ad45f03d4fa4044b391f8c656a12",
+    "gw_37_lineups": "44ab93410315ec198206109ecfbc8574c5873328e20ee0ecaca151b65859e8b9",
+    "gw_37_appearances": "9c227e1a01c1beeab13a84dfecc6883d18bc12b5a1ccfc226e507e04c22fdded",
+    "gw_38_lineups": "1f7d6dc52852a6bc2aab08e3e39d87e4aaaf817d209fcbf14768a32e726fa145",
+    "gw_38_appearances": "4dd0cbe7e016d9fb3a207bb56f4716bd07a4c6b38754ada00bccc85619a1702d"
+  },
+  "cases": [
+    {
+      "question": "Aston Villa season matches?",
+      "request": {
+        "operation": "team_stats",
+        "teams": [
+          "Aston Villa"
+        ]
+      },
+      "path": [
+        "rows",
+        0,
+        "matches"
+      ],
+      "expected": 38,
+      "source_rows": [
+        3,
+        15,
+        31,
+        35,
+        50,
+        59,
+        67,
+        79,
+        88,
+        98,
+        107,
+        119,
+        128,
+        136,
+        142,
+        159,
+        170,
+        179,
+        186,
+        192,
+        205,
+        220,
+        229,
+        237,
+        245,
+        256,
+        263,
+        273,
+        287,
+        299,
+        309,
+        317,
+        326,
+        335,
+        348,
+        356,
+        362,
+        377
+      ]
+    },
+    {
+      "question": "Aston Villa season wins?",
+      "request": {
+        "operation": "team_stats",
+        "teams": [
+          "Aston Villa"
+        ]
+      },
+      "path": [
+        "rows",
+        0,
+        "wins"
+      ],
+      "expected": 19,
+      "source_rows": [
+        3,
+        15,
+        31,
+        35,
+        50,
+        59,
+        67,
+        79,
+        88,
+        98,
+        107,
+        119,
+        128,
+        136,
+        142,
+        159,
+        170,
+        179,
+        186,
+        192,
+        205,
+        220,
+        229,
+        237,
+        245,
+        256,
+        263,
+        273,
+        287,
+        299,
+        309,
+        317,
+        326,
+        335,
+        348,
+        356,
+        362,
+        377
+      ]
+    },
+    {
+      "question": "Aston Villa season draws?",
+      "request": {
+        "operation": "team_stats",
+        "teams": [
+          "Aston Villa"
+        ]
+      },
+      "path": [
+        "rows",
+        0,
+        "draws"
+      ],
+      "expected": 8,
+      "source_rows": [
+        3,
+        15,
+        31,
+        35,
+        50,
+        59,
+        67,
+        79,
+        88,
+        98,
+        107,
+        119,
+        128,
+        136,
+        142,
+        159,
+        170,
+        179,
+        186,
+        192,
+        205,
+        220,
+        229,
+        237,
+        245,
+        256,
+        263,
+        273,
+        287,
+        299,
+        309,
+        317,
+        326,
+        335,
+        348,
+        356,
+        362,
+        377
+      ]
+    },
+    {
+      "question": "Aston Villa season losses?",
+      "request": {
+        "operation": "team_stats",
+        "teams": [
+          "Aston Villa"
+        ]
+      },
+      "path": [
+        "rows",
+        0,
+        "losses"
+      ],
+      "expected": 11,
+      "source_rows": [
+        3,
+        15,
+        31,
+        35,
+        50,
+        59,
+        67,
+        79,
+        88,
+        98,
+        107,
+        119,
+        128,
+        136,
+        142,
+        159,
+        170,
+        179,
+        186,
+        192,
+        205,
+        220,
+        229,
+        237,
+        245,
+        256,
+        263,
+        273,
+        287,
+        299,
+        309,
+        317,
+        326,
+        335,
+        348,
+        356,
+        362,
+        377
+      ]
+    },
+    {
+      "question": "Aston Villa season goals for?",
+      "request": {
+        "operation": "team_stats",
+        "teams": [
+          "Aston Villa"
+        ]
+      },
+      "path": [
+        "rows",
+        0,
+        "goals_for"
+      ],
+      "expected": 56,
+      "source_rows": [
+        3,
+        15,
+        31,
+        35,
+        50,
+        59,
+        67,
+        79,
+        88,
+        98,
+        107,
+        119,
+        128,
+        136,
+        142,
+        159,
+        170,
+        179,
+        186,
+        192,
+        205,
+        220,
+        229,
+        237,
+        245,
+        256,
+        263,
+        273,
+        287,
+        299,
+        309,
+        317,
+        326,
+        335,
+        348,
+        356,
+        362,
+        377
+      ]
+    },
+    {
+      "question": "Aston Villa season goals against?",
+      "request": {
+        "operation": "team_stats",
+        "teams": [
+          "Aston Villa"
+        ]
+      },
+      "path": [
+        "rows",
+        0,
+        "goals_against"
+      ],
+      "expected": 49,
+      "source_rows": [
+        3,
+        15,
+        31,
+        35,
+        50,
+        59,
+        67,
+        79,
+        88,
+        98,
+        107,
+        119,
+        128,
+        136,
+        142,
+        159,
+        170,
+        179,
+        186,
+        192,
+        205,
+        220,
+        229,
+        237,
+        245,
+        256,
+        263,
+        273,
+        287,
+        299,
+        309,
+        317,
+        326,
+        335,
+        348,
+        356,
+        362,
+        377
+      ]
+    },
+    {
+      "question": "Aston Villa season goal difference?",
+      "request": {
+        "operation": "team_stats",
+        "teams": [
+          "Aston Villa"
+        ]
+      },
+      "path": [
+        "rows",
+        0,
+        "goal_difference"
+      ],
+      "expected": 7,
+      "source_rows": [
+        3,
+        15,
+        31,
+        35,
+        50,
+        59,
+        67,
+        79,
+        88,
+        98,
+        107,
+        119,
+        128,
+        136,
+        142,
+        159,
+        170,
+        179,
+        186,
+        192,
+        205,
+        220,
+        229,
+        237,
+        245,
+        256,
+        263,
+        273,
+        287,
+        299,
+        309,
+        317,
+        326,
+        335,
+        348,
+        356,
+        362,
+        377
+      ]
+    },
+    {
+      "question": "Aston Villa season points?",
+      "request": {
+        "operation": "team_stats",
+        "teams": [
+          "Aston Villa"
+        ]
+      },
+      "path": [
+        "rows",
+        0,
+        "points"
+      ],
+      "expected": 65,
+      "source_rows": [
+        3,
+        15,
+        31,
+        35,
+        50,
+        59,
+        67,
+        79,
+        88,
+        98,
+        107,
+        119,
+        128,
+        136,
+        142,
+        159,
+        170,
+        179,
+        186,
+        192,
+        205,
+        220,
+        229,
+        237,
+        245,
+        256,
+        263,
+        273,
+        287,
+        299,
+        309,
+        317,
+        326,
+        335,
+        348,
+        356,
+        362,
+        377
+      ]
+    },
+    {
+      "question": "Aston Villa home matches?",
+      "request": {
+        "operation": "home_away",
+        "teams": [
+          "Aston Villa"
+        ]
+      },
+      "path": [
+        "rows",
+        0,
+        "home",
+        "matches"
+      ],
+      "expected": 19,
+      "source_rows": [
+        3,
+        15,
+        31,
+        35,
+        50,
+        59,
+        67,
+        79,
+        88,
+        98,
+        107,
+        119,
+        128,
+        136,
+        142,
+        159,
+        170,
+        179,
+        186,
+        192,
+        205,
+        220,
+        229,
+        237,
+        245,
+        256,
+        263,
+        273,
+        287,
+        299,
+        309,
+        317,
+        326,
+        335,
+        348,
+        356,
+        362,
+        377
+      ],
+      "calculation_source_rows": [
+        3,
+        31,
+        59,
+        67,
+        88,
+        107,
+        128,
+        142,
+        170,
+        192,
+        220,
+        237,
+        256,
+        263,
+        287,
+        309,
+        326,
+        348,
+        362
+      ]
+    },
+    {
+      "question": "Aston Villa home points?",
+      "request": {
+        "operation": "home_away",
+        "teams": [
+          "Aston Villa"
+        ]
+      },
+      "path": [
+        "rows",
+        0,
+        "home",
+        "points"
+      ],
+      "expected": 38,
+      "source_rows": [
+        3,
+        15,
+        31,
+        35,
+        50,
+        59,
+        67,
+        79,
+        88,
+        98,
+        107,
+        119,
+        128,
+        136,
+        142,
+        159,
+        170,
+        179,
+        186,
+        192,
+        205,
+        220,
+        229,
+        237,
+        245,
+        256,
+        263,
+        273,
+        287,
+        299,
+        309,
+        317,
+        326,
+        335,
+        348,
+        356,
+        362,
+        377
+      ],
+      "calculation_source_rows": [
+        3,
+        31,
+        59,
+        67,
+        88,
+        107,
+        128,
+        142,
+        170,
+        192,
+        220,
+        237,
+        256,
+        263,
+        287,
+        309,
+        326,
+        348,
+        362
+      ]
+    },
+    {
+      "question": "Aston Villa home goals for?",
+      "request": {
+        "operation": "home_away",
+        "teams": [
+          "Aston Villa"
+        ]
+      },
+      "path": [
+        "rows",
+        0,
+        "home",
+        "goals_for"
+      ],
+      "expected": 32,
+      "source_rows": [
+        3,
+        15,
+        31,
+        35,
+        50,
+        59,
+        67,
+        79,
+        88,
+        98,
+        107,
+        119,
+        128,
+        136,
+        142,
+        159,
+        170,
+        179,
+        186,
+        192,
+        205,
+        220,
+        229,
+        237,
+        245,
+        256,
+        263,
+        273,
+        287,
+        299,
+        309,
+        317,
+        326,
+        335,
+        348,
+        356,
+        362,
+        377
+      ],
+      "calculation_source_rows": [
+        3,
+        31,
+        59,
+        67,
+        88,
+        107,
+        128,
+        142,
+        170,
+        192,
+        220,
+        237,
+        256,
+        263,
+        287,
+        309,
+        326,
+        348,
+        362
+      ]
+    },
+    {
+      "question": "Aston Villa home goals against?",
+      "request": {
+        "operation": "home_away",
+        "teams": [
+          "Aston Villa"
+        ]
+      },
+      "path": [
+        "rows",
+        0,
+        "home",
+        "goals_against"
+      ],
+      "expected": 22,
+      "source_rows": [
+        3,
+        15,
+        31,
+        35,
+        50,
+        59,
+        67,
+        79,
+        88,
+        98,
+        107,
+        119,
+        128,
+        136,
+        142,
+        159,
+        170,
+        179,
+        186,
+        192,
+        205,
+        220,
+        229,
+        237,
+        245,
+        256,
+        263,
+        273,
+        287,
+        299,
+        309,
+        317,
+        326,
+        335,
+        348,
+        356,
+        362,
+        377
+      ],
+      "calculation_source_rows": [
+        3,
+        31,
+        59,
+        67,
+        88,
+        107,
+        128,
+        142,
+        170,
+        192,
+        220,
+        237,
+        256,
+        263,
+        287,
+        309,
+        326,
+        348,
+        362
+      ]
+    },
+    {
+      "question": "Aston Villa away matches?",
+      "request": {
+        "operation": "home_away",
+        "teams": [
+          "Aston Villa"
+        ]
+      },
+      "path": [
+        "rows",
+        0,
+        "away",
+        "matches"
+      ],
+      "expected": 19,
+      "source_rows": [
+        3,
+        15,
+        31,
+        35,
+        50,
+        59,
+        67,
+        79,
+        88,
+        98,
+        107,
+        119,
+        128,
+        136,
+        142,
+        159,
+        170,
+        179,
+        186,
+        192,
+        205,
+        220,
+        229,
+        237,
+        245,
+        256,
+        263,
+        273,
+        287,
+        299,
+        309,
+        317,
+        326,
+        335,
+        348,
+        356,
+        362,
+        377
+      ],
+      "calculation_source_rows": [
+        15,
+        35,
+        50,
+        79,
+        98,
+        119,
+        136,
+        159,
+        179,
+        186,
+        205,
+        229,
+        245,
+        273,
+        299,
+        317,
+        335,
+        356,
+        377
+      ]
+    },
+    {
+      "question": "Aston Villa away points?",
+      "request": {
+        "operation": "home_away",
+        "teams": [
+          "Aston Villa"
+        ]
+      },
+      "path": [
+        "rows",
+        0,
+        "away",
+        "points"
+      ],
+      "expected": 27,
+      "source_rows": [
+        3,
+        15,
+        31,
+        35,
+        50,
+        59,
+        67,
+        79,
+        88,
+        98,
+        107,
+        119,
+        128,
+        136,
+        142,
+        159,
+        170,
+        179,
+        186,
+        192,
+        205,
+        220,
+        229,
+        237,
+        245,
+        256,
+        263,
+        273,
+        287,
+        299,
+        309,
+        317,
+        326,
+        335,
+        348,
+        356,
+        362,
+        377
+      ],
+      "calculation_source_rows": [
+        15,
+        35,
+        50,
+        79,
+        98,
+        119,
+        136,
+        159,
+        179,
+        186,
+        205,
+        229,
+        245,
+        273,
+        299,
+        317,
+        335,
+        356,
+        377
+      ]
+    },
+    {
+      "question": "Aston Villa away goals for?",
+      "request": {
+        "operation": "home_away",
+        "teams": [
+          "Aston Villa"
+        ]
+      },
+      "path": [
+        "rows",
+        0,
+        "away",
+        "goals_for"
+      ],
+      "expected": 24,
+      "source_rows": [
+        3,
+        15,
+        31,
+        35,
+        50,
+        59,
+        67,
+        79,
+        88,
+        98,
+        107,
+        119,
+        128,
+        136,
+        142,
+        159,
+        170,
+        179,
+        186,
+        192,
+        205,
+        220,
+        229,
+        237,
+        245,
+        256,
+        263,
+        273,
+        287,
+        299,
+        309,
+        317,
+        326,
+        335,
+        348,
+        356,
+        362,
+        377
+      ],
+      "calculation_source_rows": [
+        15,
+        35,
+        50,
+        79,
+        98,
+        119,
+        136,
+        159,
+        179,
+        186,
+        205,
+        229,
+        245,
+        273,
+        299,
+        317,
+        335,
+        356,
+        377
+      ]
+    },
+    {
+      "question": "Aston Villa away goals against?",
+      "request": {
+        "operation": "home_away",
+        "teams": [
+          "Aston Villa"
+        ]
+      },
+      "path": [
+        "rows",
+        0,
+        "away",
+        "goals_against"
+      ],
+      "expected": 27,
+      "source_rows": [
+        3,
+        15,
+        31,
+        35,
+        50,
+        59,
+        67,
+        79,
+        88,
+        98,
+        107,
+        119,
+        128,
+        136,
+        142,
+        159,
+        170,
+        179,
+        186,
+        192,
+        205,
+        220,
+        229,
+        237,
+        245,
+        256,
+        263,
+        273,
+        287,
+        299,
+        309,
+        317,
+        326,
+        335,
+        348,
+        356,
+        362,
+        377
+      ],
+      "calculation_source_rows": [
+        15,
+        35,
+        50,
+        79,
+        98,
+        119,
+        136,
+        159,
+        179,
+        186,
+        205,
+        229,
+        245,
+        273,
+        299,
+        317,
+        335,
+        356,
+        377
+      ]
+    },
+    {
+      "question": "Aston Villa last five form?",
+      "request": {
+        "operation": "form",
+        "teams": [
+          "Aston Villa"
+        ]
+      },
+      "path": [
+        "rows",
+        0,
+        "form"
+      ],
+      "expected": "LLDWW",
+      "source_rows": [
+        335,
+        348,
+        356,
+        362,
+        377
+      ]
+    },
+    {
+      "question": "Aston Villa last five points?",
+      "request": {
+        "operation": "form",
+        "teams": [
+          "Aston Villa"
+        ]
+      },
+      "path": [
+        "rows",
+        0,
+        "points"
+      ],
+      "expected": 7,
+      "source_rows": [
+        335,
+        348,
+        356,
+        362,
+        377
+      ]
+    },
+    {
+      "question": "Liverpool season matches?",
+      "request": {
+        "operation": "team_stats",
+        "teams": [
+          "Liverpool"
+        ]
+      },
+      "path": [
+        "rows",
+        0,
+        "matches"
+      ],
+      "expected": 38,
+      "source_rows": [
+        2,
+        21,
+        30,
+        40,
+        42,
+        54,
+        66,
+        80,
+        86,
+        98,
+        111,
+        116,
+        130,
+        140,
+        148,
+        153,
+        167,
+        177,
+        189,
+        200,
+        211,
+        215,
+        226,
+        236,
+        251,
+        260,
+        269,
+        276,
+        286,
+        301,
+        304,
+        315,
+        327,
+        336,
+        347,
+        351,
+        362,
+        376
+      ]
+    },
+    {
+      "question": "Liverpool season wins?",
+      "request": {
+        "operation": "team_stats",
+        "teams": [
+          "Liverpool"
+        ]
+      },
+      "path": [
+        "rows",
+        0,
+        "wins"
+      ],
+      "expected": 17,
+      "source_rows": [
+        2,
+        21,
+        30,
+        40,
+        42,
+        54,
+        66,
+        80,
+        86,
+        98,
+        111,
+        116,
+        130,
+        140,
+        148,
+        153,
+        167,
+        177,
+        189,
+        200,
+        211,
+        215,
+        226,
+        236,
+        251,
+        260,
+        269,
+        276,
+        286,
+        301,
+        304,
+        315,
+        327,
+        336,
+        347,
+        351,
+        362,
+        376
+      ]
+    },
+    {
+      "question": "Liverpool season draws?",
+      "request": {
+        "operation": "team_stats",
+        "teams": [
+          "Liverpool"
+        ]
+      },
+      "path": [
+        "rows",
+        0,
+        "draws"
+      ],
+      "expected": 9,
+      "source_rows": [
+        2,
+        21,
+        30,
+        40,
+        42,
+        54,
+        66,
+        80,
+        86,
+        98,
+        111,
+        116,
+        130,
+        140,
+        148,
+        153,
+        167,
+        177,
+        189,
+        200,
+        211,
+        215,
+        226,
+        236,
+        251,
+        260,
+        269,
+        276,
+        286,
+        301,
+        304,
+        315,
+        327,
+        336,
+        347,
+        351,
+        362,
+        376
+      ]
+    },
+    {
+      "question": "Liverpool season losses?",
+      "request": {
+        "operation": "team_stats",
+        "teams": [
+          "Liverpool"
+        ]
+      },
+      "path": [
+        "rows",
+        0,
+        "losses"
+      ],
+      "expected": 12,
+      "source_rows": [
+        2,
+        21,
+        30,
+        40,
+        42,
+        54,
+        66,
+        80,
+        86,
+        98,
+        111,
+        116,
+        130,
+        140,
+        148,
+        153,
+        167,
+        177,
+        189,
+        200,
+        211,
+        215,
+        226,
+        236,
+        251,
+        260,
+        269,
+        276,
+        286,
+        301,
+        304,
+        315,
+        327,
+        336,
+        347,
+        351,
+        362,
+        376
+      ]
+    },
+    {
+      "question": "Liverpool season goals for?",
+      "request": {
+        "operation": "team_stats",
+        "teams": [
+          "Liverpool"
+        ]
+      },
+      "path": [
+        "rows",
+        0,
+        "goals_for"
+      ],
+      "expected": 63,
+      "source_rows": [
+        2,
+        21,
+        30,
+        40,
+        42,
+        54,
+        66,
+        80,
+        86,
+        98,
+        111,
+        116,
+        130,
+        140,
+        148,
+        153,
+        167,
+        177,
+        189,
+        200,
+        211,
+        215,
+        226,
+        236,
+        251,
+        260,
+        269,
+        276,
+        286,
+        301,
+        304,
+        315,
+        327,
+        336,
+        347,
+        351,
+        362,
+        376
+      ]
+    },
+    {
+      "question": "Liverpool season goals against?",
+      "request": {
+        "operation": "team_stats",
+        "teams": [
+          "Liverpool"
+        ]
+      },
+      "path": [
+        "rows",
+        0,
+        "goals_against"
+      ],
+      "expected": 53,
+      "source_rows": [
+        2,
+        21,
+        30,
+        40,
+        42,
+        54,
+        66,
+        80,
+        86,
+        98,
+        111,
+        116,
+        130,
+        140,
+        148,
+        153,
+        167,
+        177,
+        189,
+        200,
+        211,
+        215,
+        226,
+        236,
+        251,
+        260,
+        269,
+        276,
+        286,
+        301,
+        304,
+        315,
+        327,
+        336,
+        347,
+        351,
+        362,
+        376
+      ]
+    },
+    {
+      "question": "Liverpool season goal difference?",
+      "request": {
+        "operation": "team_stats",
+        "teams": [
+          "Liverpool"
+        ]
+      },
+      "path": [
+        "rows",
+        0,
+        "goal_difference"
+      ],
+      "expected": 10,
+      "source_rows": [
+        2,
+        21,
+        30,
+        40,
+        42,
+        54,
+        66,
+        80,
+        86,
+        98,
+        111,
+        116,
+        130,
+        140,
+        148,
+        153,
+        167,
+        177,
+        189,
+        200,
+        211,
+        215,
+        226,
+        236,
+        251,
+        260,
+        269,
+        276,
+        286,
+        301,
+        304,
+        315,
+        327,
+        336,
+        347,
+        351,
+        362,
+        376
+      ]
+    },
+    {
+      "question": "Liverpool season points?",
+      "request": {
+        "operation": "team_stats",
+        "teams": [
+          "Liverpool"
+        ]
+      },
+      "path": [
+        "rows",
+        0,
+        "points"
+      ],
+      "expected": 60,
+      "source_rows": [
+        2,
+        21,
+        30,
+        40,
+        42,
+        54,
+        66,
+        80,
+        86,
+        98,
+        111,
+        116,
+        130,
+        140,
+        148,
+        153,
+        167,
+        177,
+        189,
+        200,
+        211,
+        215,
+        226,
+        236,
+        251,
+        260,
+        269,
+        276,
+        286,
+        301,
+        304,
+        315,
+        327,
+        336,
+        347,
+        351,
+        362,
+        376
+      ]
+    },
+    {
+      "question": "Liverpool home matches?",
+      "request": {
+        "operation": "home_away",
+        "teams": [
+          "Liverpool"
+        ]
+      },
+      "path": [
+        "rows",
+        0,
+        "home",
+        "matches"
+      ],
+      "expected": 19,
+      "source_rows": [
+        2,
+        21,
+        30,
+        40,
+        42,
+        54,
+        66,
+        80,
+        86,
+        98,
+        111,
+        116,
+        130,
+        140,
+        148,
+        153,
+        167,
+        177,
+        189,
+        200,
+        211,
+        215,
+        226,
+        236,
+        251,
+        260,
+        269,
+        276,
+        286,
+        301,
+        304,
+        315,
+        327,
+        336,
+        347,
+        351,
+        362,
+        376
+      ],
+      "calculation_source_rows": [
+        2,
+        30,
+        42,
+        80,
+        98,
+        116,
+        140,
+        153,
+        177,
+        189,
+        215,
+        236,
+        251,
+        276,
+        301,
+        315,
+        336,
+        351,
+        376
+      ]
+    },
+    {
+      "question": "Liverpool home points?",
+      "request": {
+        "operation": "home_away",
+        "teams": [
+          "Liverpool"
+        ]
+      },
+      "path": [
+        "rows",
+        0,
+        "home",
+        "points"
+      ],
+      "expected": 36,
+      "source_rows": [
+        2,
+        21,
+        30,
+        40,
+        42,
+        54,
+        66,
+        80,
+        86,
+        98,
+        111,
+        116,
+        130,
+        140,
+        148,
+        153,
+        167,
+        177,
+        189,
+        200,
+        211,
+        215,
+        226,
+        236,
+        251,
+        260,
+        269,
+        276,
+        286,
+        301,
+        304,
+        315,
+        327,
+        336,
+        347,
+        351,
+        362,
+        376
+      ],
+      "calculation_source_rows": [
+        2,
+        30,
+        42,
+        80,
+        98,
+        116,
+        140,
+        153,
+        177,
+        189,
+        215,
+        236,
+        251,
+        276,
+        301,
+        315,
+        336,
+        351,
+        376
+      ]
+    },
+    {
+      "question": "Liverpool home goals for?",
+      "request": {
+        "operation": "home_away",
+        "teams": [
+          "Liverpool"
+        ]
+      },
+      "path": [
+        "rows",
+        0,
+        "home",
+        "goals_for"
+      ],
+      "expected": 34,
+      "source_rows": [
+        2,
+        21,
+        30,
+        40,
+        42,
+        54,
+        66,
+        80,
+        86,
+        98,
+        111,
+        116,
+        130,
+        140,
+        148,
+        153,
+        167,
+        177,
+        189,
+        200,
+        211,
+        215,
+        226,
+        236,
+        251,
+        260,
+        269,
+        276,
+        286,
+        301,
+        304,
+        315,
+        327,
+        336,
+        347,
+        351,
+        362,
+        376
+      ],
+      "calculation_source_rows": [
+        2,
+        30,
+        42,
+        80,
+        98,
+        116,
+        140,
+        153,
+        177,
+        189,
+        215,
+        236,
+        251,
+        276,
+        301,
+        315,
+        336,
+        351,
+        376
+      ]
+    },
+    {
+      "question": "Liverpool home goals against?",
+      "request": {
+        "operation": "home_away",
+        "teams": [
+          "Liverpool"
+        ]
+      },
+      "path": [
+        "rows",
+        0,
+        "home",
+        "goals_against"
+      ],
+      "expected": 20,
+      "source_rows": [
+        2,
+        21,
+        30,
+        40,
+        42,
+        54,
+        66,
+        80,
+        86,
+        98,
+        111,
+        116,
+        130,
+        140,
+        148,
+        153,
+        167,
+        177,
+        189,
+        200,
+        211,
+        215,
+        226,
+        236,
+        251,
+        260,
+        269,
+        276,
+        286,
+        301,
+        304,
+        315,
+        327,
+        336,
+        347,
+        351,
+        362,
+        376
+      ],
+      "calculation_source_rows": [
+        2,
+        30,
+        42,
+        80,
+        98,
+        116,
+        140,
+        153,
+        177,
+        189,
+        215,
+        236,
+        251,
+        276,
+        301,
+        315,
+        336,
+        351,
+        376
+      ]
+    },
+    {
+      "question": "Liverpool away matches?",
+      "request": {
+        "operation": "home_away",
+        "teams": [
+          "Liverpool"
+        ]
+      },
+      "path": [
+        "rows",
+        0,
+        "away",
+        "matches"
+      ],
+      "expected": 19,
+      "source_rows": [
+        2,
+        21,
+        30,
+        40,
+        42,
+        54,
+        66,
+        80,
+        86,
+        98,
+        111,
+        116,
+        130,
+        140,
+        148,
+        153,
+        167,
+        177,
+        189,
+        200,
+        211,
+        215,
+        226,
+        236,
+        251,
+        260,
+        269,
+        276,
+        286,
+        301,
+        304,
+        315,
+        327,
+        336,
+        347,
+        351,
+        362,
+        376
+      ],
+      "calculation_source_rows": [
+        21,
+        40,
+        54,
+        66,
+        86,
+        111,
+        130,
+        148,
+        167,
+        200,
+        211,
+        226,
+        260,
+        269,
+        286,
+        304,
+        327,
+        347,
+        362
+      ]
+    },
+    {
+      "question": "Liverpool away points?",
+      "request": {
+        "operation": "home_away",
+        "teams": [
+          "Liverpool"
+        ]
+      },
+      "path": [
+        "rows",
+        0,
+        "away",
+        "points"
+      ],
+      "expected": 24,
+      "source_rows": [
+        2,
+        21,
+        30,
+        40,
+        42,
+        54,
+        66,
+        80,
+        86,
+        98,
+        111,
+        116,
+        130,
+        140,
+        148,
+        153,
+        167,
+        177,
+        189,
+        200,
+        211,
+        215,
+        226,
+        236,
+        251,
+        260,
+        269,
+        276,
+        286,
+        301,
+        304,
+        315,
+        327,
+        336,
+        347,
+        351,
+        362,
+        376
+      ],
+      "calculation_source_rows": [
+        21,
+        40,
+        54,
+        66,
+        86,
+        111,
+        130,
+        148,
+        167,
+        200,
+        211,
+        226,
+        260,
+        269,
+        286,
+        304,
+        327,
+        347,
+        362
+      ]
+    },
+    {
+      "question": "Liverpool away goals for?",
+      "request": {
+        "operation": "home_away",
+        "teams": [
+          "Liverpool"
+        ]
+      },
+      "path": [
+        "rows",
+        0,
+        "away",
+        "goals_for"
+      ],
+      "expected": 29,
+      "source_rows": [
+        2,
+        21,
+        30,
+        40,
+        42,
+        54,
+        66,
+        80,
+        86,
+        98,
+        111,
+        116,
+        130,
+        140,
+        148,
+        153,
+        167,
+        177,
+        189,
+        200,
+        211,
+        215,
+        226,
+        236,
+        251,
+        260,
+        269,
+        276,
+        286,
+        301,
+        304,
+        315,
+        327,
+        336,
+        347,
+        351,
+        362,
+        376
+      ],
+      "calculation_source_rows": [
+        21,
+        40,
+        54,
+        66,
+        86,
+        111,
+        130,
+        148,
+        167,
+        200,
+        211,
+        226,
+        260,
+        269,
+        286,
+        304,
+        327,
+        347,
+        362
+      ]
+    },
+    {
+      "question": "Liverpool away goals against?",
+      "request": {
+        "operation": "home_away",
+        "teams": [
+          "Liverpool"
+        ]
+      },
+      "path": [
+        "rows",
+        0,
+        "away",
+        "goals_against"
+      ],
+      "expected": 33,
+      "source_rows": [
+        2,
+        21,
+        30,
+        40,
+        42,
+        54,
+        66,
+        80,
+        86,
+        98,
+        111,
+        116,
+        130,
+        140,
+        148,
+        153,
+        167,
+        177,
+        189,
+        200,
+        211,
+        215,
+        226,
+        236,
+        251,
+        260,
+        269,
+        276,
+        286,
+        301,
+        304,
+        315,
+        327,
+        336,
+        347,
+        351,
+        362,
+        376
+      ],
+      "calculation_source_rows": [
+        21,
+        40,
+        54,
+        66,
+        86,
+        111,
+        130,
+        148,
+        167,
+        200,
+        211,
+        226,
+        260,
+        269,
+        286,
+        304,
+        327,
+        347,
+        362
+      ]
+    },
+    {
+      "question": "Liverpool last five form?",
+      "request": {
+        "operation": "form",
+        "teams": [
+          "Liverpool"
+        ]
+      },
+      "path": [
+        "rows",
+        0,
+        "form"
+      ],
+      "expected": "WLDLD",
+      "source_rows": [
+        336,
+        347,
+        351,
+        362,
+        376
+      ]
+    },
+    {
+      "question": "Liverpool last five points?",
+      "request": {
+        "operation": "form",
+        "teams": [
+          "Liverpool"
+        ]
+      },
+      "path": [
+        "rows",
+        0,
+        "points"
+      ],
+      "expected": 5,
+      "source_rows": [
+        336,
+        347,
+        351,
+        362,
+        376
+      ]
+    },
+    {
+      "question": "Aston Villa top three goals?",
+      "request": {
+        "operation": "player_rankings",
+        "teams": [
+          "Aston Villa"
+        ],
+        "metric": "goals",
+        "min_minutes": 0,
+        "limit": 3
+      },
+      "path": [
+        "rows"
+      ],
+      "expected": [
+        {
+          "name": "Ollie Watkins",
+          "value": 16,
+          "minutes": 2833,
+          "player_id": "pl:2025-26:player:178301"
+        },
+        {
+          "name": "Morgan Rogers",
+          "value": 10,
+          "minutes": 3280,
+          "player_id": "pl:2025-26:player:244850"
+        },
+        {
+          "name": "Emiliano Buendía Stati",
+          "value": 6,
+          "minutes": 1753,
+          "player_id": "pl:2025-26:player:195546"
+        }
+      ],
+      "projection": [
+        "name",
+        "player_id",
+        "value",
+        "minutes"
+      ]
+    },
+    {
+      "question": "Aston Villa top three assists?",
+      "request": {
+        "operation": "player_rankings",
+        "teams": [
+          "Aston Villa"
+        ],
+        "metric": "assists",
+        "min_minutes": 0,
+        "limit": 3
+      },
+      "path": [
+        "rows"
+      ],
+      "expected": [
+        {
+          "name": "Morgan Rogers",
+          "value": 8,
+          "minutes": 3280,
+          "player_id": "pl:2025-26:player:244850"
+        },
+        {
+          "name": "Lucas Digne",
+          "value": 7,
+          "minutes": 1842,
+          "player_id": "pl:2025-26:player:101188"
+        },
+        {
+          "name": "John McGinn",
+          "value": 4,
+          "minutes": 2136,
+          "player_id": "pl:2025-26:player:122806"
+        }
+      ],
+      "projection": [
+        "name",
+        "player_id",
+        "value",
+        "minutes"
+      ]
+    },
+    {
+      "question": "Aston Villa top three goals per90?",
+      "request": {
+        "operation": "player_rankings",
+        "teams": [
+          "Aston Villa"
+        ],
+        "metric": "goals_per90",
+        "min_minutes": 450,
+        "limit": 3
+      },
+      "path": [
+        "rows"
+      ],
+      "expected": [
+        {
+          "name": "Donyell Malen",
+          "value": 0.562,
+          "minutes": 640,
+          "player_id": "pl:2025-26:player:204646"
+        },
+        {
+          "name": "Ollie Watkins",
+          "value": 0.508,
+          "minutes": 2833,
+          "player_id": "pl:2025-26:player:178301"
+        },
+        {
+          "name": "Ross Barkley",
+          "value": 0.32,
+          "minutes": 844,
+          "player_id": "pl:2025-26:player:88894"
+        }
+      ],
+      "projection": [
+        "name",
+        "player_id",
+        "value",
+        "minutes"
+      ]
+    },
+    {
+      "question": "Liverpool top three goals?",
+      "request": {
+        "operation": "player_rankings",
+        "teams": [
+          "Liverpool"
+        ],
+        "metric": "goals",
+        "min_minutes": 0,
+        "limit": 3
+      },
+      "path": [
+        "rows"
+      ],
+      "expected": [
+        {
+          "name": "Hugo Ekitiké",
+          "value": 11,
+          "minutes": 1797,
+          "player_id": "pl:2025-26:player:510663"
+        },
+        {
+          "name": "Cody Gakpo",
+          "value": 7,
+          "minutes": 2736,
+          "player_id": "pl:2025-26:player:243298"
+        },
+        {
+          "name": "Mohamed Salah",
+          "value": 7,
+          "minutes": 2144,
+          "player_id": "pl:2025-26:player:118748"
+        }
+      ],
+      "projection": [
+        "name",
+        "player_id",
+        "value",
+        "minutes"
+      ]
+    },
+    {
+      "question": "Liverpool top three assists?",
+      "request": {
+        "operation": "player_rankings",
+        "teams": [
+          "Liverpool"
+        ],
+        "metric": "assists",
+        "min_minutes": 0,
+        "limit": 3
+      },
+      "path": [
+        "rows"
+      ],
+      "expected": [
+        {
+          "name": "Dominik Szoboszlai",
+          "value": 7,
+          "minutes": 3232,
+          "player_id": "pl:2025-26:player:424876"
+        },
+        {
+          "name": "Mohamed Salah",
+          "value": 7,
+          "minutes": 2144,
+          "player_id": "pl:2025-26:player:118748"
+        },
+        {
+          "name": "Alexis Mac Allister",
+          "value": 5,
+          "minutes": 2654,
+          "player_id": "pl:2025-26:player:243016"
+        }
+      ],
+      "projection": [
+        "name",
+        "player_id",
+        "value",
+        "minutes"
+      ]
+    },
+    {
+      "question": "Liverpool top three goals per90?",
+      "request": {
+        "operation": "player_rankings",
+        "teams": [
+          "Liverpool"
+        ],
+        "metric": "goals_per90",
+        "min_minutes": 450,
+        "limit": 3
+      },
+      "path": [
+        "rows"
+      ],
+      "expected": [
+        {
+          "name": "Hugo Ekitiké",
+          "value": 0.551,
+          "minutes": 1797,
+          "player_id": "pl:2025-26:player:510663"
+        },
+        {
+          "name": "Alexander Isak",
+          "value": 0.389,
+          "minutes": 694,
+          "player_id": "pl:2025-26:player:219168"
+        },
+        {
+          "name": "Rio Ngumoha",
+          "value": 0.329,
+          "minutes": 547,
+          "player_id": "pl:2025-26:player:611922"
+        }
+      ],
+      "projection": [
+        "name",
+        "player_id",
+        "value",
+        "minutes"
+      ]
+    }
+  ]
+}
