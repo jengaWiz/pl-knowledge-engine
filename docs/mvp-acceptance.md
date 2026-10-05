@@ -16,6 +16,11 @@ CI separately runs offline Python 3.11/3.12 tests, lint, packaging and frontend 
 | Local semantic search | 457 summaries; filtered team retrieval passed |
 | Production browser suite | 8/8 desktop/mobile checks passed without retries or skips |
 | Frontend dependency audit | Zero reported vulnerabilities after compatible upgrades |
+| Docker cold setup | Pinned non-root image, empty named volumes, public collection and local CPU model; readiness passed |
+| Docker live store/API acceptance | Seven checks passed, including all 42 live numerical references |
+| Docker browser suite | 8/8 desktop/mobile checks passed against the served production dashboard |
+| Consistent private backup | All four volumes archived while project services stopped; archive and password file mode 0600 |
+| Restart persistence | No recollection; graph/index versions, corpus counts and all live numerical references preserved |
 
 [Committed reference questions](../tests/fixtures/mvp_reference_questions.json)
 cover team points, goals, results, goal difference, home/away, last-five form and
@@ -62,5 +67,8 @@ browser results and failure traces live in frontend/test-results. Collected data
 model files, credentials and these generated artifacts remain outside Git.
 
 Graph reads use bounded timeouts and only the managed configured season.
-Unknown and ambiguous names return explicit errors. Docker persistence evidence
-belongs to MVP10; this report does not claim hosted deployment.
+Unknown and ambiguous names return explicit errors. Docker cold setup, browser
+flows, backup and restart persistence were verified on this machine. The
+generated deployment.json records post-restart readiness and store acceptance.
+See [local deployment](local-demo.md) for reproduction. Public hosting remains
+outside this no-cost MVP.
