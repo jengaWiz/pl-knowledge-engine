@@ -8,7 +8,7 @@ function teamColor(name: string): string {
 }
 
 function formatDate(d: string) {
-  return new Date(d).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })
+  return new Date(d).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', timeZone: 'UTC' })
 }
 
 interface Props {
@@ -51,6 +51,7 @@ export default function MatchList({ matches, onSelect }: Props) {
           <SearchIcon />
           <input
             value={search}
+            aria-label="Filter fixtures"
             onChange={e => setSearch(e.target.value)}
             onFocus={() => setFocused(true)}
             onBlur={() => setFocused(false)}
@@ -58,7 +59,7 @@ export default function MatchList({ matches, onSelect }: Props) {
             style={{ flex: 1, background: 'transparent', border: 'none', color: 'var(--t-1)', fontSize: 13 }}
           />
           {search && (
-            <button onClick={() => setSearch('')} style={{
+            <button aria-label="Clear fixture filter" onClick={() => setSearch('')} style={{
               background: 'none', border: 'none', color: 'var(--t-3)', cursor: 'pointer', padding: 0, fontSize: 16, lineHeight: 1,
             }}>×</button>
           )}
@@ -123,11 +124,15 @@ function MatchCard({ match: m, isSelected, onClick }: {
   const active = isSelected || hovered
 
   return (
-    <div
+    <button
+      type="button"
+      aria-label={`${m.home_team} versus ${m.away_team}, ${m.date}, ${m.home_score} to ${m.away_score}`}
+      aria-pressed={isSelected}
       onClick={onClick}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
       style={{
+        width: '100%', textAlign: 'left', border: 0, color: 'inherit',
         padding: '12px 14px 12px 11px',
         cursor: 'pointer',
         borderBottom: '1px solid rgba(33,38,45,0.55)',
@@ -185,7 +190,7 @@ function MatchCard({ match: m, isSelected, onClick }: {
           </div>
         )}
       </div>
-    </div>
+    </button>
   )
 }
 

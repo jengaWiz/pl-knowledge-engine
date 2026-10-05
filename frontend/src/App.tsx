@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import GraphView from './components/GraphView'
 import ChatView from './components/ChatView'
 import MatchList from './components/MatchList'
@@ -12,26 +12,47 @@ export default function App() {
   const [matches, setMatches] = useState<Match[]>([])
   const [overrideGraph, setOverrideGraph] = useState<GraphData | null>(null)
 
-  useEffect(() => {
-    fetchMatches().then(setMatches).catch(console.error)
-  }, [])
+  const [sidebarOpen, setSidebarOpen] = useState(false)
+  const [matchesLoading, setMatchesLoading] = useState(true)
+  const [matchesError, setMatchesError] = useState('')
+  const [selectionError, setSelectionError] = useState('')
+  const requestId = useRef(0)
+  const loadMatches = () => {
+    setMatchesLoading(true)
+    setMatchesError('')
+    fetchMatches().then(setMatches)
+      .catch(() => setMatchesError('Fixtures are unavailable. Load the local dataset and retry.'))
+      .finally(() => setMatchesLoading(false))
+  }
+  useEffect(loadMatches, [])
+  const selectView = (next: View) => {
+    requestId.current += 1
+    setView(next)
+    setSidebarOpen(false)
+    setSelectionError('')
+  }
 
   const handleMatchClick = (match: Match) => {
     setView('graph')
-    fetchMatchGraph(match.id).then(setOverrideGraph).catch(console.error)
+    setSidebarOpen(false)
+    setSelectionError('')
+    const id = ++requestId.current
+    fetchMatchGraph(match.id).then(data => { if (id === requestId.current) setOverrideGraph(data) })
+      .catch(() => { if (id === requestId.current) setSelectionError('This match graph is unavailable. Try another fixture.') })
   }
 
   return (
-    <div style={{ display: 'flex', height: '100vh', overflow: 'hidden', background: 'var(--bg-0)' }}>
+    <div className="app-shell" style={{ display: 'flex', height: '100dvh', overflow: 'hidden', background: 'var(--bg-0)' }}>
 
       {/* ════════════════════ SIDEBAR ════════════════════ */}
-      <aside style={{
+      <aside className="app-sidebar" data-open={sidebarOpen} style={{
         width: 300, flexShrink: 0,
         background: 'var(--bg-1)',
         borderRight: '1px solid var(--bg-3)',
         display: 'flex', flexDirection: 'column', overflow: 'hidden',
       }}>
 
+        <button className="sidebar-close" onClick={() => setSidebarOpen(false)}>Close navigation</button>
         {/* ── Header with ambient glow ── */}
         <div style={{
           padding: '20px 16px 16px',
@@ -87,23 +108,28 @@ export default function App() {
             border: '1px solid var(--bg-3)',
             borderRadius: 10, padding: 3,
           }}>
-            <ViewTab active={view === 'graph'} onClick={() => setView('graph')}>
+            <ViewTab active={view === 'graph'} onClick={() => selectView('graph')}>
               <GraphTabIcon />
               Graph View
             </ViewTab>
-            <ViewTab active={view === 'chat'} onClick={() => setView('chat')}>
+            <ViewTab active={view === 'chat'} onClick={() => selectView('chat')}>
               <ChatTabIcon />
               Evidence Chat
             </ViewTab>
           </div>
         </div>
 
-        <MatchList matches={matches} onSelect={handleMatchClick} />
+        {matchesLoading ? <p className="state-notice" role="status">Loading fixtures…</p>
+          : matchesError ? <div className="state-notice" role="alert">{matchesError}
+              <button onClick={loadMatches}>Retry fixtures</button></div>
+          : <MatchList matches={matches} onSelect={handleMatchClick} />}
+
       </aside>
 
       {/* ════════════════════ MAIN ════════════════════ */}
-      <main style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
-        <header style={{
+      {sidebarOpen && <button className="nav-backdrop" aria-label="Close navigation" onClick={() => setSidebarOpen(false)} />}
+      <main style={{ minWidth: 0, flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+        <header className="app-header" style={{
           height: 52, flexShrink: 0,
           display: 'flex', alignItems: 'center', justifyContent: 'space-between',
           padding: '0 22px',
@@ -111,6 +137,8 @@ export default function App() {
           borderBottom: '1px solid var(--bg-3)',
         }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+            <button className="mobile-menu" aria-expanded={sidebarOpen}
+              onClick={() => setSidebarOpen(true)}>Navigation</button>
             <span style={{
               width: 8, height: 8, borderRadius: '50%', display: 'block', flexShrink: 0,
               background: view === 'graph' ? '#f59e0b' : 'var(--villa)',
@@ -121,16 +149,17 @@ export default function App() {
               {view === 'graph' ? 'Knowledge Graph' : 'Evidence Analyst'}
             </span>
           </div>
-          <div style={{ display: 'flex', gap: 6, alignItems: 'center' }}>
+          <div className="header-meta" style={{ display: 'flex', gap: 6, alignItems: 'center' }}>
             <span style={{ fontSize: 11, color: 'var(--t-3)', marginRight: 4 }}>
-              {matches.length > 0 ? `${matches.length} matches indexed` : 'Loading…'}
+              {matchesLoading ? 'Loading…' : matchesError ? 'Dataset unavailable' : `${matches.length} matches indexed`}
             </span>
             <HeaderBadge team="villa" />
             <HeaderBadge team="lfc" />
           </div>
         </header>
 
-        <div style={{ flex: 1, overflow: 'hidden' }}>
+        {selectionError && <p className="state-notice" role="alert">{selectionError}</p>}
+        <div style={{ flex: 1, minHeight: 0, overflow: 'hidden' }}>
           {view === 'graph'
             ? <GraphView overrideGraph={overrideGraph} onClearOverride={() => setOverrideGraph(null)} />
             : <ChatView />

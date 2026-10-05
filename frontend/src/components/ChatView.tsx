@@ -30,7 +30,7 @@ export default function ChatView() {
       const { reply, sources } = await sendChat(text, messages.slice(-8))
       setMessages(prev => [...prev, { role: 'assistant', content: reply, sources }])
     } catch {
-      setMessages(prev => [...prev, { role: 'assistant', content: 'Sorry, something went wrong. Please try again.' }])
+      setMessages(prev => [...prev, { role: 'assistant', content: 'The local evidence service is unavailable. Check the dataset status and retry.' }])
     } finally {
       setLoading(false)
     }
@@ -92,7 +92,7 @@ function WelcomeScreen({ onSelect }: { onSelect: (s: string) => void }) {
         <div style={{ fontSize: 10, fontWeight: 700, color: 'var(--t-3)', letterSpacing: '0.1em', marginBottom: 12, textAlign: 'center' }}>
           SUGGESTED QUESTIONS
         </div>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+        <div className="starter-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
           {STARTERS.map(s => <StarterCard key={s} text={s} onClick={() => onSelect(s)} />)}
         </div>
       </div>
@@ -138,7 +138,7 @@ function MessageBubble({ msg, idx }: { msg: ChatMessage; idx: number }) {
       }}
     >
       <Avatar assistant={!isUser} />
-      <div style={{ maxWidth: '78%', display: 'flex', flexDirection: 'column', gap: 6 }}>
+      <div className="message-content" style={{ maxWidth: '78%', display: 'flex', flexDirection: 'column', gap: 6 }}>
         <div style={{
           background: isUser
             ? 'linear-gradient(135deg, rgba(26,58,95,0.9) 0%, rgba(37,99,235,0.2) 100%)'
@@ -159,6 +159,7 @@ function MessageBubble({ msg, idx }: { msg: ChatMessage; idx: number }) {
         {!isUser && msg.sources && msg.sources.length > 0 && (
           <div>
             <button
+              aria-expanded={sourcesOpen}
               onClick={() => setSourcesOpen(o => !o)}
               style={{
                 background: 'none', border: 'none', cursor: 'pointer', padding: '2px 0',
