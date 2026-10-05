@@ -7,14 +7,42 @@ import secrets
 import shutil
 import subprocess
 import time
+from contextlib import contextmanager, nullcontext
 from datetime import UTC, datetime
 from pathlib import Path
+from tempfile import TemporaryDirectory
 from urllib.error import HTTPError, URLError
 from urllib.request import urlopen
 
 ROOT = Path(__file__).resolve().parent.parent
 PROJECT = "pl-knowledge-engine-demo"
 URL = "http://127.0.0.1:8010"
+
+
+@contextmanager
+def public_image_client():
+    """Use the current Docker context/plugins without invoking a credential store."""
+    previous = os.environ.get("DOCKER_CONFIG")
+    source = Path(previous) if previous else Path.home() / ".docker"
+    config_path = source / "config.json"
+    config = json.loads(config_path.read_text()) if config_path.exists() else {}
+    with TemporaryDirectory(prefix="pl-public-images-") as folder:
+        target = Path(folder)
+        public_config = {
+            key: config[key] for key in ("currentContext", "cliPluginsExtraDirs") if key in config
+        }
+        (target / "config.json").write_text(json.dumps(public_config))
+        for name in ("contexts", "cli-plugins"):
+            if (source / name).is_dir():
+                shutil.copytree(source / name, target / name, symlinks=True)
+        os.environ["DOCKER_CONFIG"] = folder
+        try:
+            yield
+        finally:
+            if previous is None:
+                os.environ.pop("DOCKER_CONFIG", None)
+            else:
+                os.environ["DOCKER_CONFIG"] = previous
 
 
 def prepare_secret(path: Path) -> dict:
@@ -134,8 +162,14 @@ def main():
     parser.add_argument(
         "--recollect", action="store_true", help="Revalidate caches and reload all stores"
     )
+    parser.add_argument(
+        "--public-images",
+        action="store_true",
+        help="Build public images with an isolated client; preserve the existing Docker login",
+    )
     args = parser.parse_args()
-    run_demo(args.command, recollect=args.recollect)
+    with public_image_client() if args.public_images else nullcontext():
+        run_demo(args.command, recollect=args.recollect)
 
 
 if __name__ == "__main__":

@@ -78,10 +78,18 @@ To inspect only this project's logs:
 docker compose --env-file data/private/demo.env logs --tail 100 app neo4j
 ```
 
-If Docker Desktop hangs before any build step, check its credential helper.
-The build can use a separate `DOCKER_CONFIG` containing the existing context and
-plugin paths without changing the user's login. This machine-specific workaround
-was needed during local verification; it is not a repository requirement.
+If Docker Desktop hangs before any build step because its credential helper is
+unresponsive, use the supported public-image client option:
+
+```bash
+python3 scripts/demo.py --public-images
+```
+
+It copies the existing Docker context/plugin paths into a private temporary
+configuration, omits registry credentials, and removes the temporary files when
+the command finishes. The user's existing login and settings are unchanged.
+All this demo's images are public. This option was verified on the development
+machine; the default client also builds successfully in CI.
 
 Ports are loopback-only: dashboard/API **8010**, Neo4j Bolt **7688**, Neo4j Browser
 **7475**. A conflicting listener must be stopped or these project ports changed.
