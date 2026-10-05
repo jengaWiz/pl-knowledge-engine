@@ -120,7 +120,7 @@ Verified against pinned **2025–26** sources. [Acceptance evidence and reproduc
 
 | Check | Result |
 | --- | --- |
-| Python suite | **264 tests passed**; CI covers Python 3.11 and 3.12. |
+| Python suite | **303 tests passed**; CI covers Python 3.11 and 3.12. |
 | Independent numerical references | **42/42 passed**, plus five insufficient-evidence cases. |
 | Real-store/API acceptance | **Seven checks passed**, including all 42 live numerical references. |
 | Desktop/mobile browser flows | **8/8 passed** against the Docker-served production dashboard. |
@@ -148,6 +148,8 @@ Quality reports disclose one conflicting score, five team goals unattributed to 
 Broader seasons and player coverage, public hosting with authentication, production hardening and exposed multimodal retrieval remain future work. Separate legacy media/provider pipelines exist in the repository and may require FFmpeg or billed provider credentials.
 
 ## Development
+
+An [optional public-media collector](docs/public-media-collection.md) downloads reviewed, licensed image/audio/video samples with checksum, attribution and decoding checks. These are background assets; they are not yet an indexed multimodal corpus.
 
 <details>
 <summary>Native setup and checks</summary>
