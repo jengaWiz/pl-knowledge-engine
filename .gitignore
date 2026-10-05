@@ -43,3 +43,7 @@ logs/
 node_modules/
 frontend/dist/
 frontend/.vite/
+
+# Browser acceptance artifacts
+frontend/test-results/
+frontend/playwright-report/

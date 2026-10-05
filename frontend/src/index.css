@@ -7,7 +7,7 @@
   --bg-4:   #30363d;       /* Strong borders */
   --t-1:    #f0f6fc;       /* Primary text */
   --t-2:    #8b949e;       /* Secondary text */
-  --t-3:    #484f58;       /* Muted / placeholder */
+  --t-3:    #8b949e;       /* Muted / placeholder */
   --villa:      #670E36;   /* Aston Villa claret */
   --villa-l:    #9b1548;   /* Villa claret lighter */
   --villa-blue: #6BAED8;   /* Aston Villa sky blue */
@@ -119,3 +119,38 @@ button             { font-family: inherit; }
   border-bottom: 1px solid var(--bg-3);
 }
 .markdown tr:last-child td { border-bottom: none; }
+
+/* Keyboard and small-screen navigation */
+button:focus-visible, input:focus-visible, summary:focus-visible, a:focus-visible {
+  outline: 2px solid var(--villa-blue); outline-offset: 3px;
+}
+.mobile-menu, .sidebar-close, .nav-backdrop { display: none; }
+.state-notice { padding: 16px; font-size: 13px; line-height: 1.6; }
+.state-notice button { display: block; margin-top: 12px; padding: 8px 12px;
+  border: 1px solid var(--bg-4); border-radius: 6px; background: var(--bg-2); color: var(--t-1); }
+.message-content { min-width: 0; overflow-wrap: anywhere; }
+@media (max-width: 800px) {
+  .app-sidebar { position: fixed; inset: 0 auto 0 0; z-index: 30; max-width: 90vw;
+    transform: translateX(-100%); transition: transform .15s ease; }
+  .app-sidebar[data-open="true"] { transform: translateX(0); }
+  .mobile-menu, .sidebar-close { display: block; background: var(--bg-2); color: var(--t-1);
+    border: 1px solid var(--bg-4); border-radius: 6px; padding: 7px; cursor: pointer; }
+  .nav-backdrop { display: block; position: fixed; inset: 0; z-index: 25;
+    background: rgba(0,0,0,.5); border: 0; }
+  .header-meta { display: none !important; }
+  .app-header { padding: 0 12px !important; }
+  .message-content { max-width: calc(100% - 46px) !important; }
+  .starter-grid { grid-template-columns: 1fr !important; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}
+
+.graph-controls { flex-wrap: wrap; max-width: calc(100% - 32px); }
+@media (max-width: 800px) { .graph-controls input { width: 160px !important; } }
+
+@media (max-width: 800px) {
+  .graph-legend { top: auto !important; bottom: 45px; right: 10px !important; }
+}
+
+@media (max-width: 800px) { .graph-hint { display: none; } }

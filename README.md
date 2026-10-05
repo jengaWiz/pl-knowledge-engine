@@ -73,7 +73,7 @@ publisher metadata never establishes numerical facts or causal explanations.
 
 ### 1. Prepare the backend
 
-Prerequisites: Python 3.11 or 3.12, uv, Node.js with npm, a running Neo4j instance for graph operations, and optional provider credentials. Audio and video processing additionally require FFmpeg.
+Prerequisites: Python 3.11 or 3.12, uv, Node.js 22.12+ with npm, a running Neo4j instance for graph operations, and optional provider credentials. Audio and video processing additionally require FFmpeg.
 
 ```bash
 git clone https://github.com/jengaWiz/pl-knowledge-engine.git

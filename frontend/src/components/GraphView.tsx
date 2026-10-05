@@ -6,7 +6,6 @@ import type { GraphData, GraphNode } from '../types'
 const NODE_COLORS: Record<string, string> = {
   Season:           '#f59e0b',
   Team:             '#a855f7',
-  Stadium:          '#22c55e',
   Player:           '#3b82f6',
   Gameweek:         '#6b7280',
   Match:            '#f97316',
@@ -35,10 +34,12 @@ export default function GraphView({ overrideGraph, onClearOverride }: Props) {
   const [selectedNode, setSelectedNode] = useState<GraphNode | null>(null)
   const [error, setError] = useState('')
   const containerRef = useRef<HTMLDivElement>(null)
+  const requestId = useRef(0)
   const [dims, setDims] = useState({ w: 800, h: 600 })
 
   const loadGraph = useCallback((data: GraphData) => {
     const links = data.edges.map(e => ({ source: e.source, target: e.target, type: e.type }))
+    setSelectedNode(null)
     setGraphData({ nodes: data.nodes, links })
     setLoading(false)
     setError('')
@@ -54,22 +55,33 @@ export default function GraphView({ overrideGraph, onClearOverride }: Props) {
     return () => obs.disconnect()
   }, [])
 
-  useEffect(() => {
+  const overview = useCallback(() => {
+    const id = ++requestId.current
     setLoading(true)
-    fetchOverviewGraph()
-      .then(loadGraph)
-      .catch(err => { setError('Failed to load graph: ' + err.message); setLoading(false) })
+    fetchOverviewGraph().then(data => { if (id === requestId.current) loadGraph(data) })
+      .catch(() => { if (id === requestId.current) {
+        setError('The graph is unavailable. Load the local stores and retry Overview.')
+        setLoading(false)
+      } })
   }, [loadGraph])
 
-  useEffect(() => { if (overrideGraph) loadGraph(overrideGraph) }, [overrideGraph, loadGraph])
+  useEffect(() => { overview(); return () => { requestId.current += 1 } }, [overview])
+  useEffect(() => {
+    if (overrideGraph) { requestId.current += 1; loadGraph(overrideGraph) }
+  }, [overrideGraph, loadGraph])
 
   const handleSearch = (e: FormEvent) => {
     e.preventDefault()
     if (!search.trim()) return
+    const id = ++requestId.current
     setLoading(true)
     fetchPlayerGraph(search.trim())
-      .then(data => { loadGraph(data); onClearOverride() })
-      .catch(() => { setError(`Player "${search}" not found`); setLoading(false) })
+      .then(data => { if (id === requestId.current) { loadGraph(data); onClearOverride() } })
+      .catch(err => { if (id === requestId.current) {
+        setError(err.response?.status === 409 ? 'Player name is ambiguous. Use a unique name.'
+          : `Player "${search}" is unavailable in the verified corpus.`)
+        setLoading(false)
+      } })
   }
 
   return (
@@ -90,12 +102,13 @@ export default function GraphView({ overrideGraph, onClearOverride }: Props) {
       }} />
 
       {/* ── Controls ── */}
-      <div style={{ position: 'absolute', top: 16, left: 16, zIndex: 10, display: 'flex', gap: 8, alignItems: 'center' }}>
+      <div className="graph-controls" style={{ position: 'absolute', top: 16, left: 16, zIndex: 10, display: 'flex', gap: 8, alignItems: 'center' }}>
         <form onSubmit={handleSearch} style={{ display: 'flex' }}>
           <div style={glass({ padding: '0 4px 0 12px', display: 'flex', alignItems: 'center', gap: 8 })}>
             <SearchIcon />
             <input
               value={search}
+              aria-label="Search graph player"
               onChange={e => setSearch(e.target.value)}
               placeholder="Search player (e.g. Salah)…"
               style={{
@@ -116,7 +129,7 @@ export default function GraphView({ overrideGraph, onClearOverride }: Props) {
           </div>
         </form>
         <button
-          onClick={() => { onClearOverride(); setLoading(true); fetchOverviewGraph().then(loadGraph) }}
+          onClick={() => { onClearOverride(); overview() }}
           style={{
             ...glass({ padding: '8px 14px' }),
             color: 'var(--t-2)', fontSize: 12, fontWeight: 500,
@@ -137,7 +150,7 @@ export default function GraphView({ overrideGraph, onClearOverride }: Props) {
       </div>
 
       {/* ── Legend ── */}
-      <div style={{ ...glass({ padding: '12px 15px' }), position: 'absolute', top: 16, right: 16, zIndex: 10 }}>
+      <div className="graph-legend" style={{ ...glass({ padding: '12px 15px' }), position: 'absolute', top: 16, right: 16, zIndex: 10 }}>
         <div style={{ fontSize: 9, fontWeight: 800, color: 'var(--t-3)', letterSpacing: '0.1em', marginBottom: 10 }}>
           NODE TYPES
         </div>
@@ -243,6 +256,7 @@ export default function GraphView({ overrideGraph, onClearOverride }: Props) {
           width={dims.w}
           height={dims.h - 30}        /* leave room for status bar */
           graphData={graphData}
+          cooldownTicks={100}
           nodeId="id"
           linkSource="source"
           linkTarget="target"
@@ -261,7 +275,7 @@ export default function GraphView({ overrideGraph, onClearOverride }: Props) {
             const color = NODE_COLORS[n.type] || '#9ca3af'
 
             // Outer glow ring
-            ctx.shadowBlur = 14
+            ctx.shadowBlur = n.type === 'Team' || n.type === 'Player' ? 4 : 0
             ctx.shadowColor = color
             ctx.beginPath()
             ctx.arc(n.x, n.y, size, 0, 2 * Math.PI)
@@ -303,7 +317,7 @@ export default function GraphView({ overrideGraph, onClearOverride }: Props) {
           <span>
             {graphData.nodes.length} NODES&nbsp;&nbsp;·&nbsp;&nbsp;{graphData.links.length} EDGES
           </span>
-          <span>Click node to inspect · Scroll to zoom · Drag to pan</span>
+          <span className="graph-hint">Click node to inspect · Scroll to zoom · Drag to pan</span>
         </div>
       )}
     </div>
