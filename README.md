@@ -90,7 +90,7 @@ publisher metadata never establishes numerical facts or causal explanations.
 
 ### Recommended: complete Docker demo
 
-With Docker running and Python 3 installed, execute from the repository root:
+With Docker running and Python 3.11+ installed, execute from the repository root:
 
 ```bash
 python3 scripts/demo.py

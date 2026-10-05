@@ -9,7 +9,7 @@ hosting, authentication and production hardening remain separate future work.
 ## One command from empty storage
 
 Install Docker Desktop (or Docker Engine with Compose), start the engine, and
-have Python 3 available for the standard-library launcher. Then, from the root:
+have Python 3.11 or newer available for the standard-library launcher. Then, from the root:
 
 ```bash
 python3 scripts/demo.py
