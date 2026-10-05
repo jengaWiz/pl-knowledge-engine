@@ -1,0 +1,11 @@
+.git
+.env
+.venv
+data
+**/node_modules
+frontend/dist
+frontend/test-results
+frontend/playwright-report
+**/__pycache__
+*.egg-info
+.DS_Store

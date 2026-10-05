@@ -17,11 +17,28 @@ A full-stack knowledge engine with **380 league matches**, a Neo4j graph, local 
 
 </div>
 
+> [!IMPORTANT]
+> **Intentionally deployed locally to avoid recurring hosting costs.**
+> This project includes a reproducible Docker deployment with persistent Neo4j/Chroma storage, a non-root application image, health/readiness checks and backup tooling. Run `python3 scripts/demo.py` to collect the data and launch the complete demo. No cloud billing or paid API keys are required. [Deployment details](docs/local-demo.md).
+
 ## Overview
 
 Collect a fresh historical corpus, verify its coverage and provenance, then explore it through a React dashboard. Neo4j connects clubs, fixtures and player appearances. Chroma provides local semantic retrieval. The default analyst computes descriptive statistics directly from verified records and returns their sources, definitions and sample sizes. It runs without paid API calls.
 
 ## Experience
+
+![Actual local demo: source-backed Aston Villa and Liverpool comparison](docs/images/demo-analysis.png)
+
+<details>
+<summary>Match graph and mobile screenshots</summary>
+
+![Actual Liverpool–Bournemouth match graph](docs/images/demo-match.png)
+
+<img src="docs/images/demo-mobile.png" width="390" alt="Actual mobile evidence analyst with verified season statistics" />
+
+</details>
+
+Screenshots show the populated Docker demo, captured with [Playwright](frontend/scripts/capture-demo.mjs).
 
 - **Explore the knowledge graph:** navigate season, team, player, match, and gameweek relationships, with dedicated player and match views.
 - **Browse fixtures and statistics:** inspect match results and query player rankings by supported statistics.
@@ -71,6 +88,18 @@ publisher metadata never establishes numerical facts or causal explanations.
 
 ## Run locally
 
+### Recommended: complete Docker demo
+
+With Docker running and Python 3.11+ installed, execute from the repository root:
+
+```bash
+python3 scripts/demo.py
+```
+
+Open **http://127.0.0.1:8010** when setup reports ready. The command collects and validates data from empty storage, loads the graph and local vector index, and runs numerical acceptance checks. Storage persists across restarts; optional provider keys are explicitly disabled. See [resources, attribution, readiness, backup and reset](docs/local-demo.md).
+
+### Native development
+
 ### 1. Prepare the backend
 
 Prerequisites: Python 3.11 or 3.12, uv, Node.js 22.12+ with npm, a running Neo4j instance for graph operations, and optional provider credentials. Audio and video processing additionally require FFmpeg.
@@ -95,10 +124,10 @@ uv run --locked python scripts/check_sources.py
 
 This downloads pinned 2025–26 source snapshots to `data/raw/source_checks/` and
 writes `data/reports/source_checks.json` with hashes, schemas, counts, attribution,
-and available date evidence. It validates accessibility and source identity; it
-does not yet normalize the corpus or populate the databases. Follow the
-[MVP milestone](https://github.com/jengaWiz/pl-knowledge-engine/milestone/1) for the
-remaining collection, loading, and deduction work. See [source contracts](docs/data-sources.md).
+and available date evidence. It validates accessibility and source identity. The collection and loading
+commands below populate the completed
+[MVP milestone](https://github.com/jengaWiz/pl-knowledge-engine/milestone/1).
+See [source contracts](docs/data-sources.md).
 
 Collect, reconcile and validate the historical MVP corpus without provider keys:
 
@@ -185,6 +214,7 @@ Open **http://localhost:5173** for the dashboard or **http://localhost:8000/docs
 | `GET` | `/api/evidence/search` | Source-linked local text retrieval with club filters. |
 | `POST` | `/api/chat` | Local supported answers with source links and explicit abstention. |
 | `GET` | `/api/health` | API liveness; does not verify external dependencies. |
+| `GET` | `/api/readiness` | Verified corpus, current graph/index and cached-model readiness. |
 
 ## Code map
 
@@ -209,12 +239,12 @@ cd frontend
 npm run build
 ```
 
-GitHub Actions runs offline tests and Python correctness checks on 3.11 and 3.12, builds a wheel, and verifies a clean frontend build. Strict style checks cover the new MVP foundation modules; legacy style cleanup remains separate. The root `conftest.py` supplies test credentials, and a subprocess regression verifies backend liveness without any provider keys. Live API calls and database integrations require separately configured services.
+GitHub Actions runs offline tests and Python correctness checks on 3.11 and 3.12, builds a wheel, verifies a clean frontend build, and builds the Docker image with cold-storage liveness/readiness checks. Strict style checks cover the new MVP foundation modules; legacy style cleanup remains separate. The root `conftest.py` supplies test credentials, and a subprocess regression verifies backend liveness without any provider keys. Live API calls and database integrations require separately configured services.
 
 ## Scope and next steps
 
-This is a local development prototype. Data completeness depends on ingestion results, provider access, and the configured season; fresh FPL data may differ from the intended 2025–26 scope. There is no published benchmark or claim of production readiness.
+The MVP starts from empty storage and delivers a verified 2025–26 corpus, repeatable loading, source-linked numerical deductions and a persistent local Docker demo. [Acceptance evidence](docs/mvp-acceptance.md) covers independent numerical references, real-store API checks and desktop/mobile browser flows.
 
-The active MVP starts from empty storage: collect historical match/player data, verify provenance and coverage, populate the stores, and deliver evidence-backed deductions through a local demo. API authentication, broader deployment hardening, and exposing multimodal search remain future work.
+Detailed player coverage is limited to Aston Villa and Liverpool. Optional commentary discovery yielded no usable season-dated items; unsupported evidence claims abstain. Broader seasons/clubs, authenticated public hosting, production hardening and exposing multimodal retrieval remain future work.
 
 For deeper design context, see the [implementation guide](IMPLEMENTATION_GUIDE.md) and [graph improvement plan](GRAPH_IMPROVEMENT_PLAN.md). These documents include planning material; the source code defines current behavior.

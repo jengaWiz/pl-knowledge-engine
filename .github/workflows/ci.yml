@@ -25,8 +25,8 @@ jobs:
         run: uv run --locked --extra dev ruff check src config backend scripts tests --select E9,F
       - name: Check style for MVP foundation modules
         run: |
-          uv run --locked --extra dev ruff check config/season.py config/sources.py config/settings.py scripts/check_sources.py tests/test_config tests/test_ingest/test_stats_api.py src/ingest/historical_matches.py src/ingest/source_download.py scripts/collect_matches.py tests/test_ingest/test_historical_matches.py tests/test_ingest/test_source_download.py src/ingest/historical_players.py scripts/collect_players.py tests/test_ingest/test_historical_players.py src/clean/corpus_quality.py scripts/check_corpus.py tests/test_clean/test_corpus_quality.py scripts/run_mvp.py src/utils/checkpoint.py tests/test_utils src/store/mvp_graph.py src/store/mvp_index.py scripts/load_mvp.py tests/test_store/test_mvp_stores.py src/ingest/commentary.py scripts/collect_commentary.py tests/test_ingest/test_commentary.py src/analysis tests/test_analysis backend/graph.py scripts/build_reference_questions.py scripts/accept_mvp.py scripts/accept_stores.py
-          uv run --locked --extra dev ruff format --check config/season.py config/sources.py config/settings.py scripts/check_sources.py tests/test_config tests/test_ingest/test_stats_api.py src/ingest/historical_matches.py src/ingest/source_download.py scripts/collect_matches.py tests/test_ingest/test_historical_matches.py tests/test_ingest/test_source_download.py src/ingest/historical_players.py scripts/collect_players.py tests/test_ingest/test_historical_players.py src/clean/corpus_quality.py scripts/check_corpus.py tests/test_clean/test_corpus_quality.py scripts/run_mvp.py src/utils/checkpoint.py tests/test_utils src/store/mvp_graph.py src/store/mvp_index.py scripts/load_mvp.py tests/test_store/test_mvp_stores.py src/ingest/commentary.py scripts/collect_commentary.py tests/test_ingest/test_commentary.py src/analysis tests/test_analysis backend/graph.py scripts/build_reference_questions.py scripts/accept_mvp.py scripts/accept_stores.py
+          uv run --locked --extra dev ruff check config/season.py config/sources.py config/settings.py scripts/check_sources.py tests/test_config tests/test_ingest/test_stats_api.py src/ingest/historical_matches.py src/ingest/source_download.py scripts/collect_matches.py tests/test_ingest/test_historical_matches.py tests/test_ingest/test_source_download.py src/ingest/historical_players.py scripts/collect_players.py tests/test_ingest/test_historical_players.py src/clean/corpus_quality.py scripts/check_corpus.py tests/test_clean/test_corpus_quality.py scripts/run_mvp.py src/utils/checkpoint.py tests/test_utils src/store/mvp_graph.py src/store/mvp_index.py scripts/load_mvp.py tests/test_store/test_mvp_stores.py src/ingest/commentary.py scripts/collect_commentary.py tests/test_ingest/test_commentary.py src/analysis tests/test_analysis backend/graph.py scripts/build_reference_questions.py scripts/accept_mvp.py scripts/accept_stores.py backend/readiness.py scripts/demo.py
+          uv run --locked --extra dev ruff format --check config/season.py config/sources.py config/settings.py scripts/check_sources.py tests/test_config tests/test_ingest/test_stats_api.py src/ingest/historical_matches.py src/ingest/source_download.py scripts/collect_matches.py tests/test_ingest/test_historical_matches.py tests/test_ingest/test_source_download.py src/ingest/historical_players.py scripts/collect_players.py tests/test_ingest/test_historical_players.py src/clean/corpus_quality.py scripts/check_corpus.py tests/test_clean/test_corpus_quality.py scripts/run_mvp.py src/utils/checkpoint.py tests/test_utils src/store/mvp_graph.py src/store/mvp_index.py scripts/load_mvp.py tests/test_store/test_mvp_stores.py src/ingest/commentary.py scripts/collect_commentary.py tests/test_ingest/test_commentary.py src/analysis tests/test_analysis backend/graph.py scripts/build_reference_questions.py scripts/accept_mvp.py scripts/accept_stores.py backend/readiness.py scripts/demo.py
       - run: uv run --locked --extra dev pytest --junitxml=/tmp/pytest.xml -q
       - name: Build distributable package
         run: uv build
@@ -48,3 +48,24 @@ jobs:
         working-directory: frontend
       - run: npm run build
         working-directory: frontend
+  docker:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate local deployment configuration
+        run: NEO4J_PASSWORD=ci-validation-only docker compose config --quiet
+      - name: Build the pinned non-root demo image
+        run: docker build -t pl-demo-ci .
+      - name: Verify cold-storage liveness and honest readiness
+        run: |
+          docker run -d --name pl-demo-ci pl-demo-ci
+          for attempt in $(seq 1 30); do
+            if docker exec pl-demo-ci python -c 'import urllib.request; urllib.request.urlopen("http://127.0.0.1:8000/api/health",timeout=2)' 2>/dev/null; then break; fi
+            sleep 2
+          done
+          docker exec pl-demo-ci python -c 'import os; assert os.getuid() == 10001'
+          docker exec pl-demo-ci python -c 'import urllib.request; assert urllib.request.urlopen("http://127.0.0.1:8000/").status == 200'
+          docker exec pl-demo-ci python -c 'import http.client,json; c=http.client.HTTPConnection("127.0.0.1",8000); c.request("GET","/api/readiness"); r=c.getresponse(); assert r.status == 503; assert json.load(r)["status"] == "not_ready"'
+      - name: Stop the CI container
+        if: always()
+        run: docker rm -f pl-demo-ci || true

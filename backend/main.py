@@ -167,3 +167,19 @@ def evidence_search(query: str = Query(min_length=1, max_length=4096),
 @app.get("/api/health")
 def health() -> dict[str, str]:
     return {"status": "ok"}
+
+
+@app.get("/api/readiness")
+def ready():
+    from fastapi.responses import JSONResponse
+    from backend.readiness import readiness
+
+    report = readiness()
+    return JSONResponse(report, status_code=200 if report["status"] == "ready" else 503)
+
+
+# Register static assets after API routes; Docker serves the built dashboard here.
+if Path("frontend/dist").is_dir():
+    from fastapi.staticfiles import StaticFiles
+
+    app.mount("/", StaticFiles(directory="frontend/dist", html=True), name="dashboard")
