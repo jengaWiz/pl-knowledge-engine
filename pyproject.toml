@@ -67,4 +67,4 @@ include = ["src*", "config*", "backend*"]
 exclude = ["tests*", "frontend*", "data*"]
 
 [tool.setuptools.package-data]
-config = ["sources.json"]
+config = ["sources.json", "commons_media.json"]

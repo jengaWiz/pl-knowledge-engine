@@ -1,0 +1,32 @@
+[
+  {
+    "title": "File:Girls football training.webm",
+    "modality": "video",
+    "sha256": "37f86e65d3a285fa788f7ab69734ec365170b16f5b0bd37f88b87c515106ab67",
+    "bytes": 5572217,
+    "attribution": "Evworo",
+    "license_name": "CC BY-SA 3.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/3.0",
+    "event_date": "2019-03-15"
+  },
+  {
+    "title": "File:Anfield Road Stand in May 2024.jpg",
+    "modality": "image",
+    "sha256": "092e82f810752bb29bb646e2fb715b4b2a69b7375c05bbf57f3c765fdbf349cf",
+    "bytes": 314170,
+    "attribution": "FYI2023",
+    "license_name": "CC0",
+    "license_url": "https://creativecommons.org/publicdomain/zero/1.0/deed.en",
+    "event_date": "2024-05-15"
+  },
+  {
+    "title": "File:Premier League.ogg",
+    "modality": "audio",
+    "sha256": "0ac51a32393b3216ea804ecd026c6181686d13f11d193e9930416dc631d79bc3",
+    "bytes": 7874334,
+    "attribution": "Speaker: Hassocks5489 Authors of the article",
+    "license_name": "CC BY-SA 3.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/3.0/",
+    "event_date": "2007-03-04"
+  }
+]
