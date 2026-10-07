@@ -72,7 +72,8 @@ repeated descriptions; repeated content must not inflate the scale claim.
 
 The analyst API and React interface still use the established MVP. Evidence
 indexing does not train a prediction model, expose new endpoints, load evidence
-graph nodes or verify Gemini access. Those integrations remain separate work.
+graph nodes or verify Gemini access. A [separate evidence graph](local-evidence-graph.md)
+now provides canonical reads; hybrid routing and API integration remain pending.
 
 A small eight-query source-known fixture lookup smoke check found the expected
 match in the top five for **six of eight queries**; all returned results respected
