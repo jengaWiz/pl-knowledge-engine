@@ -10,6 +10,7 @@ from filelock import FileLock
 from config.sources import inspect_source, load_sources
 from src.clean.corpus_quality import load_verified_corpus
 from src.corpus.contracts import Asset, Document, content_id, count_corpus, document_id, sha256
+from src.corpus.text_rendering import render_match_text
 from src.ingest.historical_matches import TEAM_NAMES, normalize_matches
 from src.ingest.historical_players import number, source_rows
 from src.ingest.source_download import atomic_write
@@ -98,13 +99,7 @@ def build_documents(output: Path, season: str) -> tuple[list[Asset], list[dict],
             "row": expected["source_row"],
         }:
             raise ValueError("Match source row mapping changed")
-        text = (
-            f"{season} Premier League, {match['date']}: {match['home_team']} "
-            f"{match['home_score']}–{match['away_score']} {match['away_team']}. "
-            f"Shots: {known(match['home_shots'])}–{known(match['away_shots'])}; "
-            f"shots on target: {known(match['home_shots_on_target'])}–"
-            f"{known(match['away_shots_on_target'])}."
-        )
+        text = render_match_text(match)
         pending.append((text, "match", match["date"], [match["id"]], [match_reference(match)]))
     for app in corpus["appearances"]:
         if app["minutes"] <= 0:
