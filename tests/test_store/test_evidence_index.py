@@ -212,3 +212,42 @@ def test_nontext_input_cannot_be_indexed_as_text(tmp_path, corpus):
     corpus[1][0]["document"]["modality"] = "video"
     with pytest.raises(ValueError, match="checksum-verified text"):
         index.build_index(tmp_path, "2025-26")
+
+
+def test_graph_match_allowlist_is_enforced_before_ranking(tmp_path, corpus, monkeypatch):
+    def distinct_vectors(texts):
+        return [
+            [1.0, float(text.split()[-1]) / 100] + [0.0] * 382
+            if text.split()[-1].isdigit()
+            else [1.0] + [0.0] * 383
+            for text in texts
+        ]
+
+    monkeypatch.setattr(index, "embedding_function", lambda: distinct_vectors)
+    index.build_index(tmp_path, "2025-26")
+    hits = index.search(
+        tmp_path,
+        "2025-26",
+        "Match",
+        evidence_season="2024-25",
+        match_ids=("match0", "match1", "match32"),
+        limit=10,
+    )
+    assert {hit["metadata"]["match_id"] for hit in hits} == {"match0", "match1"}
+
+
+@pytest.mark.parametrize(
+    "options",
+    [
+        {"match_ids": ["match0"]},
+        {"match_ids": ("",)},
+        {"match_ids": (1,)},
+        {"match_ids": tuple(str(i) for i in range(51))},
+        {"match_ids": ("match0",), "match_id": "match1"},
+        {"limit": True},
+    ],
+)
+def test_invalid_allowlist_or_limit_before_access(tmp_path, options):
+    with pytest.raises(ValueError):
+        index.search(tmp_path, "2025-26", "Match", evidence_season="2025-26", **options)
+    assert not list(tmp_path.iterdir())

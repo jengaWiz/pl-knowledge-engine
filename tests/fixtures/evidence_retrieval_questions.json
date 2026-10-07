@@ -1,0 +1,26 @@
+{
+  "schema": "evidence-retrieval-smoke-v1",
+  "scope": "Small canonical fixture and player-opponent smoke set, not a broad relevance benchmark.",
+  "fixtures": [
+    {"season": "2022-23", "query": "2022-23 Premier League Liverpool home match against Bournemouth", "match_id": "pl:2022-23:liverpool:bournemouth", "home_score": 9, "away_score": 0},
+    {"season": "2022-23", "query": "2022-23 Premier League Aston Villa home match against Liverpool", "match_id": "pl:2022-23:aston-villa:liverpool", "home_score": 1, "away_score": 3},
+    {"season": "2023-24", "query": "2023-24 Premier League Liverpool home match against Bournemouth", "match_id": "pl:2023-24:liverpool:bournemouth", "home_score": 3, "away_score": 1},
+    {"season": "2023-24", "query": "2023-24 Premier League Aston Villa home match against Liverpool", "match_id": "pl:2023-24:aston-villa:liverpool", "home_score": 3, "away_score": 3},
+    {"season": "2024-25", "query": "2024-25 Premier League Liverpool home match against Bournemouth", "match_id": "pl:2024-25:liverpool:bournemouth", "home_score": 3, "away_score": 0},
+    {"season": "2024-25", "query": "2024-25 Premier League Aston Villa home match against Liverpool", "match_id": "pl:2024-25:aston-villa:liverpool", "home_score": 2, "away_score": 2},
+    {"season": "2025-26", "query": "2025-26 Premier League Liverpool home match against Bournemouth", "match_id": "pl:2025-26:liverpool:bournemouth", "home_score": 4, "away_score": 2},
+    {"season": "2025-26", "query": "2025-26 Premier League Aston Villa home match against Liverpool", "match_id": "pl:2025-26:aston-villa:liverpool", "home_score": 4, "away_score": 2}
+  ],
+  "players": [
+    {"season": "2025-26", "query": "Digne appearances against Liverpool", "player_id": "pl:2025-26:player:101188", "team": "Aston Villa", "opponent": "Liverpool", "matches": ["pl:2025-26:aston-villa:liverpool", "pl:2025-26:liverpool:aston-villa"]},
+    {"season": "2025-26", "query": "Salah appearances against Aston Villa", "player_id": "pl:2025-26:player:118748", "team": "Liverpool", "opponent": "Aston Villa", "matches": ["pl:2025-26:aston-villa:liverpool", "pl:2025-26:liverpool:aston-villa"]}
+  ],
+  "abstentions": [
+    {"season": "2025-26", "query": "Liverpool vs Bournemouth", "status": "clarification"},
+    {"season": "2025-26", "query": "Liverpool home against Bournemouth in 2024-25", "status": "clarification"},
+    {"season": "2025-26", "query": "Predict Liverpool vs Bournemouth tomorrow", "status": "unsupported"},
+    {"season": "2025-26", "query": "Digne against Real Madrid", "status": "unavailable"},
+    {"season": "2025-26", "query": "Digne at home against Liverpool", "status": "clarification"},
+    {"season": "2025-26", "query": "Liverpool vs Bournemouth on 2025-02-30", "status": "clarification"}
+  ]
+}

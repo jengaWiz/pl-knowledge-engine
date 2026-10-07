@@ -73,12 +73,14 @@ repeated descriptions; repeated content must not inflate the scale claim.
 The analyst API and React interface still use the established MVP. Evidence
 indexing does not train a prediction model, expose new endpoints, load evidence
 graph nodes or verify Gemini access. A [separate evidence graph](local-evidence-graph.md)
-now provides canonical reads; hybrid routing and API integration remain pending.
+now provides canonical reads. [Graph-constrained retrieval](graph-constrained-retrieval.md)
+combines these stores for supported requests; API integration remains pending.
 
 A small eight-query source-known fixture lookup smoke check found the expected
 match in the top five for **six of eight queries**; all returned results respected
 the requested season. This is not a broad relevance benchmark. The vector-only
 model sometimes ranks the reverse fixture or a different opponent ahead of the
 requested home fixture. Use canonical exact filters when the entity is known;
-intent/entity resolution and graph-supported retrieval remain necessary before
-claiming reliable natural-language fixture analysis.
+the new graph-constrained router addresses those identities for supported
+requests, passing the same eight questions at rank one. Broader natural-language
+retrieval evaluation remains necessary.

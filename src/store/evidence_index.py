@@ -209,12 +209,20 @@ def search(
     kind: str = "",
     player_id: str = "",
     match_id: str = "",
+    match_ids: tuple[str, ...] = (),
     limit: int = 5,
 ):
-    if not query.strip() or len(query) > 4000 or not 1 <= limit <= 50:
+    if not query.strip() or len(query) > 4000 or type(limit) is not int or not 1 <= limit <= 50:
         raise ValueError("Query must be nonempty, at most 4000 characters, with limit 1–50")
     if not evidence_season or kind not in {"", "match", "appearance"}:
         raise ValueError("Search requires an explicit evidence season and supported kind")
+    if (
+        not isinstance(match_ids, tuple)
+        or len(match_ids) > 50
+        or any(not isinstance(ident, str) or not ident for ident in match_ids)
+        or (match_id and match_ids)
+    ):
+        raise ValueError("Use one match ID or a tuple of at most 50 nonempty match IDs")
     path = report_path(output, primary_season)
     with FileLock(str(path.parent / "index.lock"), timeout=0):
         rows, profile, dataset, _ = prepare_rows(output, primary_season)
@@ -239,12 +247,18 @@ def search(
             for key, value in (("kind", kind), ("player_id", player_id), ("match_id", match_id))
             if value
         )
+        if match_ids:
+            filters.append({"match_id": {"$in": sorted(set(match_ids))}})
         where = filters[0] if len(filters) == 1 else {"$and": filters}
         eligible = [
             row
             for row in rows
             if all(
-                row["metadata"].get(key) == value
+                (
+                    row["metadata"].get(key) in value["$in"]
+                    if isinstance(value, dict)
+                    else row["metadata"].get(key) == value
+                )
                 for clause in filters
                 for key, value in clause.items()
             )

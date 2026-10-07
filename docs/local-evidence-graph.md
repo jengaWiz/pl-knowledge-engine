@@ -87,5 +87,6 @@ was rejected and rolled back.
 
 These exact canonical checks do not resolve natural-language ambiguity: the
 separate vector smoke result remains 6/8 expected fixtures in the top five.
-Hybrid routing, analyst integration, prediction evaluation and live Gemini
-verification remain pending. No provider calls or cloud spending were needed.
+A [graph-constrained retriever](graph-constrained-retrieval.md) now resolves a
+bounded set of natural-language fixture/player requests. Analyst integration,
+prediction evaluation and live Gemini verification remain pending. No provider calls or cloud spending were needed.
