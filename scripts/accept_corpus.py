@@ -1,4 +1,4 @@
-"""Validate prepared text and media; report the target honestly without embedding."""
+"""Validate prepared football evidence with optional media and no embedding calls."""
 
 import argparse
 import sys
@@ -16,22 +16,28 @@ def main():
     parser.add_argument("--season", default=settings.season)
     parser.add_argument("--document-budget", type=int, default=5000)
     parser.add_argument("--byte-budget", type=int, default=150_000_000)
+    parser.add_argument("--mode", choices=["structured", "multimodal"], default="structured")
     parser.add_argument("--require-target", action="store_true")
     args = parser.parse_args()
     report = accept_corpus(
-        args.output, args.season, document_budget=args.document_budget, byte_budget=args.byte_budget
+        args.output,
+        args.season,
+        mode=args.mode,
+        document_budget=args.document_budget,
+        byte_budget=args.byte_budget,
     )
     if not report["valid"]:
         raise SystemExit(
-            "Corpus acceptance failed; inspect reports/multimodal/<season>/corpus.json"
+            "Corpus acceptance failed; inspect the corpus report under reports/evidence "
+            "or reports/multimodal"
         )
     print(
         f"Verified documents: {report['counts']['retrieval_documents']}; "
         f"original sources: {report['counts']['source_assets']}; "
         f"status: {report['status']}; no embeddings created"
     )
-    if args.require_target and not report["counts"]["multimodal_target_met"]:
-        raise SystemExit("The 2,500-document/four-modality target has not been met")
+    if args.require_target and not report["target_met"]:
+        raise SystemExit("The configured 2,500-document evidence target has not been met")
 
 
 if __name__ == "__main__":
