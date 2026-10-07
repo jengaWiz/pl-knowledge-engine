@@ -1,4 +1,8 @@
-# Combined multimodal corpus acceptance
+# Optional multimodal corpus acceptance
+
+The default [structured evidence route](structured-evidence-acceptance.md) makes
+media optional. This document describes `--mode multimodal`; schema v2 requires
+rerunning acceptance for this mode if a v1 report exists.
 
 This stage combines source-verified statistical text with extracted public media,
 retaining their asset contracts, document identities and contributing references.
@@ -14,9 +18,9 @@ make mvp
 make collect-media
 make extract-media
 make prepare-text
-make accept-corpus
+uv run --locked python scripts/accept_corpus.py --mode multimodal
 # A milestone gate that exits unsuccessfully until both target conditions hold:
-uv run --locked python scripts/accept_corpus.py --require-target
+uv run --locked python scripts/accept_corpus.py --mode multimodal --require-target
 ```
 
 The media stages require native FFmpeg/ffprobe. For custom data directories, pass
@@ -27,7 +31,7 @@ Acceptance first snapshots the input manifests/reports, invokes both downstream
 source/payload gates, then checks that the snapshot stayed unchanged. If inputs
 move during verification, acceptance fails and can be retried. Combined output
 has its own lock; source stages keep their existing locks. Consumers must use
-`load_corpus(output, season)` to revalidate inputs and reproduce the combined
+`load_corpus(output, season, mode="multimodal")` to revalidate inputs and reproduce the combined
 manifests before use, rather than trusting a stale report alone.
 
 Default limits are 5,000 traceable document records and 150,000,000 unique payload
