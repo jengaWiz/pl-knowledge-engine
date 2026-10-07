@@ -1,0 +1,62 @@
+[
+  {
+    "id": "matches",
+    "season": "2022-23",
+    "url": "https://www.football-data.co.uk/mmz4281/2223/E0.csv",
+    "publisher": "Football-Data.co.uk",
+    "reference_url": "https://www.football-data.co.uk/englandm.php",
+    "reuse_terms": "Publisher describes data as free; retain attribution and source acknowledgments. Raw downloads remain local.",
+    "revision": "sha256:8442792d3b614c94ea3cf381bd2736805889cc1713169035368fff19c3d02380",
+    "sha256": "8442792d3b614c94ea3cf381bd2736805889cc1713169035368fff19c3d02380",
+    "required_columns": [
+      "Div",
+      "Date",
+      "HomeTeam",
+      "AwayTeam",
+      "FTHG",
+      "FTAG",
+      "FTR"
+    ],
+    "schema_note": "Premier League full-time results; betting fields are not part of MVP."
+  },
+  {
+    "id": "matches",
+    "season": "2023-24",
+    "url": "https://www.football-data.co.uk/mmz4281/2324/E0.csv",
+    "publisher": "Football-Data.co.uk",
+    "reference_url": "https://www.football-data.co.uk/englandm.php",
+    "reuse_terms": "Publisher describes data as free; retain attribution and source acknowledgments. Raw downloads remain local.",
+    "revision": "sha256:b2e057b0ed959f198b0f63d2391c01239f3608e6de5db68edab3f88e04d07ff3",
+    "sha256": "b2e057b0ed959f198b0f63d2391c01239f3608e6de5db68edab3f88e04d07ff3",
+    "required_columns": [
+      "Div",
+      "Date",
+      "HomeTeam",
+      "AwayTeam",
+      "FTHG",
+      "FTAG",
+      "FTR"
+    ],
+    "schema_note": "Premier League full-time results; betting fields are not part of MVP."
+  },
+  {
+    "id": "matches",
+    "season": "2024-25",
+    "url": "https://www.football-data.co.uk/mmz4281/2425/E0.csv",
+    "publisher": "Football-Data.co.uk",
+    "reference_url": "https://www.football-data.co.uk/englandm.php",
+    "reuse_terms": "Publisher describes data as free; retain attribution and source acknowledgments. Raw downloads remain local.",
+    "revision": "sha256:d0c8ce4a96d886cf60cf101f570f4a3893844226f91c7bd769eb568c49edbfa4",
+    "sha256": "d0c8ce4a96d886cf60cf101f570f4a3893844226f91c7bd769eb568c49edbfa4",
+    "required_columns": [
+      "Div",
+      "Date",
+      "HomeTeam",
+      "AwayTeam",
+      "FTHG",
+      "FTAG",
+      "FTR"
+    ],
+    "schema_note": "Premier League full-time results; betting fields are not part of MVP."
+  }
+]
