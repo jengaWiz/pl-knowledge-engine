@@ -120,7 +120,7 @@ Verified against pinned **2025–26** sources. [Acceptance evidence and reproduc
 
 | Check | Result |
 | --- | --- |
-| Python suite | **359 tests passed**; CI covers Python 3.11 and 3.12. |
+| Python suite | **378 tests passed**; CI covers Python 3.11 and 3.12. |
 | Independent numerical references | **42/42 passed**, plus five insufficient-evidence cases. |
 | Real-store/API acceptance | **Seven checks passed**, including all 42 live numerical references. |
 | Desktop/mobile browser flows | **8/8 passed** against the Docker-served production dashboard. |
@@ -149,7 +149,7 @@ Broader seasons and player coverage, public hosting with authentication, product
 
 ## Development
 
-An [optional historical match collector](docs/historical-match-corpus.md) prepares **1,140 additional match documents** from three complete Premier League seasons (2022–23 through 2024–25). [Structured evidence acceptance](docs/structured-evidence-acceptance.md) combines them with the 2025–26 text into **2,682 verified structured/text documents** across four seasons, meeting the preparation target. These artifacts are not yet embedded or loaded into the demo graph; media collection is optional.
+An [optional historical match collector](docs/historical-match-corpus.md) prepares **1,140 additional match documents** from three complete Premier League seasons (2022–23 through 2024–25). [Structured evidence acceptance](docs/structured-evidence-acceptance.md) combines them with the 2025–26 text into **2,682 verified structured/text documents** across four seasons, meeting the preparation target. A [separate local evidence index](docs/local-evidence-index.md) embeds all 2,682 documents with the existing 384-dimensional ONNX model. It is not yet connected to the analyst API or evidence graph; Gemini integration remains pending and media collection is optional.
 
 An [optional public-media collector](docs/public-media-collection.md) downloads reviewed, licensed image/audio/video samples with checksum, attribution and decoding checks. These are background assets; bounded extraction prepares 106 verified media documents. [Statistical text preparation](docs/statistical-text-documents.md) adds 1,542 source-backed match and appearance documents. [Combined corpus acceptance](docs/multimodal-acceptance.md) verifies **1,648 prepared documents** across all four modalities, from 120 original source files. This optional four-modality corpus remains below its own 2,500-document target; it is separate from the structured preparation target above and is not yet embedded or exposed through the demo index.
 

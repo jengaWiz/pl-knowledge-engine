@@ -56,8 +56,9 @@ separate `counts.multimodal_target_met` remains false for text-only evidence;
 it does not control the structured policy. `--require-target` uses the stored
 mode-specific policy, not an assumption about four modalities.
 
-This completes the preparation count target, not the indexing, hybrid retrieval,
-prediction or Gemini endpoint milestones. The default demo remains the verified
+This completes the preparation count target. A [separate local ONNX index](local-evidence-index.md)
+now embeds this corpus; hybrid retrieval, prediction evaluation and Gemini model/endpoint
+acceptance remain unfinished. The default demo remains the verified
 2025–26 MVP with its existing 457 ONNX-indexed summaries and graph.
 
 ## Output and migration
