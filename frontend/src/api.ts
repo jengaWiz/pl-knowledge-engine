@@ -44,3 +44,17 @@ export async function sendChat(
   })
   return data
 }
+
+export async function fetchEvidenceStatus(signal?: AbortSignal): Promise<import('./types').EvidenceStatus> {
+  const { data } = await api.get('/evidence/status', {
+    signal, timeout: 120000, validateStatus: status => status === 200 || status === 503,
+  })
+  return data
+}
+
+export async function retrieveEvidence(query: string, evidenceSeason: string, signal?: AbortSignal): Promise<import('./types').EvidenceResult> {
+  const { data } = await api.post('/evidence/retrieve', {
+    query, evidence_season: evidenceSeason, limit: 5,
+  }, { signal, timeout: 120000 })
+  return data
+}

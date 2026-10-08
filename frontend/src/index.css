@@ -154,3 +154,41 @@ button:focus-visible, input:focus-visible, summary:focus-visible, a:focus-visibl
 }
 
 @media (max-width: 800px) { .graph-hint { display: none; } }
+
+.analyst-modes { display: flex; gap: 8px; padding: 12px 24px; border-bottom: 1px solid var(--bg-3); }
+.analyst-modes button, .evidence-view button { color: var(--t-2); background: var(--bg-1); border: 1px solid var(--bg-3); border-radius: 8px; padding: 9px 12px; cursor: pointer; font: inherit; font-size: 13px; }
+.analyst-modes button[aria-pressed="true"] { color: var(--t-1); border-color: var(--villa); background: rgba(103,14,54,.18); }
+.evidence-view { max-width: 900px; margin: 0 auto; padding: 28px 24px; color: var(--t-1); }
+.evidence-heading { display: flex; gap: 20px; align-items: flex-start; justify-content: space-between; }
+.evidence-heading h2 { font-size: 23px; margin: 8px 0; letter-spacing: -.025em; }
+.evidence-heading p, .evidence-scope { color: var(--t-2); font-size: 13px; line-height: 1.6; }
+.evidence-heading button { flex-shrink: 0; }
+.evidence-eyebrow { letter-spacing: .1em; font-size: 10px !important; font-weight: 700; }
+.evidence-coverage { font-size: 12px; color: #96c4a1; }
+.evidence-notice { padding: 14px; border: 1px solid var(--bg-4); border-radius: 9px; background: var(--bg-1); font-size: 13px; line-height: 1.6; }
+.evidence-form { display: flex; align-items: flex-end; gap: 12px; margin-top: 20px; }
+.evidence-form label { display: flex; flex-direction: column; gap: 7px; font-size: 12px; color: var(--t-2); }
+.evidence-form select, .evidence-form textarea { font: inherit; color: var(--t-1); background: var(--bg-1); border: 1px solid var(--bg-4); border-radius: 8px; padding: 10px; }
+.evidence-form textarea { resize: vertical; width: 100%; min-height: 62px; }
+.evidence-question { flex: 1; min-width: 0; }
+.evidence-view button:disabled { opacity: .5; cursor: not-allowed; }
+.evidence-examples { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+.evidence-scope { font-size: 11px; margin: 14px 0 24px; }
+.evidence-results h3 { font-size: 16px; line-height: 1.5; margin: 10px 0; }
+.evidence-result-header { display: flex; gap: 10px; justify-content: space-between; font-size: 12px; color: var(--t-3); }
+.evidence-status { color: var(--t-1); }
+.evidence-card { margin-top: 14px; padding: 20px; background: var(--bg-1); border: 1px solid var(--bg-3); border-radius: 12px; overflow-wrap: anywhere; }
+.evidence-card p { font-size: 13px; line-height: 1.7; color: var(--t-2); }
+.evidence-card summary { cursor: pointer; font-size: 12px; color: #c87898; }
+.evidence-source { display: flex; flex-direction: column; gap: 6px; padding: 12px 0; border-bottom: 1px solid var(--bg-3); font-size: 12px; }
+.evidence-source code, .evidence-document { font-size: 10px; color: var(--t-3); overflow-wrap: anywhere; }
+.evidence-source a { color: #c87898; }
+.evidence-document { display: block; margin-top: 12px; }
+.evidence-candidate { display: block; margin: 8px 0; text-align: left; }
+@media (max-width: 600px) {
+  .evidence-view { padding: 20px 16px; }
+  .evidence-heading { flex-direction: column; gap: 4px; }
+  .evidence-form { flex-direction: column; align-items: stretch; }
+  .evidence-card { padding: 16px; }
+  .analyst-modes { padding: 10px 16px; }
+}
