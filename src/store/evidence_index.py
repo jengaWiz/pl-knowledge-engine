@@ -200,6 +200,24 @@ def build_index(output: Path, season: str, *, embed=None):
         return report
 
 
+def verified_collection(output, primary_season):
+    """Caller holds index.lock; validate the complete persisted retrieval contract."""
+    rows, profile, dataset, _ = prepare_rows(output, primary_season)
+    report = json.loads(report_path(output, primary_season).read_text())
+    if (
+        not report.get("valid")
+        or report.get("profile") != profile
+        or report.get("dataset_id") != dataset
+        or report.get("indexed_records") != len(rows)
+        or report.get("collection") != "evidence_onnx_" + dataset[:32]
+    ):
+        raise ValueError("Evidence index is stale or incomplete")
+    collection = client(output).get_collection(report["collection"], embedding_function=None)
+    if verify_index(output, collection, rows, profile, dataset) != report["vectors_sha256"]:
+        raise ValueError("Evidence vector index changed after verification")
+    return rows, profile, dataset, collection
+
+
 def search(
     output: Path,
     primary_season: str,
@@ -225,21 +243,9 @@ def search(
         raise ValueError("Use one match ID or a tuple of at most 50 nonempty match IDs")
     path = report_path(output, primary_season)
     with FileLock(str(path.parent / "index.lock"), timeout=0):
-        rows, profile, dataset, _ = prepare_rows(output, primary_season)
+        rows, _, _, collection = verified_collection(output, primary_season)
         if evidence_season not in {row["metadata"]["season"] for row in rows}:
             raise ValueError("Requested season has no accepted evidence")
-        report = json.loads(path.read_text())
-        if (
-            not report.get("valid")
-            or report.get("profile") != profile
-            or report.get("dataset_id") != dataset
-            or report.get("indexed_records") != len(rows)
-            or report.get("collection") != "evidence_onnx_" + dataset[:32]
-        ):
-            raise ValueError("Evidence index is stale or incomplete")
-        collection = client(output).get_collection(report["collection"], embedding_function=None)
-        if verify_index(output, collection, rows, profile, dataset) != report["vectors_sha256"]:
-            raise ValueError("Evidence vector index changed after verification")
         vectors = normalized_vectors(embedding_function()([query]), 1)
         filters = [{"season": evidence_season}]
         filters.extend(
@@ -277,3 +283,17 @@ def search(
             }
             for index, ident in enumerate(result["ids"][0])
         ]
+
+
+def status(output, primary_season):
+    """Inspect source/index integrity without embedding or downloading any model."""
+    path = report_path(output, primary_season)
+    with FileLock(str(path.parent / "index.lock"), timeout=0):
+        rows, profile, dataset, _ = verified_collection(output, primary_season)
+        return {
+            "dataset_id": dataset,
+            "model": profile["model"],
+            "dimensions": profile["dimensions"],
+            "documents": len(rows),
+            "records_by_season": dict(Counter(row["metadata"]["season"] for row in rows)),
+        }

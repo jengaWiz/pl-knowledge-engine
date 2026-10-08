@@ -251,3 +251,21 @@ def test_invalid_allowlist_or_limit_before_access(tmp_path, options):
     with pytest.raises(ValueError):
         index.search(tmp_path, "2025-26", "Match", evidence_season="2025-26", **options)
     assert not list(tmp_path.iterdir())
+
+
+def test_status_verifies_index_without_embedding(tmp_path, corpus, monkeypatch):
+    index.build_index(tmp_path, "2025-26")
+    monkeypatch.setattr(
+        index, "embedding_function", lambda: pytest.fail("No embedding at readiness")
+    )
+    report = index.status(tmp_path, "2025-26")
+    assert report["documents"] == 35 and report["records_by_season"] == {
+        "2024-25": 32,
+        "2025-26": 3,
+    }
+    collection = index.client(tmp_path).get_collection(
+        "evidence_onnx_" + report["dataset_id"][:32], embedding_function=None
+    )
+    collection.update(ids=["doc000"], documents=["tampered"])
+    with pytest.raises(ValueError, match="text or provenance"):
+        index.status(tmp_path, "2025-26")
