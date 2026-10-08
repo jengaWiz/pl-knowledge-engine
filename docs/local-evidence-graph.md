@@ -2,9 +2,9 @@
 
 The optional structured corpus now has an independently owned Neo4j projection.
 It connects verified documents and original CSV sources to season-specific matches,
-teams, players and positive-minute appearances. The default analyst API and React
-interface still use the established MVP; combining this graph with the evidence
-vector index and natural-language entity routing remains separate work.
+teams, players and positive-minute appearances. The optional [Source evidence API and UI](evidence-api-ui.md) combine this graph
+with the separate vector index and canonical routing. Existing numerical
+statistics and default graph views retain the established MVP.
 
 ## Load
 
@@ -88,5 +88,6 @@ was rejected and rolled back.
 These exact canonical checks do not resolve natural-language ambiguity: the
 separate vector smoke result remains 6/8 expected fixtures in the top five.
 A [graph-constrained retriever](graph-constrained-retrieval.md) now resolves a
-bounded set of natural-language fixture/player requests. Analyst integration,
-prediction evaluation and live Gemini verification remain pending. No provider calls or cloud spending were needed.
+bounded set of natural-language fixture/player requests, exposed through the
+optional Source evidence API and UI. Prediction evaluation and live Gemini
+verification remain pending. No provider calls or cloud spending were needed.

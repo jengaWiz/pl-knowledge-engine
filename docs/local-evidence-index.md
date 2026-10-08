@@ -70,11 +70,11 @@ The verified local corpus contains 2,682 records and 2,682 unique documents.
 Counts distinguish traceable records from unique content if later sources add
 repeated descriptions; repeated content must not inflate the scale claim.
 
-The analyst API and React interface still use the established MVP. Evidence
-indexing does not train a prediction model, expose new endpoints, load evidence
-graph nodes or verify Gemini access. A [separate evidence graph](local-evidence-graph.md)
+Existing numerical statistics and default graph views retain the established
+MVP. Evidence indexing does not train a prediction model or verify Gemini access. A [separate evidence graph](local-evidence-graph.md)
 now provides canonical reads. [Graph-constrained retrieval](graph-constrained-retrieval.md)
-combines these stores for supported requests; API integration remains pending.
+combines these stores for supported requests and is exposed in the optional
+[Source evidence API and UI](evidence-api-ui.md).
 
 A small eight-query source-known fixture lookup smoke check found the expected
 match in the top five for **six of eight queries**; all returned results respected
