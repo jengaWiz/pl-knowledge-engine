@@ -52,3 +52,46 @@ export interface ChatMessage {
   content: string
   sources?: { type: string; summary: string; url?: string; record_ids?: string[] }[]
 }
+
+export interface EvidenceStatus {
+  status: 'ready' | 'not_ready'
+  primary_season: string
+  seasons: string[]
+  index?: { documents: number; records_by_season: Record<string, number> }
+  detail?: string
+}
+
+export interface SourceReference {
+  id?: string
+  row?: number
+  url?: string
+  revision?: string
+  asset_id?: string
+}
+
+export interface EvidenceResult {
+  route: {
+    status: 'resolved' | 'clarification' | 'unsupported' | 'unavailable'
+    season: string
+    reason: string
+    kind?: 'fixture' | 'player'
+    candidates?: { canonical_id: string; date: string; home_team: string; away_team: string }[]
+  }
+  hits: {
+    id: string
+    text: string
+    graph: {
+      match_id: string
+      date: string
+      home_team?: string
+      away_team?: string
+      home_score?: number
+      away_score?: number
+      team?: string
+      opponent?: string
+      minutes?: number
+      source_refs: SourceReference[]
+    }
+  }[]
+  graph_candidates?: number
+}

@@ -37,6 +37,7 @@ The [fresh-data MVP milestone](https://github.com/jengaWiz/pl-knowledge-engine/m
 - **Evidence analyst:** compare points, goals and goal difference; inspect last-five form, home/away splits and goal/assist rankings, including per-90 rates with a minutes threshold.
 - **Connected graph:** explore season, club, gameweek, fixture and player relationships, with player search and match views.
 - **Fixture browser:** filter the full league schedule and navigate results using mouse or keyboard.
+- **Source evidence:** select a historical season, resolve fixture or player/opponent questions, and inspect verified records with original row/revision references. [Optional preparation and API guide](docs/evidence-api-ui.md).
 - **Evidence retrieval API:** search local summaries by club and inspect source URLs, record IDs and provenance.
 
 <details>
@@ -49,6 +50,15 @@ The [fresh-data MVP milestone](https://github.com/jengaWiz/pl-knowledge-engine/m
 </details>
 
 These are screenshots of the populated application, captured with [Playwright](frontend/scripts/capture-demo.mjs).
+
+<details>
+<summary>See the four-season Source evidence workspace</summary>
+
+![Actual local historical fixture retrieval with original source references](docs/images/evidence.png)
+
+The [Source evidence guide](docs/evidence-api-ui.md) explains the optional store preparation and API.
+
+</details>
 
 Try these questions:
 
@@ -120,7 +130,7 @@ Verified against pinned **2025–26** sources. [Acceptance evidence and reproduc
 
 | Check | Result |
 | --- | --- |
-| Python suite | **497 tests passed**; CI covers Python 3.11 and 3.12. |
+| Python suite | **526 tests passed**; CI covers Python 3.11 and 3.12. |
 | Independent numerical references | **42/42 passed**, plus five insufficient-evidence cases. |
 | Real-store/API acceptance | **Seven checks passed**, including all 42 live numerical references. |
 | Desktop/mobile browser flows | **8/8 passed** against the Docker-served production dashboard. |
@@ -149,7 +159,7 @@ Broader seasons and player coverage, public hosting with authentication, product
 
 ## Development
 
-An [optional historical match collector](docs/historical-match-corpus.md) prepares **1,140 additional match documents** from three complete Premier League seasons (2022–23 through 2024–25). [Structured evidence acceptance](docs/structured-evidence-acceptance.md) combines them with the 2025–26 text into **2,682 verified structured/text documents** across four seasons, meeting the preparation target. A [separate local evidence index](docs/local-evidence-index.md) embeds all 2,682 documents with the existing 384-dimensional ONNX model. A [separate evidence graph](docs/local-evidence-graph.md) now connects those documents and their CSV sources to 2,815 season-scoped entities, with exact fixture reads and bounded player/opponent and association-path traversal. A [graph-constrained retriever](docs/graph-constrained-retrieval.md) now resolves supported natural-language fixture/player requests and ranks only canonical graph candidates, passing 16/16 local smoke cases. This pipeline remains separate from the analyst API; API integration and Gemini verification are pending, and media collection is optional.
+An [optional historical match collector](docs/historical-match-corpus.md) prepares **1,140 additional match documents** from three complete Premier League seasons (2022–23 through 2024–25). [Structured evidence acceptance](docs/structured-evidence-acceptance.md) combines them with the 2025–26 text into **2,682 verified structured/text documents** across four seasons, meeting the preparation target. A [separate local evidence index](docs/local-evidence-index.md) embeds all 2,682 documents with the existing 384-dimensional ONNX model. A [separate evidence graph](docs/local-evidence-graph.md) now connects those documents and their CSV sources to 2,815 season-scoped entities, with exact fixture reads and bounded player/opponent and association-path traversal. A [graph-constrained retriever](docs/graph-constrained-retrieval.md) now resolves supported natural-language fixture/player requests and ranks only canonical graph candidates, passing 16/16 local smoke cases. The [Source evidence mode and API](docs/evidence-api-ui.md) now expose this pipeline with explicit seasons, readiness checks, clarification and source cards. Expanded stores require optional preparation; Gemini verification and prediction evaluation remain pending, and media collection is optional.
 
 An [optional public-media collector](docs/public-media-collection.md) downloads reviewed, licensed image/audio/video samples with checksum, attribution and decoding checks. These are background assets; bounded extraction prepares 106 verified media documents. [Statistical text preparation](docs/statistical-text-documents.md) adds 1,542 source-backed match and appearance documents. [Combined corpus acceptance](docs/multimodal-acceptance.md) verifies **1,648 prepared documents** across all four modalities, from 120 original source files. This optional four-modality corpus remains below its own 2,500-document target; it is separate from the structured preparation target above and is not yet embedded or exposed through the demo index.
 

@@ -178,6 +178,10 @@ def ready():
     return JSONResponse(report, status_code=200 if report["status"] == "ready" else 503)
 
 
+from backend.evidence import router as evidence_router
+
+app.include_router(evidence_router)
+
 # Register static assets after API routes; Docker serves the built dashboard here.
 if Path("frontend/dist").is_dir():
     from fastapi.staticfiles import StaticFiles

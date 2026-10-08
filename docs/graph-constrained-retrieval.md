@@ -86,7 +86,8 @@ This is a small source-known smoke set, not a broad semantic relevance benchmark
 Graph constraints address the home/away and opponent ambiguity in these supported
 routes; they do not establish arbitrary natural-language understanding.
 
-The default analyst API and React interface still use the established MVP.
-Connecting this evidence retriever to those endpoints, broader independent
-retrieval evaluation, temporal prediction evaluation and Gemini free-tier
-verification remain pending. The existing 457-summary MVP index remains intact.
+The [Source evidence API and UI](evidence-api-ui.md) now expose this retriever
+as an optional mode with explicit seasons and readiness checks. The existing
+statistics API retains the established MVP. Broader independent retrieval
+evaluation, temporal prediction evaluation and Gemini free-tier verification
+remain pending. The existing 457-summary MVP index remains intact.
