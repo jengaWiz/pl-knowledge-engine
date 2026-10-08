@@ -2,6 +2,10 @@ import { defineConfig } from '@playwright/test'
 
 export default defineConfig({
   testDir: './tests',
+  webServer: process.env.PL_STATIC_PREVIEW ? {
+    command: 'npm run preview -- --host 127.0.0.1 --port 5174',
+    url: 'http://127.0.0.1:5174', reuseExistingServer: false, timeout: 30000,
+  } : undefined,
   fullyParallel: false,
   workers: 1,
   timeout: 45_000,
