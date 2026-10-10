@@ -36,6 +36,7 @@ The [fresh-data MVP milestone](https://github.com/jengaWiz/pl-knowledge-engine/m
 
 - **Evidence analyst:** compare points, goals and goal difference; inspect last-five form, home/away splits and goal/assist rankings, including per-90 rates with a minutes threshold.
 - **Focused graph explorer:** start with 20 clubs, drill into up to 12 available players and six recent fixtures, or search a player. Stable, labeled layouts replace the full-graph cluster; inspect real relationship directions and follow connections. Mobile starts in an accessible list view. Player/fixture views show up to eight recent appearance records.
+- **Player discovery:** search accent-free or full names (`ekitike`, `Alisson`), select closest matches for typos (`allison`), and distinguish missing roster coverage from service errors. [Search behavior and coverage](docs/player-search.md).
 - **Fixture browser:** filter the full league schedule and navigate results using mouse or keyboard.
 - **Source evidence:** select a historical season, resolve fixture or player/opponent questions, and inspect verified records with original row/revision references. [Optional preparation and API guide](docs/evidence-api-ui.md).
 - **Evidence retrieval API:** search local summaries by club and inspect source URLs, record IDs and provenance.
@@ -44,6 +45,8 @@ The [fresh-data MVP milestone](https://github.com/jengaWiz/pl-knowledge-engine/m
 <summary>See club exploration, match detail and the mobile experience</summary>
 
 ![Liverpool squad and recent fixtures in a bounded relationship map](docs/images/demo-club.png)
+
+![Closest-match player suggestions for a misspelled Alisson search](docs/images/player-search.png)
 
 ![Actual Liverpool–Bournemouth match graph with readable appearance records](docs/images/demo-match.png)
 
@@ -146,10 +149,10 @@ Verified against pinned **2025–26** sources. [Acceptance evidence and reproduc
 
 | Check | Result |
 | --- | --- |
-| Python suite | **542 tests passed**; CI covers Python 3.11 and 3.12. |
+| Python suite | **563 tests passed**; CI covers Python 3.11 and 3.12. |
 | Independent numerical references | **42/42 passed**, plus five insufficient-evidence cases. |
 | Real-store/API acceptance | **Seven checks passed**, including all 42 live numerical references. |
-| Desktop/mobile browser flows | **20/20 passed**, covering graph exploration, keyboard navigation, fixtures, statistics and source evidence on desktop/mobile. |
+| Desktop/mobile browser flows | **24/24 passed**, covering graph exploration, keyboard navigation, fixtures, statistics and source evidence on desktop/mobile. |
 | Empty-storage Docker setup | Public collection, validation, graph/index loading and readiness passed. |
 | Backup and restart | All four volumes backed up privately; versions, counts and live answers preserved without recollection. |
 | CI | Python checks, wheel packaging, frontend build, Docker build and cold-storage readiness checks. |
