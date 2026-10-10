@@ -32,6 +32,8 @@ The [fresh-data MVP milestone](https://github.com/jengaWiz/pl-knowledge-engine/m
 
 ## Demo
 
+The workspace uses an off-white canvas, white cards and restrained plum accents, with readable graph labels and a compact fixture sidebar.
+
 ![Club-first relationship explorer showing the 20 Premier League clubs and season](docs/images/demo-graph.png)
 
 - **Evidence analyst:** compare points, goals and goal difference; inspect last-five form, home/away splits and goal/assist rankings, including per-90 rates with a minutes threshold.
