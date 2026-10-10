@@ -106,8 +106,8 @@ function StarterCard({ text, onClick }: { text: string; onClick: () => void }) {
       onMouseLeave={() => setHovered(false)}
       style={{
         background: hovered ? 'var(--bg-2)' : 'var(--bg-1)',
-        border: `1px solid ${hovered ? '#63876d' : 'var(--bg-3)'}`,
-        borderLeft: `3px solid ${hovered ? '#c6ed78' : 'var(--bg-4)'}`,
+        border: `1px solid ${hovered ? '#9776b5' : 'var(--bg-3)'}`,
+        borderLeft: `3px solid ${hovered ? '#00ff85' : 'var(--bg-4)'}`,
         borderRadius: 11, padding: '14px 16px',
         color: hovered ? 'var(--t-1)' : 'var(--t-2)',
         fontSize: 13, textAlign: 'left', cursor: 'pointer', lineHeight: 1.55,
