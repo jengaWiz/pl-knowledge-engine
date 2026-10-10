@@ -140,7 +140,7 @@ Verified against pinned **2025–26** sources. [Acceptance evidence and reproduc
 
 | Check | Result |
 | --- | --- |
-| Python suite | **535 tests passed**; CI covers Python 3.11 and 3.12. |
+| Python suite | **536 tests passed**; CI covers Python 3.11 and 3.12. |
 | Independent numerical references | **42/42 passed**, plus five insufficient-evidence cases. |
 | Real-store/API acceptance | **Seven checks passed**, including all 42 live numerical references. |
 | Desktop/mobile browser flows | **8/8 passed** against the Docker-served production dashboard. |

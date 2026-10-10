@@ -218,6 +218,33 @@ def verified_collection(output, primary_season):
     return rows, profile, dataset, collection
 
 
+def bounded_rank(collection, rows, vector, limit):
+    """Exact cosine ranking avoids filtered ANN omissions in small candidate sets."""
+    stored = collection.get(
+        ids=[row["id"] for row in rows], include=["documents", "metadatas", "embeddings"]
+    )
+    if len(stored["ids"]) != len(rows) or set(stored["ids"]) != {row["id"] for row in rows}:
+        raise ValueError("Bounded vector candidates are incomplete")
+    expected = {row["id"]: row for row in rows}
+    for index, ident in enumerate(stored["ids"]):
+        row = expected[ident]
+        if (
+            stored["documents"][index] != row["text"]
+            or stored["metadatas"][index] != row["metadata"]
+        ):
+            raise ValueError("Bounded candidate text or provenance changed")
+    vectors_digest(stored["embeddings"], len(rows))
+    matrix = np.asarray(stored["embeddings"], dtype=np.float64)
+    query_vector = np.asarray(vector, dtype=np.float64)
+    similarities = (matrix @ query_vector) / (
+        np.linalg.norm(matrix, axis=1) * np.linalg.norm(query_vector)
+    )
+    ranked = sorted(
+        zip(stored["ids"], 1 - np.clip(similarities, -1, 1)), key=lambda pair: (pair[1], pair[0])
+    )
+    return [{**expected[ident], "distance": float(distance)} for ident, distance in ranked[:limit]]
+
+
 def search(
     output: Path,
     primary_season: str,
@@ -271,6 +298,8 @@ def search(
         ]
         if not eligible:
             return []
+        if len(eligible) <= 50:
+            return bounded_rank(collection, eligible, vectors[0], limit)
         result = collection.query(
             query_embeddings=vectors, n_results=min(limit, len(eligible)), where=where
         )

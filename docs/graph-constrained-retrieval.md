@@ -91,3 +91,9 @@ as an optional mode with explicit seasons and readiness checks. The existing
 statistics API retains the established MVP. Broader independent retrieval
 evaluation, temporal prediction evaluation and Gemini free-tier verification
 remain pending. The existing 457-summary MVP index remains intact.
+
+For eligible candidate sets of at most 50 documents, retrieval computes exact
+cosine distances from verified vectors stored in Chroma, with document-ID tie
+breaking. This prevents filtered approximate search from omitting eligible small
+sets, including bounded graph routes. Larger candidate sets retain approximate
+Chroma search; the small-set correction is not a broader recall guarantee.
