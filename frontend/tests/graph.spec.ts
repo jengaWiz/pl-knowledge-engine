@@ -59,3 +59,31 @@ test('player routes show eight recent appearances with their real links', async 
   await expect(page.getByText('Showing up to 8 recent appearance records', { exact: false })).toBeVisible()
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true)
 })
+
+test('fixture paths identify each player appearance without squad-link clutter', async ({ page }) => {
+  await page.route('**/api/matches', route => route.fulfill({ json: [{ id: 'fixture', date: '2026-05-12', home_team: 'Liverpool', away_team: 'Aston Villa', home_score: 2, away_score: 0, gameweek: 38 }] }))
+  const fixtureNodes = [nodes[1], nodes[2], nodes[21], nodes[22], nodes[36],
+    { id: 'a0', name: 'Liverpool', type: 'PlayerAppearance', minutes: 90, date: '2026-05-12' },
+    { id: 'a1', name: 'Liverpool', type: 'PlayerAppearance', minutes: 81, date: '2026-05-12' }]
+  const fixtureEdges = [
+    { source: 'club0', target: 'm0', type: 'HOME_TEAM' },
+    { source: 'club1', target: 'm0', type: 'AWAY_TEAM' },
+    ...[0, 1].flatMap(i => [
+      { source: `p${i}`, target: 'club0', type: 'PLAYS_FOR' },
+      { source: `p${i}`, target: `a${i}`, type: 'HAD_APPEARANCE' },
+      { source: `a${i}`, target: 'm0', type: 'IN_MATCH' },
+    ]),
+  ]
+  await page.route('**/api/graph/match/fixture', route => route.fulfill({ json: { nodes: fixtureNodes, edges: fixtureEdges } }))
+  await page.goto('/')
+  const menu = page.getByRole('button', { name: 'Navigation', exact: true })
+  if (await menu.isVisible()) await menu.click()
+  await page.getByRole('button', { name: /Liverpool versus Aston Villa/ }).click()
+  await expect(page.getByText('7 NODES · 6 EDGES')).toBeVisible()
+  await page.getByRole('button', { name: 'List', exact: true }).click()
+  await page.getByRole('button', { name: /Appearance Player 1 · 81 min/ }).click()
+  const inspector = page.getByRole('complementary', { name: 'Record inspector' })
+  await expect(inspector.getByRole('heading', { name: 'Player 1 · 81 min' })).toBeVisible()
+  await expect(inspector.getByText('← recorded appearance', { exact: true })).toBeVisible()
+  await expect(inspector.getByText('→ in fixture', { exact: true })).toBeVisible()
+})

@@ -103,7 +103,7 @@ export default function GraphView({ overrideGraph, onClearOverride }: Props) {
       <aside className="graph-inspector" aria-label="Record inspector">
         <p className="workspace-eyebrow">{selected ? 'SELECTED RECORD' : 'YOUR STARTING POINT'}</p>
         {selected ? <><h2>{title(selected)}</h2><span className="inspector-type">{TYPE[selected.type]}</span>
-          <dl>{Object.entries(selected).filter(([key, value]) => !['id', 'name', 'type'].includes(key) && value !== null && value !== undefined).map(([key, value]) => <div key={key}><dt>{key.replace(/_/g, ' ')}</dt><dd>{String(value)}</dd></div>)}</dl>
+          <dl>{Object.entries(selected).filter(([key, value]) => !['id', 'name', 'type', 'displayName'].includes(key) && value !== null && value !== undefined).map(([key, value]) => <div key={key}><dt>{key.replace(/_/g, ' ')}</dt><dd>{String(value)}</dd></div>)}</dl>
           <h3>Visible connections</h3><div className="inspector-connections">{visible.edges.filter(e => e.source === selected.id || e.target === selected.id).map((edge, i) => {
             const outgoing = edge.source === selected.id
             const other = visible.nodes.find(n => n.id === (outgoing ? edge.target : edge.source))!
@@ -111,9 +111,9 @@ export default function GraphView({ overrideGraph, onClearOverride }: Props) {
           })}</div><button className="clear-selection" onClick={() => setSelected(null)}>Clear selection</button></> : <>
           <div className="inspector-art" aria-hidden="true"><span>01</span><svg viewBox="0 0 220 110"><path d="M30 55H90M90 55C125 55 125 20 185 20M90 55C125 55 125 90 185 90" /><circle cx="30" cy="55" r="9" /><circle cx="90" cy="55" r="6" /><circle cx="185" cy="20" r="9" /><circle cx="185" cy="90" r="9" /></svg></div>
           <h2>Follow the<br />football.</h2><p>Choose a club to reveal its players and recent fixtures. Select any record to read its details and follow its connections.</p>
-          <h3>Try a focused route</h3>{!focused && ['Liverpool', 'Aston Villa'].map(name => <button className="club-shortcut" key={name} disabled={!clubs.some(n => n.name === name)} onClick={() => { setClubId(clubs.find(n => n.name === name)!.id); setFocused(false) }}>{name}<span>Explore club ↗</span></button>)}
+          {!focused && <h3>Try a focused route</h3>}{!focused && ['Liverpool', 'Aston Villa'].map(name => <button className="club-shortcut" key={name} disabled={!clubs.some(n => n.name === name)} onClick={() => { setClubId(clubs.find(n => n.name === name)!.id); setFocused(false) }}>{name}<span>Explore club ↗</span></button>)}
         </>}
-        <p className="inspector-scope">{focused ? 'Showing up to 8 recent appearance records and their connected entities.' : clubId ? 'Up to 12 available players, ordered by goals, and 6 recent fixtures. Player coverage is limited to Aston Villa and Liverpool.' : 'The map starts with clubs and the season. Fixtures and players appear when you drill in.'} All links shown come from the stored graph. This explorer covers the 2025–26 MVP.</p>
+        <p className="inspector-scope">{focused ? 'Showing up to 8 recent appearance records and their connected entities. Fixture views omit squad membership links to keep appearance paths clear.' : clubId ? 'Up to 12 available players, ordered by goals, and 6 recent fixtures. Player coverage is limited to Aston Villa and Liverpool.' : 'The map starts with clubs and the season. Fixtures and players appear when you drill in.'} All links shown come from the stored graph. This explorer covers the 2025–26 MVP.</p>
       </aside>
     </div>
   </section>
