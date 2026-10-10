@@ -1,348 +1,120 @@
-import { useEffect, useRef, useState, useCallback, type FormEvent } from 'react'
-import ForceGraph2D from 'react-force-graph-2d'
+import { useEffect, useRef, useState, useCallback, useMemo, type FormEvent } from 'react'
 import { fetchOverviewGraph, fetchPlayerGraph } from '../api'
 import type { GraphData, GraphNode } from '../types'
+import { project, layout, title } from './graphProjection'
 
-const NODE_COLORS: Record<string, string> = {
-  Season:           '#f59e0b',
-  Team:             '#a855f7',
-  Player:           '#3b82f6',
-  Gameweek:         '#6b7280',
-  Match:            '#f97316',
-  PlayerAppearance: '#ec4899',
-}
-
-const NODE_SIZES: Record<string, number> = {
-  Season:           14,
-  Team:             12,
-  Stadium:          9,
-  Player:           7,
-  Gameweek:         5,
-  Match:            8,
-  PlayerAppearance: 4,
-}
-
-interface Props {
-  overrideGraph: GraphData | null
-  onClearOverride: () => void
-}
+const COLORS: Record<string, string> = { Season: '#c6ed78', Team: '#68d6c0', Player: '#91baff', Match: '#f2c178', PlayerAppearance: '#c2a4e8' }
+const TYPE: Record<string, string> = { Season: 'Season', Team: 'Club', Player: 'Player', Match: 'Fixture', PlayerAppearance: 'Appearance' }
+const RELATIONS: Record<string, string> = { IN_SEASON: 'in season', PLAYS_FOR: 'plays for', HOME_TEAM: 'home club', AWAY_TEAM: 'away club', HAD_APPEARANCE: 'recorded appearance', IN_MATCH: 'in fixture', FOR_TEAM: 'for club' }
+interface Props { overrideGraph: GraphData | null; onClearOverride: () => void }
 
 export default function GraphView({ overrideGraph, onClearOverride }: Props) {
-  const [graphData, setGraphData] = useState<{ nodes: GraphNode[]; links: object[] }>({ nodes: [], links: [] })
+  const [data, setData] = useState<GraphData>({ nodes: [], edges: [] })
   const [loading, setLoading] = useState(true)
   const [search, setSearch] = useState('')
-  const [selectedNode, setSelectedNode] = useState<GraphNode | null>(null)
+  const [selected, setSelected] = useState<GraphNode | null>(null)
+  const [clubId, setClubId] = useState('')
+  const [focused, setFocused] = useState(false)
+  const [focusKind, setFocusKind] = useState<'player' | 'fixture'>('fixture')
   const [error, setError] = useState('')
-  const containerRef = useRef<HTMLDivElement>(null)
+  const [mode, setMode] = useState<'map' | 'list'>(() => window.matchMedia('(max-width: 800px)').matches ? 'list' : 'map')
   const requestId = useRef(0)
-  const [dims, setDims] = useState({ w: 800, h: 600 })
-
-  const loadGraph = useCallback((data: GraphData) => {
-    const links = data.edges.map(e => ({ source: e.source, target: e.target, type: e.type }))
-    setSelectedNode(null)
-    setGraphData({ nodes: data.nodes, links })
-    setLoading(false)
-    setError('')
+  const load = useCallback((graph: GraphData, focus = false) => {
+    setData(graph); setSelected(null); setClubId(''); setFocused(focus); setLoading(false); setError('')
   }, [])
-
-  useEffect(() => {
-    if (!containerRef.current) return
-    const obs = new ResizeObserver(entries => {
-      const { width, height } = entries[0].contentRect
-      setDims({ w: width, h: height })
-    })
-    obs.observe(containerRef.current)
-    return () => obs.disconnect()
-  }, [])
-
   const overview = useCallback(() => {
     const id = ++requestId.current
-    setLoading(true)
-    fetchOverviewGraph().then(data => { if (id === requestId.current) loadGraph(data) })
-      .catch(() => { if (id === requestId.current) {
-        setError('The graph is unavailable. Load the local stores and retry Overview.')
-        setLoading(false)
-      } })
-  }, [loadGraph])
-
+    setLoading(true); setError('')
+    fetchOverviewGraph().then(graph => { if (id === requestId.current) load(graph) })
+      .catch(() => { if (id === requestId.current) { setError('The graph is unavailable. Retry Overview.'); setLoading(false) } })
+  }, [load])
   useEffect(() => { overview(); return () => { requestId.current += 1 } }, [overview])
-  useEffect(() => {
-    if (overrideGraph) { requestId.current += 1; loadGraph(overrideGraph) }
-  }, [overrideGraph, loadGraph])
-
-  const handleSearch = (e: FormEvent) => {
-    e.preventDefault()
+  useEffect(() => { if (overrideGraph) { requestId.current += 1; load(overrideGraph, true); setFocusKind('fixture') } }, [overrideGraph, load])
+  const handleSearch = (event: FormEvent) => {
+    event.preventDefault()
     if (!search.trim()) return
     const id = ++requestId.current
-    setLoading(true)
-    fetchPlayerGraph(search.trim())
-      .then(data => { if (id === requestId.current) { loadGraph(data); onClearOverride() } })
+    setLoading(true); setError('')
+    fetchPlayerGraph(search.trim()).then(graph => { if (id === requestId.current) { load(graph, true); setFocusKind('player'); onClearOverride() } })
       .catch(err => { if (id === requestId.current) {
-        setError(err.response?.status === 409 ? 'Player name is ambiguous. Use a unique name.'
-          : `Player "${search}" is unavailable in the verified corpus.`)
+        setError(err.response?.status === 409 ? 'Player name is ambiguous. Use a unique name.' : `Player "${search}" is unavailable in the verified corpus.`)
         setLoading(false)
       } })
   }
-
-  return (
-    <div
-      ref={containerRef}
-      style={{ position: 'relative', width: '100%', height: '100%', background: '#050508' }}
-    >
-      {/* ── Canvas depth layers (pointer-events: none) ── */}
-      {/* Radial center glow — gives the cluster area energy */}
-      <div style={{
-        position: 'absolute', inset: 0, zIndex: 1, pointerEvents: 'none',
-        background: 'radial-gradient(ellipse 55% 45% at 50% 52%, rgba(103,14,54,0.07) 0%, transparent 65%)',
-      }} />
-      {/* Edge vignette — darkens the corners for depth */}
-      <div style={{
-        position: 'absolute', inset: 0, zIndex: 1, pointerEvents: 'none',
-        background: 'radial-gradient(ellipse at center, transparent 35%, rgba(5,5,8,0.72) 100%)',
-      }} />
-
-      {/* ── Controls ── */}
-      <div className="graph-controls" style={{ position: 'absolute', top: 16, left: 16, zIndex: 10, display: 'flex', gap: 8, alignItems: 'center' }}>
-        <form onSubmit={handleSearch} style={{ display: 'flex' }}>
-          <div style={glass({ padding: '0 4px 0 12px', display: 'flex', alignItems: 'center', gap: 8 })}>
-            <SearchIcon />
-            <input
-              value={search}
-              aria-label="Search graph player"
-              onChange={e => setSearch(e.target.value)}
-              placeholder="Search player (e.g. Salah)…"
-              style={{
-                background: 'transparent', border: 'none', outline: 'none',
-                padding: '8px 0', color: 'var(--t-1)', fontSize: 13, width: 210,
-              }}
-            />
-            <button type="submit" style={{
-              background: 'var(--villa)', border: 'none', borderRadius: 8,
-              padding: '6px 14px', margin: '4px',
-              color: '#fff', fontSize: 12, fontWeight: 700, cursor: 'pointer',
-              boxShadow: '0 2px 10px rgba(103,14,54,0.5)',
-              letterSpacing: '-0.01em',
-              transition: 'background 0.15s',
-            }}>
-              Search
-            </button>
-          </div>
-        </form>
-        <button
-          onClick={() => { onClearOverride(); overview() }}
-          style={{
-            ...glass({ padding: '8px 14px' }),
-            color: 'var(--t-2)', fontSize: 12, fontWeight: 500,
-            cursor: 'pointer', border: '1px solid rgba(33,38,45,0.85)',
-            transition: 'color 0.15s, border-color 0.15s',
-          } as React.CSSProperties}
-          onMouseEnter={e => {
-            const el = e.currentTarget as HTMLElement
-            el.style.color = 'var(--t-1)'; el.style.borderColor = 'rgba(103,14,54,0.5)'
-          }}
-          onMouseLeave={e => {
-            const el = e.currentTarget as HTMLElement
-            el.style.color = 'var(--t-2)'; el.style.borderColor = 'rgba(33,38,45,0.85)'
-          }}
-        >
-          Overview
-        </button>
-      </div>
-
-      {/* ── Legend ── */}
-      <div className="graph-legend" style={{ ...glass({ padding: '12px 15px' }), position: 'absolute', top: 16, right: 16, zIndex: 10 }}>
-        <div style={{ fontSize: 9, fontWeight: 800, color: 'var(--t-3)', letterSpacing: '0.1em', marginBottom: 10 }}>
-          NODE TYPES
-        </div>
-        {Object.entries(NODE_COLORS).map(([type, color]) => (
-          <div key={type} style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 6 }}>
-            <div style={{
-              width: 8, height: 8, borderRadius: '50%', background: color, flexShrink: 0,
-              boxShadow: `0 0 7px ${color}`,
-            }} />
-            <span style={{ fontSize: 11, color: 'var(--t-2)', letterSpacing: '-0.01em' }}>{type}</span>
-          </div>
-        ))}
-      </div>
-
-      {/* ── Node detail panel ── */}
-      {selectedNode && (
-        <div
-          className="fade-in-up"
-          style={{
-            ...glass({ padding: '14px 16px' }),
-            position: 'absolute', bottom: 48, left: 16, zIndex: 10,
-            minWidth: 240, maxWidth: 310,
-            borderLeft: `3px solid ${NODE_COLORS[selectedNode.type] || 'var(--villa)'}`,
-            boxShadow: `0 10px 40px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.04)`,
-          }}
-        >
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
-            <span style={{
-              fontSize: 9, fontWeight: 800, letterSpacing: '0.1em',
-              color: NODE_COLORS[selectedNode.type] || '#fff',
-              background: `${NODE_COLORS[selectedNode.type] || '#670E36'}20`,
-              border: `1px solid ${NODE_COLORS[selectedNode.type] || '#670E36'}45`,
-              padding: '3px 8px', borderRadius: 5,
-            }}>
-              {selectedNode.type.toUpperCase()}
-            </span>
-            <button
-              onClick={() => setSelectedNode(null)}
-              style={{
-                background: 'none', border: 'none', color: 'var(--t-3)',
-                cursor: 'pointer', fontSize: 18, lineHeight: 1, padding: '2px 5px',
-                transition: 'color 0.15s',
-              }}
-              onMouseEnter={e => (e.currentTarget.style.color = 'var(--t-1)')}
-              onMouseLeave={e => (e.currentTarget.style.color = 'var(--t-3)')}
-            >
-              ×
-            </button>
-          </div>
-          <div style={{
-            fontSize: 16, fontWeight: 800, color: 'var(--t-1)',
-            letterSpacing: '-0.02em', marginBottom: 10,
-          }}>
-            {selectedNode.name}
-          </div>
-          {Object.entries(selectedNode)
-            .filter(([k]) => !['id', 'name', 'type', 'x', 'y', 'vx', 'vy', 'index', '__indexColor'].includes(k))
-            .filter(([, v]) => v !== undefined && v !== null)
-            .map(([k, v]) => (
-              <div key={k} style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 4, gap: 12 }}>
-                <span style={{ fontSize: 12, color: 'var(--t-3)', textTransform: 'capitalize' }}>{k}</span>
-                <span style={{ fontSize: 12, color: 'var(--t-2)', fontWeight: 600, textAlign: 'right' }}>{String(v)}</span>
-              </div>
-            ))
-          }
-        </div>
-      )}
-
-      {/* ── Loading spinner ── */}
-      {loading && (
-        <div style={{
-          position: 'absolute', inset: 0, zIndex: 5,
-          display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 16,
-          background: 'rgba(5,5,8,0.8)', backdropFilter: 'blur(6px)',
-        }}>
-          <div style={{
-            width: 40, height: 40, borderRadius: '50%',
-            border: '2px solid rgba(103,14,54,0.2)',
-            borderTop: '2px solid var(--villa)',
-            animation: 'spin 0.75s linear infinite',
-          }} />
-          <span style={{ fontSize: 13, color: 'var(--t-3)', letterSpacing: '0.05em', fontWeight: 500 }}>
-            Loading graph…
-          </span>
-        </div>
-      )}
-
-      {/* ── Error ── */}
-      {error && (
-        <div className="fade-in" style={{
-          position: 'absolute', top: 68, left: '50%', transform: 'translateX(-50%)', zIndex: 20,
-          background: 'rgba(127,29,29,0.92)', border: '1px solid rgba(153,27,27,0.8)',
-          borderRadius: 10, padding: '9px 18px', fontSize: 13, color: '#fca5a5',
-          backdropFilter: 'blur(8px)', boxShadow: '0 4px 20px rgba(0,0,0,0.5)',
-        }}>
-          {error}
-        </div>
-      )}
-
-      {/* ── Force graph canvas ── */}
-      {!loading && (
-        <ForceGraph2D
-          width={dims.w}
-          height={dims.h - 30}        /* leave room for status bar */
-          graphData={graphData}
-          cooldownTicks={100}
-          nodeId="id"
-          linkSource="source"
-          linkTarget="target"
-          nodeColor={(n: GraphNode) => NODE_COLORS[n.type] || '#9ca3af'}
-          nodeVal={(n: GraphNode) => NODE_SIZES[n.type] || 5}
-          nodeLabel={(n: GraphNode) => `${n.type}: ${n.name}`}
-          linkColor={() => 'rgba(48,54,61,0.7)'}
-          linkWidth={1.5}
-          linkDirectionalArrowLength={5}
-          linkDirectionalArrowRelPos={1}
-          backgroundColor="#050508"
-          onNodeClick={(n) => setSelectedNode(n as GraphNode)}
-          nodeCanvasObject={(node, ctx, globalScale) => {
-            const n = node as GraphNode & { x: number; y: number }
-            const size = (NODE_SIZES[n.type] || 5) / 2
-            const color = NODE_COLORS[n.type] || '#9ca3af'
-
-            // Outer glow ring
-            ctx.shadowBlur = n.type === 'Team' || n.type === 'Player' ? 4 : 0
-            ctx.shadowColor = color
-            ctx.beginPath()
-            ctx.arc(n.x, n.y, size, 0, 2 * Math.PI)
-            ctx.fillStyle = color
-            ctx.fill()
-            ctx.shadowBlur = 0
-
-            // Inner specular highlight
-            ctx.beginPath()
-            ctx.arc(n.x - size * 0.3, n.y - size * 0.32, size * 0.35, 0, 2 * Math.PI)
-            ctx.fillStyle = 'rgba(255,255,255,0.3)'
-            ctx.fill()
-
-            // Label at zoom
-            if (globalScale > 1.5) {
-              const label = n.name?.length > 16 ? n.name.slice(0, 16) + '…' : (n.name || '')
-              ctx.shadowBlur = 0
-              ctx.font = `${Math.max(4, 6 / globalScale)}px Inter, sans-serif`
-              ctx.fillStyle = 'rgba(240,246,252,0.85)'
-              ctx.textAlign = 'center'
-              ctx.fillText(label, n.x, n.y + size + 5)
-            }
-          }}
-          nodeCanvasObjectMode={() => 'replace'}
-        />
-      )}
-
-      {/* ── Status bar ── */}
-      {!loading && (
-        <div style={{
-          position: 'absolute', bottom: 0, left: 0, right: 0, height: 30, zIndex: 10,
-          display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-          padding: '0 16px',
-          background: 'rgba(13,17,23,0.85)',
-          borderTop: '1px solid rgba(33,38,45,0.7)',
-          backdropFilter: 'blur(10px)',
-          fontSize: 10, color: 'var(--t-3)', fontWeight: 600, letterSpacing: '0.06em',
-        }}>
-          <span>
-            {graphData.nodes.length} NODES&nbsp;&nbsp;·&nbsp;&nbsp;{graphData.links.length} EDGES
-          </span>
-          <span className="graph-hint">Click node to inspect · Scroll to zoom · Drag to pan</span>
-        </div>
-      )}
-    </div>
-  )
-}
-
-/* ── Shared glassmorphism style helper ─────────────────────── */
-function glass(extra: React.CSSProperties = {}): React.CSSProperties {
-  return {
-    background: 'rgba(13,17,23,0.9)',
-    border: '1px solid rgba(33,38,45,0.85)',
-    borderRadius: 11,
-    backdropFilter: 'blur(18px)',
-    boxShadow: '0 4px 24px rgba(0,0,0,0.5)',
-    ...extra,
+  const visible = useMemo(() => project(data, clubId, focused), [data, clubId, focused])
+  const positions = useMemo(() => layout(visible, !focused && !clubId), [visible, focused, clubId])
+  const clubs = data.nodes.filter(n => n.type === 'Team').sort((a, b) => a.name.localeCompare(b.name))
+  const neighbors = new Set(selected ? visible.edges.filter(e => e.source === selected.id || e.target === selected.id).flatMap(e => [e.source, e.target]) : [])
+  const inspect = (node: GraphNode) => {
+    setSelected(node)
+    if (node.type === 'Team' && !focused && !clubId) { setClubId(node.id); setSelected(node) }
   }
-}
-
-/* ── Icon ─────────────────────────────────────────────────── */
-function SearchIcon() {
-  return (
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
-      stroke="var(--t-3)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-      <circle cx="11" cy="11" r="8" />
-      <line x1="21" y1="21" x2="16.65" y2="16.65" />
-    </svg>
-  )
+  const heading = focused ? (focusKind === 'player' ? 'Player connections' : 'Fixture connections') : clubId ? clubs.find(n => n.id === clubId)?.name : 'Start with a club.'
+  return <section className="graph-workspace">
+    <div className="graph-intro">
+      <div><p className="workspace-eyebrow">THE EXPLORER / 2025–26</p><h1>{heading}</h1>
+        <p>{focused ? 'Follow the recorded links between players, appearances and fixtures.' : clubId ? 'A focused look at the available squad and six most recent fixtures.' : 'Twenty clubs. One season. Follow a connection to find the story.'}</p></div>
+      <div className="workspace-stamp"><span className="status-dot" />LOCAL DATA<span>Verified season records</span></div>
+    </div>
+    <div className="explorer-toolbar">
+      <form onSubmit={handleSearch}><label className="sr-only" htmlFor="graph-search">Search graph player</label>
+        <input id="graph-search" value={search} onChange={e => setSearch(e.target.value)} placeholder="Find a player, e.g. Salah" />
+        <button className="primary-action" type="submit">Search</button></form>
+      <button onClick={() => { onClearOverride(); overview() }}>Overview</button>
+      {!focused && <select aria-label="Explore club" value={clubId} onChange={e => { setClubId(e.target.value); setSelected(null) }}>
+        <option value="">All clubs</option>{clubs.map(n => <option key={n.id} value={n.id}>{n.name}</option>)}
+      </select>}
+      <div className="map-switch" aria-label="Graph presentation"><button aria-pressed={mode === 'map'} onClick={() => setMode('map')}>Map</button><button aria-pressed={mode === 'list'} onClick={() => setMode('list')}>List</button></div>
+    </div>
+    {error && <p role="alert" className="graph-notice">{error}</p>}
+    <div className="explorer-body">
+      <div className="graph-stage">
+        <div className="graph-caption"><span>{focused ? 'RECORDED CONNECTIONS' : clubId ? 'CLUB NETWORK' : 'LEAGUE MAP'}</span><span>{visible.nodes.length} NODES · {visible.edges.length} EDGES</span></div>
+        {loading ? <div className="graph-empty" role="status">Loading graph…</div> : !visible.nodes.length ? <div className="graph-empty">No graph records available. Retry Overview after loading the local stores.</div> : mode === 'map' ?
+          <div className="graph-scroll"><svg className="relationship-map" viewBox="0 0 1100 640" aria-label="Interactive football relationship map">
+            {clubId && !focused && <g className="map-lane-label"><text x="43" y="22">AVAILABLE PLAYERS</text><text x="413" y="22">CLUB</text><text x="783" y="22">RECENT FIXTURES</text></g>}
+            {visible.edges.map((edge, i) => {
+              const a = positions.get(edge.source), b = positions.get(edge.target)
+              if (!a || !b) return null
+              const active = selected && (edge.source === selected.id || edge.target === selected.id)
+              return <path key={i} className={`map-edge ${active ? 'active' : ''}`} opacity={selected && !active ? .12 : 1}
+                d={`M ${a.x} ${a.y} C ${(a.x + b.x) / 2} ${a.y}, ${(a.x + b.x) / 2} ${b.y}, ${b.x} ${b.y}`}><title>{RELATIONS[edge.type] || edge.type.toLowerCase().replace(/_/g, ' ')}</title></path>
+            })}
+            {visible.nodes.map(node => {
+              const point = positions.get(node.id)
+              if (!point) return null
+              const active = selected?.id === node.id
+              return <g key={node.id} role="button" tabIndex={0} aria-label={`Inspect ${TYPE[node.type] || node.type} ${title(node)}`} aria-pressed={active}
+                className={`map-node ${active ? 'selected' : ''}`} transform={`translate(${point.x},${point.y})`}
+                opacity={selected && !active && !neighbors.has(node.id) ? .35 : 1}
+                onClick={() => inspect(node)} onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); inspect(node) } }}>
+                <title>{title(node)}{node.date ? ` · ${node.date}` : ''}</title>
+                <rect x="-137" y="-21" width="274" height="42" rx="9" />
+                <circle cx="-119" r="4" fill={COLORS[node.type] || '#aab6c8'} />
+                <text x="-106" y="-1" className="map-name">{title(node).length > 31 ? `${title(node).slice(0, 30)}…` : title(node)}</text>
+                <text x="-106" y="13" className="map-kind">{TYPE[node.type]}{node.date ? ` · ${node.date}` : ''}</text>
+              </g>
+            })}
+          </svg></div> : <div className="graph-record-list">{visible.nodes.map(node => <button key={node.id} aria-pressed={selected?.id === node.id} onClick={() => inspect(node)}>
+            <span className="record-dot" style={{ background: COLORS[node.type] }} /><span><small>{TYPE[node.type]}</small><strong>{title(node)}</strong>{node.date && <small>{node.date}</small>}</span><span aria-hidden="true">↗</span>
+          </button>)}</div>}
+        <div className="map-footer"><span>{Object.entries(COLORS).filter(([kind]) => visible.nodes.some(n => n.type === kind)).map(([kind, color]) => <span key={kind}><i style={{ background: color }} />{TYPE[kind]}</span>)}</span><span>Select a record to inspect</span></div>
+      </div>
+      <aside className="graph-inspector" aria-label="Record inspector">
+        <p className="workspace-eyebrow">{selected ? 'SELECTED RECORD' : 'YOUR STARTING POINT'}</p>
+        {selected ? <><h2>{title(selected)}</h2><span className="inspector-type">{TYPE[selected.type]}</span>
+          <dl>{Object.entries(selected).filter(([key, value]) => !['id', 'name', 'type'].includes(key) && value !== null && value !== undefined).map(([key, value]) => <div key={key}><dt>{key.replace(/_/g, ' ')}</dt><dd>{String(value)}</dd></div>)}</dl>
+          <h3>Visible connections</h3><div className="inspector-connections">{visible.edges.filter(e => e.source === selected.id || e.target === selected.id).map((edge, i) => {
+            const outgoing = edge.source === selected.id
+            const other = visible.nodes.find(n => n.id === (outgoing ? edge.target : edge.source))!
+            return <button key={i} onClick={() => setSelected(other)}><small>{outgoing ? '→' : '←'} {RELATIONS[edge.type] || edge.type.toLowerCase().replace(/_/g, ' ')}</small><strong>{title(other)}</strong></button>
+          })}</div><button className="clear-selection" onClick={() => setSelected(null)}>Clear selection</button></> : <>
+          <div className="inspector-art" aria-hidden="true"><span>01</span><svg viewBox="0 0 220 110"><path d="M30 55H90M90 55C125 55 125 20 185 20M90 55C125 55 125 90 185 90" /><circle cx="30" cy="55" r="9" /><circle cx="90" cy="55" r="6" /><circle cx="185" cy="20" r="9" /><circle cx="185" cy="90" r="9" /></svg></div>
+          <h2>Follow the<br />football.</h2><p>Choose a club to reveal its players and recent fixtures. Select any record to read its details and follow its connections.</p>
+          <h3>Try a focused route</h3>{!focused && ['Liverpool', 'Aston Villa'].map(name => <button className="club-shortcut" key={name} disabled={!clubs.some(n => n.name === name)} onClick={() => { setClubId(clubs.find(n => n.name === name)!.id); setFocused(false) }}>{name}<span>Explore club ↗</span></button>)}
+        </>}
+        <p className="inspector-scope">{focused ? 'Showing up to 8 recent appearance records and their connected entities.' : clubId ? 'Up to 12 available players, ordered by goals, and 6 recent fixtures. Player coverage is limited to Aston Villa and Liverpool.' : 'The map starts with clubs and the season. Fixtures and players appear when you drill in.'} All links shown come from the stored graph. This explorer covers the 2025–26 MVP.</p>
+      </aside>
+    </div>
+  </section>
 }
