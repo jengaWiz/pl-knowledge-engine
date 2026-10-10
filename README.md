@@ -32,7 +32,16 @@ The [fresh-data MVP milestone](https://github.com/jengaWiz/pl-knowledge-engine/m
 
 ## Demo
 
-The workspace uses an off-white canvas, lavender navigation and context panels, and softly tinted records: sage clubs, blue players and sand fixtures. Readable labels and a compact fixture sidebar keep the graph easy to follow.
+Explore the season through a focused relationship map, searchable player records and source-backed statistics. The light workspace separates navigation and context with lavender panels; soft record colors help distinguish clubs, players and fixtures.
+
+| Record | Visual cue |
+| --- | --- |
+| Club | Sage card and club initials |
+| Player | Blue card and player label |
+| Fixture | Sand card, score and date |
+| Season / appearance | Lavender card with its record type |
+
+Labels, keyboard focus and selection borders keep navigation clear without relying on color alone.
 
 ![Club-first relationship explorer showing the 20 Premier League clubs and season](docs/images/demo-graph.png)
 
@@ -44,15 +53,25 @@ The workspace uses an off-white canvas, lavender navigation and context panels, 
 - **Evidence retrieval API:** search local summaries by club and inspect source URLs, record IDs and provenance.
 
 <details>
-<summary>See club exploration, match detail and the mobile experience</summary>
+<summary>Explore the current UI: clubs, player search, fixture paths and mobile</summary>
+
+**Club exploration** — choose Liverpool to reveal available players and recent fixtures.
 
 ![Liverpool squad and recent fixtures in a bounded relationship map](docs/images/demo-club.png)
 
+**Player discovery** — a misspelling such as `allison` offers a selectable Alisson Becker match.
+
 ![Closest-match player suggestions for a misspelled Alisson search](docs/images/player-search.png)
+
+**Fixture paths** — follow a player through their appearance record to the fixture.
 
 ![Actual Liverpool–Bournemouth match graph with readable appearance records](docs/images/demo-match.png)
 
+**Mobile explorer** — selectable record cards keep the same type colors in a compact list.
+
 <img src="docs/images/demo-graph-mobile.png" width="390" alt="Mobile graph explorer with selectable club records" />
+
+**Evidence analyst** — compare verified season totals and inspect the answer’s sources.
 
 ![Actual Docker demo comparing Aston Villa and Liverpool with verified season statistics](docs/images/demo-analysis.png)
 
@@ -60,7 +79,7 @@ The workspace uses an off-white canvas, lavender navigation and context panels, 
 
 </details>
 
-These are screenshots of the populated application, captured with [Playwright](frontend/scripts/capture-demo.mjs).
+The screenshots show the current light UI running locally with real populated data. The [Playwright capture script](frontend/scripts/capture-demo.mjs) reproduces the main graph, fixture and analyst views.
 
 <details>
 <summary>See the four-season Source evidence workspace</summary>
