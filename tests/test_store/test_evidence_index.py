@@ -10,7 +10,11 @@ from src.store import evidence_index as index
 
 
 def vectors(texts):
-    return [[1.0] + [0.0] * 383 for _ in texts]
+    # Distinct directions avoid an all-identical HNSW fixture with unstable recall.
+    return [
+        [1.0, float(text.split()[-1]) / 100 if text.split()[-1].isdigit() else 0.0] + [0.0] * 382
+        for text in texts
+    ]
 
 
 @pytest.fixture
