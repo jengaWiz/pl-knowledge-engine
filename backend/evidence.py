@@ -1,5 +1,6 @@
 """Optional evidence API: independent readiness, explicit seasons and bounded work."""
 
+import json
 from contextlib import contextmanager
 from pathlib import Path
 from threading import BoundedSemaphore
@@ -24,6 +25,18 @@ UNAVAILABLE = (
     "Structured evidence is unavailable. Verify the corpus, graph, index and cached model."
 )
 ERRORS = (OSError, ValueError, KeyError, RuntimeError, Timeout, DriverError, Neo4jError)
+
+
+def require_prepared_pipeline():
+    path = settings.data_dir / "reports/evidence" / settings.season / "pipeline.json"
+    if path.exists():
+        report = json.loads(path.read_text())
+        if (
+            report.get("schema") != "evidence-preparation-v1"
+            or report.get("status") != "complete"
+            or report.get("season") != settings.season
+        ):
+            raise ValueError("Evidence preparation has not completed")
 
 
 def model_cached():
@@ -80,6 +93,7 @@ def readiness():
         "seasons": [],
     }
     try:
+        require_prepared_pipeline()
         settings.require_credentials("neo4j_password")
         plan = prepare_graph(settings.data_dir, settings.season)
         report["checks"]["corpus"] = True
@@ -129,6 +143,7 @@ def evidence_status():
 def evidence_retrieve(req: EvidenceRequest):
     with exclusive_work():
         try:
+            require_prepared_pipeline()
             settings.require_credentials("neo4j_password")
             if not model_cached():
                 raise ValueError("Model must be cached before serving requests")
