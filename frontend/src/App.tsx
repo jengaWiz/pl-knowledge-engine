@@ -64,9 +64,9 @@ export default function App() {
             <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 13 }}>
               <div style={{
                 width: 42, height: 42, borderRadius: 13, flexShrink: 0,
-                background: '#37003c',
+                background: '#766185',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
-                border: '1px solid #705285',
+                border: '1px solid #887595',
               }}>
                 <NetworkIcon />
               </div>
@@ -129,7 +129,7 @@ export default function App() {
               onClick={() => setSidebarOpen(true)}>Navigation</button>
             <span style={{
               width: 8, height: 8, borderRadius: '50%', display: 'block', flexShrink: 0,
-              background: '#00ff85',
+              background: '#779b87',
               boxShadow: 'none',
               transition: 'all 0.3s ease',
             }} />
@@ -167,8 +167,8 @@ function ViewTab({ active, onClick, children }: { active: boolean; onClick: () =
         flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6,
         padding: '8px 0', borderRadius: 8, border: 'none', cursor: 'pointer',
         fontSize: 13, fontWeight: 600, letterSpacing: '-0.01em',
-        background: active ? '#49305d' : 'transparent',
-        color: active ? '#fff' : 'var(--t-3)',
+        background: active ? '#eee8f4' : 'transparent',
+        color: active ? '#655176' : 'var(--t-3)',
         transition: 'all 0.18s ease',
         boxShadow: 'none',
       }}
@@ -192,15 +192,15 @@ function FullTeamPill({ team }: { team: 'villa' | 'lfc' }) {
       <div style={{
         display: 'flex', alignItems: 'center', gap: 8,
         padding: '5px 11px 5px 7px', borderRadius: 8,
-        background: 'rgba(103,14,54,0.2)',
+        background: '#f6f0f3',
         border: '1px solid rgba(103,14,54,0.42)',
       }}>
         {/* Claret + sky-blue kit swatch */}
-        <div style={{ display: 'flex', borderRadius: 2, overflow: 'hidden', flexShrink: 0, boxShadow: '0 0 5px rgba(103,14,54,0.6)' }}>
+        <div style={{ display: 'flex', borderRadius: 2, overflow: 'hidden', flexShrink: 0, boxShadow: 'none' }}>
           <span style={{ display: 'block', width: 5, height: 18, background: '#670E36' }} />
           <span style={{ display: 'block', width: 4, height: 18, background: '#6BAED8' }} />
         </div>
-        <span style={{ fontSize: 11, fontWeight: 700, color: '#d08898', letterSpacing: '-0.01em' }}>
+        <span style={{ fontSize: 11, fontWeight: 700, color: '#845d70', letterSpacing: '-0.01em' }}>
           Aston Villa
         </span>
       </div>
@@ -210,15 +210,15 @@ function FullTeamPill({ team }: { team: 'villa' | 'lfc' }) {
     <div style={{
       display: 'flex', alignItems: 'center', gap: 8,
       padding: '5px 11px 5px 7px', borderRadius: 8,
-      background: 'rgba(200,16,46,0.18)',
+      background: '#faf1f1',
       border: '1px solid rgba(200,16,46,0.42)',
     }}>
       {/* Red + gold kit swatch */}
-      <div style={{ display: 'flex', borderRadius: 2, overflow: 'hidden', flexShrink: 0, boxShadow: '0 0 5px rgba(200,16,46,0.55)' }}>
+      <div style={{ display: 'flex', borderRadius: 2, overflow: 'hidden', flexShrink: 0, boxShadow: 'none' }}>
         <span style={{ display: 'block', width: 6, height: 18, background: '#C8102E' }} />
         <span style={{ display: 'block', width: 3, height: 18, background: '#F6C94E' }} />
       </div>
-      <span style={{ fontSize: 11, fontWeight: 700, color: '#f07888', letterSpacing: '-0.01em' }}>
+      <span style={{ fontSize: 11, fontWeight: 700, color: '#995e68', letterSpacing: '-0.01em' }}>
         Liverpool FC
       </span>
     </div>
@@ -237,7 +237,7 @@ function HeaderBadge({ team }: { team: 'villa' | 'lfc' }) {
           <span style={{ display: 'block', width: 3, height: 11, background: '#670E36' }} />
           <span style={{ display: 'block', width: 2, height: 11, background: '#6BAED8' }} />
         </div>
-        <span style={{ fontSize: 9, fontWeight: 800, color: '#d08898', letterSpacing: '0.06em' }}>AVFC</span>
+        <span style={{ fontSize: 9, fontWeight: 800, color: '#845d70', letterSpacing: '0.06em' }}>AVFC</span>
       </div>
     )
   }
@@ -245,13 +245,13 @@ function HeaderBadge({ team }: { team: 'villa' | 'lfc' }) {
     <div style={{
       display: 'flex', alignItems: 'center', gap: 5,
       padding: '3px 8px 3px 5px', borderRadius: 5,
-      background: 'rgba(200,16,46,0.18)', border: '1px solid rgba(200,16,46,0.38)',
+      background: '#faf1f1', border: '1px solid rgba(200,16,46,0.38)',
     }}>
       <div style={{ display: 'flex', borderRadius: 1, overflow: 'hidden' }}>
         <span style={{ display: 'block', width: 4, height: 11, background: '#C8102E' }} />
         <span style={{ display: 'block', width: 2, height: 11, background: '#F6C94E' }} />
       </div>
-      <span style={{ fontSize: 9, fontWeight: 800, color: '#f07888', letterSpacing: '0.06em' }}>LFC</span>
+      <span style={{ fontSize: 9, fontWeight: 800, color: '#995e68', letterSpacing: '0.06em' }}>LFC</span>
     </div>
   )
 }

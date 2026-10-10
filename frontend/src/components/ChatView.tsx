@@ -106,8 +106,8 @@ function StarterCard({ text, onClick }: { text: string; onClick: () => void }) {
       onMouseLeave={() => setHovered(false)}
       style={{
         background: hovered ? 'var(--bg-2)' : 'var(--bg-1)',
-        border: `1px solid ${hovered ? '#9776b5' : 'var(--bg-3)'}`,
-        borderLeft: `3px solid ${hovered ? '#00ff85' : 'var(--bg-4)'}`,
+        border: `1px solid ${hovered ? '#c5b9cf' : 'var(--bg-3)'}`,
+        borderLeft: `3px solid ${hovered ? '#8e7a9c' : 'var(--bg-4)'}`,
         borderRadius: 11, padding: '14px 16px',
         color: hovered ? 'var(--t-1)' : 'var(--t-2)',
         fontSize: 13, textAlign: 'left', cursor: 'pointer', lineHeight: 1.55,
@@ -138,13 +138,13 @@ function MessageBubble({ msg, idx }: { msg: ChatMessage; idx: number }) {
       <div className="message-content" style={{ maxWidth: '78%', display: 'flex', flexDirection: 'column', gap: 6 }}>
         <div style={{
           background: isUser
-            ? 'linear-gradient(135deg, rgba(26,58,95,0.9) 0%, rgba(37,99,235,0.2) 100%)'
+            ? '#edf1f6'
             : 'var(--bg-1)',
-          border: `1px solid ${isUser ? 'rgba(37,99,235,0.3)' : 'var(--bg-3)'}`,
+          border: `1px solid ${isUser ? '#ccd5e1' : 'var(--bg-3)'}`,
           borderRadius: isUser ? '14px 3px 14px 14px' : '3px 14px 14px 14px',
           padding: '13px 17px',
           fontSize: 14, lineHeight: 1.7, color: 'var(--t-1)',
-          boxShadow: isUser ? '0 2px 12px rgba(37,99,235,0.12)' : 'none',
+          boxShadow: 'none',
         }}>
           {isUser ? msg.content : (
             <div className="markdown">
@@ -177,7 +177,7 @@ function MessageBubble({ msg, idx }: { msg: ChatMessage; idx: number }) {
                     borderLeft: '2px solid rgba(103,14,54,0.6)',
                     borderRadius: 7, padding: '7px 12px', fontSize: 12, color: 'var(--t-2)',
                   }}>
-                    <span style={{ color: '#c87898', fontWeight: 700, marginRight: 7 }}>[{s.type}]</span>
+                    <span style={{ color: '#756087', fontWeight: 700, marginRight: 7 }}>[{s.type}]</span>
                     {s.summary}
                     {s.record_ids && <details style={{ marginTop: 4 }}>
                       <summary>{s.record_ids.length} evidence records</summary>
@@ -186,7 +186,7 @@ function MessageBubble({ msg, idx }: { msg: ChatMessage; idx: number }) {
                       </pre>
                     </details>}
                     {s.url && <a href={s.url} target="_blank" rel="noopener noreferrer"
-                      style={{ display: 'block', color: '#c87898', marginTop: 4 }}>View source</a>}
+                      style={{ display: 'block', color: '#756087', marginTop: 4 }}>View source</a>}
                   </div>
                 ))}
               </div>
@@ -263,7 +263,7 @@ function InputBar({ value, onChange, onSend, loading }: {
             onClick={onSend}
             disabled={!canSend}
             style={{
-              background: canSend ? 'var(--villa)' : 'var(--bg-2)',
+              background: canSend ? 'var(--accent)' : 'var(--bg-2)',
               border: 'none', borderRadius: 11, padding: '10px 18px', margin: 3,
               color: canSend ? '#fff' : 'var(--t-3)',
               fontWeight: 700, fontSize: 13,
@@ -271,7 +271,7 @@ function InputBar({ value, onChange, onSend, loading }: {
               display: 'flex', alignItems: 'center', gap: 6,
               transition: 'all 0.18s ease',
               letterSpacing: '-0.01em',
-              boxShadow: canSend ? '0 2px 12px rgba(103,14,54,0.45)' : 'none',
+              boxShadow: 'none',
             }}
           >
             <SendIcon />
@@ -292,11 +292,11 @@ function Avatar({ assistant }: { assistant?: boolean }) {
     <div style={{
       width: 34, height: 34, borderRadius: '50%', flexShrink: 0, marginTop: 2,
       background: assistant
-        ? 'linear-gradient(135deg, #670E36 0%, #9b1540 100%)'
-        : 'linear-gradient(135deg, #1e3a6e 0%, #1d4ed8 100%)',
+        ? '#78658a'
+        : '#647b96',
       display: 'flex', alignItems: 'center', justifyContent: 'center',
       fontSize: 11, fontWeight: 800, color: 'rgba(255,255,255,0.9)', letterSpacing: '-0.02em',
-      boxShadow: assistant ? '0 2px 10px rgba(103,14,54,0.45)' : '0 2px 10px rgba(29,78,216,0.35)',
+      boxShadow: 'none',
     }}>
       {assistant ? 'PL' : 'U'}
     </div>
