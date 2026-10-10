@@ -32,7 +32,7 @@ The [fresh-data MVP milestone](https://github.com/jengaWiz/pl-knowledge-engine/m
 
 ## Demo
 
-The workspace uses an off-white canvas, white cards and restrained plum accents, with readable graph labels and a compact fixture sidebar.
+The workspace uses an off-white canvas, lavender navigation and context panels, and softly tinted records: sage clubs, blue players and sand fixtures. Readable labels and a compact fixture sidebar keep the graph easy to follow.
 
 ![Club-first relationship explorer showing the 20 Premier League clubs and season](docs/images/demo-graph.png)
 

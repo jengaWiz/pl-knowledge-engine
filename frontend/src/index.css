@@ -704,3 +704,30 @@ button:focus-visible, input:focus-visible, summary:focus-visible, a:focus-visibl
 .evidence-card summary, .evidence-source a { color: #756087; }
 .evidence-coverage { color: #5d816d; }
 @media(max-width:800px) { .graph-notice { margin-left: 12px; margin-right: 12px; } }
+
+/* Soft color separates navigation, context and records without competing with text. */
+:root { --sidebar-bg: #f3f0f7; --header-bg: #eee8f5; }
+.graph-intro { background: #eee8f5; border-bottom: 1px solid #ddd3e7; margin-bottom: 20px; }
+.graph-intro .workspace-eyebrow { color: #78628d; }
+.workspace-stamp { border-left-color: #d0c3dc; }
+.coverage-metrics strong { color: #665078; }
+.graph-inspector { background: #eee9f4; border-left-color: #d9cfe3; }
+.graph-caption { background: #e6efed; color: #4e726b; border-bottom-color: #ccded9; }
+.map-footer { background: #edf3f2; border-top-color: #d4e2de; }
+.map-node[data-kind="Team"] rect { fill: #edf5f2; stroke: #b9d2ca; }
+.map-node[data-kind="Season"] rect { fill: #ece4f4; stroke: #c5b3d8; }
+.map-node[data-kind="Player"] rect { fill: #eaf0f9; stroke: #bdcee4; }
+.map-node[data-kind="Match"] rect { fill: #fbf1e2; stroke: #e1cba9; }
+.map-node[data-kind="PlayerAppearance"] rect { fill: #f3ecf6; stroke: #d3bedc; }
+.map-node:hover rect, .map-node:focus-visible rect, .map-node.selected rect { fill: #e7dcf0; stroke: #87649f; stroke-width: 2; }
+.club-monogram { fill: #655078; }
+.graph-record-list button[data-kind="Team"] { background: #edf5f2; border-color: #bfd5cd; }
+.graph-record-list button[data-kind="Season"] { background: #ece4f4; border-color: #c5b3d8; }
+.graph-record-list button[data-kind="Player"] { background: #eaf0f9; border-color: #bdcee4; }
+.graph-record-list button[data-kind="Match"] { background: #fbf1e2; border-color: #e1cba9; }
+.graph-record-list button[data-kind="PlayerAppearance"] { background: #f3ecf6; border-color: #d3bedc; }
+.graph-record-list button[aria-pressed="true"] { background: #e7dcf0; border-color: #87649f; }
+.analyst-modes { background: #ece7f2; border-bottom-color: #d8cee2; }
+.evidence-coverage { display: inline-block; background: #e1eee6; border: 1px solid #c1d7c9; color: #41634e; padding: 7px 10px; border-radius: 6px; margin-top: 10px; }
+.evidence-card { border-top: 3px solid #8aaba2; }
+@media(max-width:1100px) { .graph-inspector { border-top-color: #d9cfe3; } }
