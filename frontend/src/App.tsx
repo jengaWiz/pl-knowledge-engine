@@ -47,7 +47,7 @@ export default function App() {
       {/* ════════════════════ SIDEBAR ════════════════════ */}
       <aside className="app-sidebar" data-open={sidebarOpen} style={{
         width: 276, flexShrink: 0,
-        background: 'var(--bg-1)',
+        background: 'var(--sidebar-bg)',
         borderRight: '1px solid var(--bg-3)',
         display: 'flex', flexDirection: 'column', overflow: 'hidden',
       }}>
@@ -121,7 +121,7 @@ export default function App() {
           height: 52, flexShrink: 0,
           display: 'flex', alignItems: 'center', justifyContent: 'space-between',
           padding: '0 22px',
-          background: 'var(--bg-1)',
+          background: 'var(--header-bg)',
           borderBottom: '1px solid var(--bg-3)',
         }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>

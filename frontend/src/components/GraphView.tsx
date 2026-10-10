@@ -97,7 +97,7 @@ export default function GraphView({ overrideGraph, onClearOverride }: Props) {
               if (!point) return null
               const active = selected?.id === node.id
               return <g key={node.id} role="button" tabIndex={0} aria-label={`Inspect ${TYPE[node.type] || node.type} ${title(node)}`} aria-pressed={active}
-                className={`map-node ${active ? 'selected' : ''}`} transform={`translate(${point.x},${point.y})`}
+                data-kind={node.type} className={`map-node ${active ? 'selected' : ''}`} transform={`translate(${point.x},${point.y})`}
                 opacity={selected && !active && !neighbors.has(node.id) ? .35 : 1}
                 onClick={() => inspect(node)} onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); inspect(node) } }}>
                 <title>{title(node)}{node.date ? ` · ${node.date}` : ''}</title>
@@ -107,7 +107,7 @@ export default function GraphView({ overrideGraph, onClearOverride }: Props) {
                 <text x={node.type === 'Team' ? -99 : -106} y="13" className="map-kind">{TYPE[node.type]}{node.date ? ` · ${node.date}` : ''}</text>
               </g>
             })}
-          </svg></div> : <div className="graph-record-list">{visible.nodes.map(node => <button key={node.id} aria-pressed={selected?.id === node.id} onClick={() => inspect(node)}>
+          </svg></div> : <div className="graph-record-list">{visible.nodes.map(node => <button key={node.id} data-kind={node.type} aria-pressed={selected?.id === node.id} onClick={() => inspect(node)}>
             <span className="record-dot" style={{ background: COLORS[node.type] }} /><span><small>{TYPE[node.type]}</small><strong>{title(node)}</strong>{node.date && <small>{node.date}</small>}</span><span aria-hidden="true">↗</span>
           </button>)}</div>}
         <div className="map-footer"><span>{Object.entries(COLORS).filter(([kind]) => visible.nodes.some(n => n.type === kind)).map(([kind, color]) => <span key={kind}><i style={{ background: color }} />{TYPE[kind]}</span>)}</span><span>Select a record to inspect</span></div>
