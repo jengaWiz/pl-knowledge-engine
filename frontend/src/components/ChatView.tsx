@@ -72,38 +72,21 @@ function StatisticsChat() {
 /* ── Welcome screen ───────────────────────────────────────── */
 function WelcomeScreen({ onSelect }: { onSelect: (s: string) => void }) {
   return (
-    <div className="fade-in" style={{ maxWidth: 620, margin: '0 auto', padding: '20px 24px 40px' }}>
+    <div className="fade-in" style={{ maxWidth: 760, margin: '0 auto', padding: '20px 24px 40px' }}>
       {/* Hero */}
-      <div style={{ textAlign: 'center', marginBottom: 36 }}>
-        {/* Icon */}
-        <div style={{
-          width: 72, height: 72, borderRadius: 20, margin: '0 auto 22px',
-          background: 'linear-gradient(135deg, rgba(103,14,54,0.3) 0%, rgba(200,16,46,0.15) 100%)',
-          border: '1px solid rgba(103,14,54,0.4)',
-          display: 'flex', alignItems: 'center', justifyContent: 'center',
-          boxShadow: '0 6px 32px rgba(103,14,54,0.25)',
-          position: 'relative',
-        }}>
-          <AnalystIcon />
-          {/* Subtle glow halo */}
-          <div style={{
-            position: 'absolute', inset: -1, borderRadius: 21,
-            background: 'linear-gradient(135deg, rgba(103,14,54,0.15), transparent)',
-            pointerEvents: 'none',
-          }} />
+      <div style={{ textAlign: 'left', marginBottom: 36 }}>
+        <p className="workspace-eyebrow" style={{ marginBottom: 16 }}>THE ANALYST / 2025–26</p>
+        <div style={{ fontSize: 36, fontWeight: 550, color: 'var(--t-1)', letterSpacing: '-0.04em', marginBottom: 9 }}>
+          Ask a football question.
         </div>
-
-        <div style={{ fontSize: 26, fontWeight: 800, color: 'var(--t-1)', letterSpacing: '-0.04em', marginBottom: 9 }}>
-          PL Evidence Analyst
-        </div>
-        <div style={{ fontSize: 14, color: 'var(--t-2)', lineHeight: 1.65, maxWidth: 380, margin: '0 auto' }}>
-          Explore results and player statistics for<br />2025–26 Premier League season
+        <div style={{ fontSize: 14, color: 'var(--t-2)', lineHeight: 1.65, maxWidth: 480 }}>
+          Compare form, explore player output, and trace every answer back to the season records.
         </div>
       </div>
 
       {/* Starter cards */}
       <div style={{ marginBottom: 16 }}>
-        <div style={{ fontSize: 10, fontWeight: 700, color: 'var(--t-3)', letterSpacing: '0.1em', marginBottom: 12, textAlign: 'center' }}>
+        <div style={{ fontSize: 10, fontWeight: 700, color: 'var(--t-3)', letterSpacing: '0.1em', marginBottom: 12, textAlign: 'left' }}>
           SUGGESTED QUESTIONS
         </div>
         <div className="starter-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
@@ -123,13 +106,13 @@ function StarterCard({ text, onClick }: { text: string; onClick: () => void }) {
       onMouseLeave={() => setHovered(false)}
       style={{
         background: hovered ? 'var(--bg-2)' : 'var(--bg-1)',
-        border: `1px solid ${hovered ? 'rgba(103,14,54,0.45)' : 'var(--bg-3)'}`,
-        borderLeft: `3px solid ${hovered ? 'var(--villa)' : 'var(--bg-4)'}`,
+        border: `1px solid ${hovered ? '#63876d' : 'var(--bg-3)'}`,
+        borderLeft: `3px solid ${hovered ? '#c6ed78' : 'var(--bg-4)'}`,
         borderRadius: 11, padding: '14px 16px',
         color: hovered ? 'var(--t-1)' : 'var(--t-2)',
         fontSize: 13, textAlign: 'left', cursor: 'pointer', lineHeight: 1.55,
         transition: 'all 0.18s ease',
-        boxShadow: hovered ? '0 2px 12px rgba(103,14,54,0.12)' : 'none',
+        boxShadow: 'none',
       }}
     >
       {text}
@@ -295,7 +278,7 @@ function InputBar({ value, onChange, onSend, loading }: {
             Send
           </button>
         </div>
-        <div style={{ fontSize: 11, color: 'var(--t-3)', marginTop: 8, textAlign: 'center' }}>
+        <div style={{ fontSize: 11, color: 'var(--t-3)', marginTop: 8, textAlign: 'left' }}>
           Press Enter to send · Local evidence · 2025–26
         </div>
       </div>
@@ -321,17 +304,6 @@ function Avatar({ assistant }: { assistant?: boolean }) {
 }
 
 /* ── Icons ────────────────────────────────────────────────── */
-function AnalystIcon() {
-  return (
-    <svg width="32" height="32" viewBox="0 0 24 24" fill="none"
-      stroke="rgba(212,128,154,0.9)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
-      <polyline points="3.27 6.96 12 12.01 20.73 6.96" />
-      <line x1="12" y1="22.08" x2="12" y2="12" />
-    </svg>
-  )
-}
-
 function SendIcon() {
   return (
     <svg width="13" height="13" viewBox="0 0 24 24" fill="none"

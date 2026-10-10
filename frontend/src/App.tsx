@@ -46,7 +46,7 @@ export default function App() {
 
       {/* ════════════════════ SIDEBAR ════════════════════ */}
       <aside className="app-sidebar" data-open={sidebarOpen} style={{
-        width: 300, flexShrink: 0,
+        width: 276, flexShrink: 0,
         background: 'var(--bg-1)',
         borderRight: '1px solid var(--bg-3)',
         display: 'flex', flexDirection: 'column', overflow: 'hidden',
@@ -59,26 +59,14 @@ export default function App() {
           borderBottom: '1px solid var(--bg-3)',
           position: 'relative', overflow: 'hidden',
         }}>
-          {/* Ambient glow orbs */}
-          <div style={{
-            position: 'absolute', top: -40, left: -25, width: 140, height: 140,
-            borderRadius: '50%', background: 'rgba(103,14,54,0.55)', filter: 'blur(50px)',
-            pointerEvents: 'none',
-          }} />
-          <div style={{
-            position: 'absolute', top: -10, right: -20, width: 110, height: 110,
-            borderRadius: '50%', background: 'rgba(200,16,46,0.45)', filter: 'blur(40px)',
-            pointerEvents: 'none',
-          }} />
-
           {/* Content */}
           <div style={{ position: 'relative', zIndex: 1 }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 13 }}>
               <div style={{
                 width: 42, height: 42, borderRadius: 13, flexShrink: 0,
-                background: 'linear-gradient(135deg, #670E36 0%, #a81545 100%)',
+                background: '#243c38',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
-                boxShadow: '0 3px 18px rgba(103,14,54,0.65), 0 0 0 1px rgba(255,255,255,0.09)',
+                border: '1px solid #42635b',
               }}>
                 <NetworkIcon />
               </div>
@@ -87,7 +75,7 @@ export default function App() {
                   PL Knowledge Engine
                 </div>
                 <div style={{ fontSize: 11, color: 'var(--t-3)', marginTop: 3, letterSpacing: '0.01em' }}>
-                  2025–26 Premier League
+                  PREMIER LEAGUE / 2025–26
                 </div>
               </div>
             </div>
@@ -141,8 +129,8 @@ export default function App() {
               onClick={() => setSidebarOpen(true)}>Navigation</button>
             <span style={{
               width: 8, height: 8, borderRadius: '50%', display: 'block', flexShrink: 0,
-              background: view === 'graph' ? '#f59e0b' : 'var(--villa)',
-              boxShadow: view === 'graph' ? '0 0 10px #f59e0b' : '0 0 10px rgba(103,14,54,0.95)',
+              background: '#c6ed78',
+              boxShadow: 'none',
               transition: 'all 0.3s ease',
             }} />
             <span style={{ fontSize: 14, fontWeight: 700, color: 'var(--t-1)', letterSpacing: '-0.025em' }}>
@@ -179,10 +167,10 @@ function ViewTab({ active, onClick, children }: { active: boolean; onClick: () =
         flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6,
         padding: '8px 0', borderRadius: 8, border: 'none', cursor: 'pointer',
         fontSize: 13, fontWeight: 600, letterSpacing: '-0.01em',
-        background: active ? 'var(--villa)' : 'transparent',
+        background: active ? '#29453f' : 'transparent',
         color: active ? '#fff' : 'var(--t-3)',
         transition: 'all 0.18s ease',
-        boxShadow: active ? '0 2px 12px rgba(103,14,54,0.5)' : 'none',
+        boxShadow: 'none',
       }}
       onMouseEnter={e => { if (!active) (e.currentTarget as HTMLElement).style.color = 'var(--t-2)' }}
       onMouseLeave={e => { if (!active) (e.currentTarget as HTMLElement).style.color = 'var(--t-3)' }}
