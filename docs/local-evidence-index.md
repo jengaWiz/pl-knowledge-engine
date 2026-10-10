@@ -57,7 +57,12 @@ The report is invalid while a build runs or after failure. Every query rechecks
 the accepted corpus, model/profile, complete stored record count, text/provenance,
 all batch checkpoints and stored-vector hashes before retrieval. This favors
 integrity over minimum latency in the prototype; full-index checks add work to
-each query and may need a separately validated optimization at larger scale.
+each query. Verification fetches at most 512 records per database read, then
+checks the original 32-record checkpoints in canonical document order. All text,
+metadata and vectors are still verified on every request; no readiness cache or
+sampling is introduced. For 2,682 documents this reduces verification reads from
+84 to six while bounding memory use. This optimizes the index stage only; graph
+and source verification still contribute to total API latency.
 
 Outputs remain ignored local artifacts:
 
