@@ -64,9 +64,9 @@ export default function App() {
             <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 13 }}>
               <div style={{
                 width: 42, height: 42, borderRadius: 13, flexShrink: 0,
-                background: '#243c38',
+                background: '#37003c',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
-                border: '1px solid #42635b',
+                border: '1px solid #705285',
               }}>
                 <NetworkIcon />
               </div>
@@ -129,7 +129,7 @@ export default function App() {
               onClick={() => setSidebarOpen(true)}>Navigation</button>
             <span style={{
               width: 8, height: 8, borderRadius: '50%', display: 'block', flexShrink: 0,
-              background: '#c6ed78',
+              background: '#00ff85',
               boxShadow: 'none',
               transition: 'all 0.3s ease',
             }} />
@@ -167,7 +167,7 @@ function ViewTab({ active, onClick, children }: { active: boolean; onClick: () =
         flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6,
         padding: '8px 0', borderRadius: 8, border: 'none', cursor: 'pointer',
         fontSize: 13, fontWeight: 600, letterSpacing: '-0.01em',
-        background: active ? '#29453f' : 'transparent',
+        background: active ? '#49305d' : 'transparent',
         color: active ? '#fff' : 'var(--t-3)',
         transition: 'all 0.18s ease',
         boxShadow: 'none',

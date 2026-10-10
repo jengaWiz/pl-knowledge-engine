@@ -16,6 +16,7 @@ export interface GraphNode {
   date?: string
   total_points?: number
   minutes?: number
+  full_name?: string
   displayName?: string
   abbreviation?: string
 }

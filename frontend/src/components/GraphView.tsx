@@ -3,7 +3,7 @@ import { fetchOverviewGraph, fetchPlayerGraph } from '../api'
 import type { GraphData, GraphNode } from '../types'
 import { project, layout, title } from './graphProjection'
 
-const COLORS: Record<string, string> = { Season: '#c6ed78', Team: '#68d6c0', Player: '#91baff', Match: '#f2c178', PlayerAppearance: '#c2a4e8' }
+const COLORS: Record<string, string> = { Season: '#00ff85', Team: '#05f0ff', Player: '#91baff', Match: '#f2c178', PlayerAppearance: '#c2a4e8' }
 const TYPE: Record<string, string> = { Season: 'Season', Team: 'Club', Player: 'Player', Match: 'Fixture', PlayerAppearance: 'Appearance' }
 const RELATIONS: Record<string, string> = { IN_SEASON: 'in season', PLAYS_FOR: 'plays for', HOME_TEAM: 'home club', AWAY_TEAM: 'away club', HAD_APPEARANCE: 'recorded appearance', IN_MATCH: 'in fixture', FOR_TEAM: 'for club' }
 interface Props { overrideGraph: GraphData | null; onClearOverride: () => void }
@@ -17,10 +17,13 @@ export default function GraphView({ overrideGraph, onClearOverride }: Props) {
   const [focused, setFocused] = useState(false)
   const [focusKind, setFocusKind] = useState<'player' | 'fixture'>('fixture')
   const [error, setError] = useState('')
+  const [suggestions, setSuggestions] = useState<{id: string; name: string; full_name: string}[]>([])
+  const [roster, setRoster] = useState<GraphNode[]>([])
+  const [coverage, setCoverage] = useState({ clubs: 0, players: 0, fixtures: 0 })
   const [mode, setMode] = useState<'map' | 'list'>(() => window.matchMedia('(max-width: 800px)').matches ? 'list' : 'map')
   const requestId = useRef(0)
   const load = useCallback((graph: GraphData, focus = false) => {
-    setData(graph); setSelected(null); setClubId(''); setFocused(focus); setLoading(false); setError('')
+    setSuggestions([]); if (!focus) { setRoster(graph.nodes.filter(n => n.type === 'Player')); setCoverage({ clubs: graph.nodes.filter(n => n.type === 'Team').length, players: graph.nodes.filter(n => n.type === 'Player').length, fixtures: graph.nodes.filter(n => n.type === 'Match').length }) }; setData(graph); setSelected(null); setClubId(''); setFocused(focus); setLoading(false); setError('')
   }, [])
   const overview = useCallback(() => {
     const id = ++requestId.current
@@ -30,17 +33,21 @@ export default function GraphView({ overrideGraph, onClearOverride }: Props) {
   }, [load])
   useEffect(() => { overview(); return () => { requestId.current += 1 } }, [overview])
   useEffect(() => { if (overrideGraph) { requestId.current += 1; load(overrideGraph, true); setFocusKind('fixture') } }, [overrideGraph, load])
-  const handleSearch = (event: FormEvent) => {
-    event.preventDefault()
-    if (!search.trim()) return
+  const findPlayer = (value: string, label = value) => {
+    if (!value.trim()) return
     const id = ++requestId.current
-    setLoading(true); setError('')
-    fetchPlayerGraph(search.trim()).then(graph => { if (id === requestId.current) { load(graph, true); setFocusKind('player'); onClearOverride() } })
+    setLoading(true); setError(''); setSuggestions([])
+    fetchPlayerGraph(value.trim()).then(graph => { if (id === requestId.current) { load(graph, true); setSearch(label); setFocusKind('player'); onClearOverride() } })
       .catch(err => { if (id === requestId.current) {
-        setError(err.response?.status === 409 ? 'Player name is ambiguous. Use a unique name.' : `Player "${search}" is unavailable in the verified corpus.`)
+        const detail = err.response?.data?.detail
+        setSuggestions(Array.isArray(detail?.suggestions) ? detail.suggestions : [])
+        setError(err.response?.status === 409 ? 'Choose a player from the closest roster matches below.'
+          : err.response?.status === 404 ? `No stored player matches “${label}”. Coverage: pinned 2025–26 Aston Villa and Liverpool roster. A player may be outside this snapshot.`
+          : 'Player search is unavailable. Please retry shortly.')
         setLoading(false)
       } })
   }
+  const handleSearch = (event: FormEvent) => { event.preventDefault(); findPlayer(search) }
   const visible = useMemo(() => project(data, clubId, focused), [data, clubId, focused])
   const positions = useMemo(() => layout(visible, !focused && !clubId), [visible, focused, clubId])
   const clubs = data.nodes.filter(n => n.type === 'Team').sort((a, b) => a.name.localeCompare(b.name))
@@ -53,20 +60,25 @@ export default function GraphView({ overrideGraph, onClearOverride }: Props) {
   return <section className="graph-workspace">
     <div className="graph-intro">
       <div><p className="workspace-eyebrow">THE EXPLORER / 2025–26</p><h1>{heading}</h1>
+        {focused && focusKind === 'player' && <p className="player-match">Showing {data.nodes.find(n => n.type === 'Player')?.full_name || data.nodes.find(n => n.type === 'Player')?.name}</p>}
         <p>{focused ? 'Follow the recorded links between players, appearances and fixtures.' : clubId ? 'A focused look at the available squad and six most recent fixtures.' : 'Twenty clubs. One season. Follow a connection to find the story.'}</p></div>
-      <div className="workspace-stamp"><span className="status-dot" />LOCAL DATA<span>Verified season records</span></div>
+      <div className="workspace-stamp"><span className="status-dot" />LOCAL DATA<span>Verified season records</span>
+        <div className="coverage-metrics"><div><strong>{coverage.clubs || '—'}</strong><small>CLUBS</small></div><div><strong>{coverage.players || '—'}</strong><small>PLAYERS</small></div><div><strong>{coverage.fixtures || '—'}</strong><small>FIXTURES</small></div></div></div>
     </div>
     <div className="explorer-toolbar">
       <form onSubmit={handleSearch}><label className="sr-only" htmlFor="graph-search">Search graph player</label>
-        <input id="graph-search" value={search} onChange={e => setSearch(e.target.value)} placeholder="Find a player, e.g. Salah" />
-        <button className="primary-action" type="submit">Search</button></form>
+        <input id="graph-search" list="player-roster" maxLength={120} value={search} onChange={e => setSearch(e.target.value)} placeholder="Find a player, e.g. Salah" />
+        <button className="primary-action" type="submit" disabled={loading}>Search</button>
+        <datalist id="player-roster">{roster.map(player => <option key={player.id} value={player.full_name || player.name}>{player.name}</option>)}</datalist></form>
       <button onClick={() => { onClearOverride(); overview() }}>Overview</button>
       {!focused && <select aria-label="Explore club" value={clubId} onChange={e => { setClubId(e.target.value); setSelected(null) }}>
         <option value="">All clubs</option>{clubs.map(n => <option key={n.id} value={n.id}>{n.name}</option>)}
       </select>}
       <div className="map-switch" aria-label="Graph presentation"><button aria-pressed={mode === 'map'} onClick={() => setMode('map')}>Map</button><button aria-pressed={mode === 'list'} onClick={() => setMode('list')}>List</button></div>
     </div>
-    {error && <p role="alert" className="graph-notice">{error}</p>}
+    {error && <div className="graph-notice"><p role="alert">{error}</p>
+      {suggestions.length > 0 && <div className="player-suggestions" aria-label="Closest player matches">{suggestions.map(player => <button key={player.id} onClick={() => findPlayer(player.id, player.full_name || player.name)}><span>{player.full_name || player.name}</span><small>{player.name} ↗</small></button>)}</div>}
+    </div>}
     <div className="explorer-body">
       <div className="graph-stage">
         <div className="graph-caption"><span>{focused ? 'RECORDED CONNECTIONS' : clubId ? 'CLUB NETWORK' : 'LEAGUE MAP'}</span><span>{visible.nodes.length} NODES · {visible.edges.length} EDGES</span></div>
@@ -90,9 +102,9 @@ export default function GraphView({ overrideGraph, onClearOverride }: Props) {
                 onClick={() => inspect(node)} onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); inspect(node) } }}>
                 <title>{title(node)}{node.date ? ` · ${node.date}` : ''}</title>
                 <rect x="-137" y="-21" width="274" height="42" rx="9" />
-                <circle cx="-119" r="4" fill={COLORS[node.type] || '#aab6c8'} />
-                <text x="-106" y="-1" className="map-name">{title(node).length > 31 ? `${title(node).slice(0, 30)}…` : title(node)}</text>
-                <text x="-106" y="13" className="map-kind">{TYPE[node.type]}{node.date ? ` · ${node.date}` : ''}</text>
+                {node.type === 'Team' ? <><circle cx="-119" r="11" fill="#37003c" stroke="#ac85cb" /><text className="club-monogram" x="-119" y="3">{node.name.split(' ').map(word => word[0]).join('').slice(0, 3)}</text></> : <circle cx="-119" r="4" fill={COLORS[node.type] || '#aab6c8'} />}
+                <text x={node.type === 'Team' ? -99 : -106} y="-1" className="map-name">{title(node).length > 31 ? `${title(node).slice(0, 30)}…` : title(node)}</text>
+                <text x={node.type === 'Team' ? -99 : -106} y="13" className="map-kind">{TYPE[node.type]}{node.date ? ` · ${node.date}` : ''}</text>
               </g>
             })}
           </svg></div> : <div className="graph-record-list">{visible.nodes.map(node => <button key={node.id} aria-pressed={selected?.id === node.id} onClick={() => inspect(node)}>

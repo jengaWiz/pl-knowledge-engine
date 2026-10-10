@@ -8,7 +8,7 @@ const browser = await chromium.launch()
 try {
   const page = await browser.newPage({ viewport: { width: 1440, height: 960 }, deviceScaleFactor: 1 })
   await page.goto(url)
-  await expect(page.getByText(/NODES.*EDGES/)).toBeVisible()
+  await expect(page.getByText('21 NODES · 20 EDGES')).toBeVisible()
   await page.screenshot({ path: destination + 'demo-graph.png', fullPage: true })
   await page.getByLabel('Explore club').selectOption({ label: 'Liverpool' })
   await expect(page.getByRole('heading', { name: 'Liverpool', exact: true })).toBeVisible()

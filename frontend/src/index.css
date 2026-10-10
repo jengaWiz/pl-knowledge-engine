@@ -1,13 +1,13 @@
 /* ─── Design Tokens ─────────────────────────────────────────── */
 :root {
-  --bg-0:   #101819;       /* OLED near-black base */
-  --bg-1:   #172122;       /* Primary surface */
-  --bg-2:   #202d2e;       /* Elevated surface */
-  --bg-3:   #314041;       /* Borders / dividers */
-  --bg-4:   #465858;       /* Strong borders */
-  --t-1:    #edf2ec;       /* Primary text */
-  --t-2:    #a4b2b0;       /* Secondary text */
-  --t-3:    #a4b2b0;       /* Muted / placeholder */
+  --bg-0:   #120d1e;       /* OLED near-black base */
+  --bg-1:   #1b142c;       /* Primary surface */
+  --bg-2:   #2a1d3e;       /* Elevated surface */
+  --bg-3:   #403153;       /* Borders / dividers */
+  --bg-4:   #655375;       /* Strong borders */
+  --t-1:    #f6f2ff;       /* Primary text */
+  --t-2:    #b7acc9;       /* Secondary text */
+  --t-3:    #b7acc9;       /* Muted / placeholder */
   --villa:      #670E36;   /* Aston Villa claret */
   --villa-l:    #9b1548;   /* Villa claret lighter */
   --villa-blue: #6BAED8;   /* Aston Villa sky blue */
@@ -210,7 +210,7 @@ button:focus-visible, input:focus-visible, summary:focus-visible, a:focus-visibl
   display:flex;
   flex-direction:column;
   overflow:auto;
-  background:#101819;
+  background:#120d1e;
 }
 .graph-intro {
   display:flex;
@@ -220,7 +220,7 @@ button:focus-visible, input:focus-visible, summary:focus-visible, a:focus-visibl
   padding:30px 30px 24px;
 }
 .workspace-eyebrow {
-  color:#a8bbb5;
+  color:#c3b2d7;
   font-size:10px;
   font-weight:650;
   letter-spacing:.15em;
@@ -233,7 +233,7 @@ button:focus-visible, input:focus-visible, summary:focus-visible, a:focus-visibl
   line-height:1.1;
 }
 .graph-intro p:not(.workspace-eyebrow) {
-  color:#a4b2b0;
+  color:#b7acc9;
   font-size:13px;
   line-height:1.6;
 }
@@ -255,7 +255,7 @@ button:focus-visible, input:focus-visible, summary:focus-visible, a:focus-visibl
 .status-dot {
   width:6px;
   height:6px;
-  background:#c6ed78;
+  background:#00ff85;
   border-radius:50%;
 }
 .explorer-toolbar {
@@ -277,9 +277,9 @@ button:focus-visible, input:focus-visible, summary:focus-visible, a:focus-visibl
   width:100%;
 }
 .explorer-toolbar input,.explorer-toolbar select,.explorer-toolbar button {
-  border:1px solid #3c4e4c;
-  background:#1a2727;
-  color:#d7e2dc;
+  border:1px solid #584169;
+  background:#261b38;
+  color:#eee5f8;
   border-radius:7px;
   font:inherit;
   font-size:12px;
@@ -289,13 +289,13 @@ button:focus-visible, input:focus-visible, summary:focus-visible, a:focus-visibl
   cursor:pointer;
 }
 .explorer-toolbar button:hover {
-  background:#2b403a;
-  border-color:#87b7a6;
+  background:#3b2451;
+  border-color:#bda0d9;
 }
 .explorer-toolbar .primary-action {
-  color:#17261b;
-  background:#c6ed78;
-  border-color:#c6ed78;
+  color:#19072b;
+  background:#00ff85;
+  border-color:#00ff85;
   font-weight:700;
 }
 .map-switch {
@@ -304,15 +304,15 @@ button:focus-visible, input:focus-visible, summary:focus-visible, a:focus-visibl
   gap:2px;
 }
 .map-switch button[aria-pressed="true"] {
-  background:#30443d;
-  color:#dcf4b4;
-  border-color:#68816c;
+  background:#44305c;
+  color:#00ff85;
+  border-color:#9a75b8;
 }
 .explorer-body {
   display:grid;
   grid-template-columns:minmax(0,1fr) 250px;
   margin:0 24px 24px;
-  border:1px solid #354543;
+  border:1px solid #49335f;
   border-radius:12px;
   flex:1;
   min-height:530px;
@@ -322,8 +322,8 @@ button:focus-visible, input:focus-visible, summary:focus-visible, a:focus-visibl
   display:flex;
   flex-direction:column;
   min-width:0;
-  background-color:#142020;
-  background-image:radial-gradient(#354341 .7px,transparent .7px);
+  background-color:#1a112c;
+  background-image:radial-gradient(#513761 .7px,transparent .7px);
   background-size:20px 20px;
 }
 .graph-caption {
@@ -333,9 +333,9 @@ button:focus-visible, input:focus-visible, summary:focus-visible, a:focus-visibl
   padding:17px 18px;
   font-size:9px;
   letter-spacing:.1em;
-  color:#a7bbb3;
-  background:#142020;
-  border-bottom:1px solid #2d3d39;
+  color:#bdaed1;
+  background:#1a112c;
+  border-bottom:1px solid #422e56;
 }
 .graph-scroll {
   flex:1;
@@ -351,12 +351,12 @@ button:focus-visible, input:focus-visible, summary:focus-visible, a:focus-visibl
 }
 .map-edge {
   fill:none;
-  stroke:#446059;
+  stroke:#74558e;
   stroke-width:1.2;
   transition:opacity .15s;
 }
 .map-edge.active {
-  stroke:#c6ed78;
+  stroke:#00ff85;
   stroke-width:2;
 }
 .map-node {
@@ -365,22 +365,22 @@ button:focus-visible, input:focus-visible, summary:focus-visible, a:focus-visibl
   transition:opacity .15s;
 }
 .map-node rect {
-  fill:#20302e;
-  stroke:#536b61;
+  fill:#291b40;
+  stroke:#765a8c;
   stroke-width:1;
 }
 .map-node:hover rect,.map-node:focus-visible rect,.map-node.selected rect {
-  stroke:#c6ed78;
+  stroke:#00ff85;
   stroke-width:2;
-  fill:#2a4036;
+  fill:#412553;
 }
 .map-name {
-  fill:#edf2ec;
+  fill:#f6f2ff;
   font-size:13px;
   font-weight:550;
 }
 .map-kind {
-  fill:#a9b9b1;
+  fill:#c7b6d7;
   font-size:10px;
 }
 .map-footer {
@@ -390,9 +390,9 @@ button:focus-visible, input:focus-visible, summary:focus-visible, a:focus-visibl
   gap:12px;
   padding:14px 18px;
   font-size:10px;
-  color:#a6b6ae;
-  border-top:1px solid #30413b;
-  background:#142020;
+  color:#b7a8ca;
+  border-top:1px solid #49335f;
+  background:#1a112c;
 }
 .map-footer>span:first-child {
   display:flex;
@@ -409,8 +409,8 @@ button:focus-visible, input:focus-visible, summary:focus-visible, a:focus-visibl
 }
 .graph-inspector {
   padding:24px 20px;
-  background:#1b2826;
-  border-left:1px solid #354543;
+  background:#241438;
+  border-left:1px solid #49335f;
   overflow:auto;
 }
 .graph-inspector h2 {
@@ -424,25 +424,25 @@ button:focus-visible, input:focus-visible, summary:focus-visible, a:focus-visibl
 .graph-inspector p:not(.workspace-eyebrow) {
   font-size:12px;
   line-height:1.8;
-  color:#b1bfb5;
+  color:#c9bdd8;
 }
 .graph-inspector h3 {
   font-size:11px;
   font-weight:550;
-  color:#c6d4c9;
+  color:#e1d1f0;
   margin:24px 0 12px;
 }
 .inspector-art {
   margin-top:28px;
-  border:1px solid #496052;
+  border:1px solid #6e4f89;
   padding:15px;
   border-radius:8px;
-  background:#24382b;
+  background:#37003c;
 }
 .inspector-art>span {
   font-size:32px;
   font-weight:500;
-  color:#c6ed78;
+  color:#00ff85;
   letter-spacing:-.08em;
 }
 .inspector-art svg {
@@ -450,19 +450,19 @@ button:focus-visible, input:focus-visible, summary:focus-visible, a:focus-visibl
 }
 .inspector-art path {
   fill:none;
-  stroke:#6c8f66;
+  stroke:#b18ac9;
   stroke-width:1.5;
 }
 .inspector-art circle {
-  fill:#c6ed78;
+  fill:#00ff85;
 }
 .club-shortcut {
   width:100%;
   text-align:left;
   background:none;
-  color:#e1ebdf;
+  color:#f3ebff;
   border:0;
-  border-top:1px solid #3a4e42;
+  border-top:1px solid #513964;
   padding:14px 0;
   cursor:pointer;
   font:inherit;
@@ -470,7 +470,7 @@ button:focus-visible, input:focus-visible, summary:focus-visible, a:focus-visibl
 }
 .club-shortcut span {
   display:block;
-  color:#a3b89e;
+  color:#ba9ed0;
   font-size:10px;
   margin-top:6px;
 }
@@ -481,13 +481,13 @@ button:focus-visible, input:focus-visible, summary:focus-visible, a:focus-visibl
 .graph-inspector .inspector-scope {
   margin-top:24px;
   padding-top:16px;
-  border-top:1px solid #3a4e42;
+  border-top:1px solid #513964;
   font-size:10px!important;
-  color:#92a78f!important;
+  color:#b6a2c7!important;
 }
 .inspector-type {
   font-size:11px;
-  color:#c6ed78;
+  color:#00ff85;
 }
 .graph-inspector dl {
   margin-top:20px;
@@ -498,14 +498,14 @@ button:focus-visible, input:focus-visible, summary:focus-visible, a:focus-visibl
   justify-content:space-between;
   font-size:11px;
   padding:7px 0;
-  border-bottom:1px solid #34483c;
+  border-bottom:1px solid #4d365e;
 }
 .graph-inspector dt {
-  color:#a7b7a8;
+  color:#baa5d0;
   text-transform:capitalize;
 }
 .graph-inspector dd {
-  color:#e4ece1;
+  color:#f5eaff;
   text-align:right;
   overflow-wrap:anywhere;
   min-width:0;
@@ -514,17 +514,17 @@ button:focus-visible, input:focus-visible, summary:focus-visible, a:focus-visibl
   display:block;
   width:100%;
   text-align:left;
-  background:#22332c;
-  border:1px solid #3d5545;
+  background:#2c1b3e;
+  border:1px solid #67477d;
   border-radius:6px;
   padding:10px;
   margin:6px 0;
-  color:#e1ebdf;
+  color:#f3ebff;
   cursor:pointer;
 }
 .inspector-connections small {
   display:block;
-  color:#a9c398;
+  color:#05f0ff;
   margin-bottom:5px;
   font-size:10px;
 }
@@ -537,13 +537,13 @@ button:focus-visible, input:focus-visible, summary:focus-visible, a:focus-visibl
 .clear-selection {
   background:none;
   border:0;
-  color:#c6ed78;
+  color:#00ff85;
   padding:12px 0;
   cursor:pointer;
 }
 .graph-empty {
   padding:70px 30px;
-  color:#b9cabc;
+  color:#cfbfdf;
   line-height:1.7;
   font-size:14px;
 }
@@ -565,16 +565,16 @@ button:focus-visible, input:focus-visible, summary:focus-visible, a:focus-visibl
   width:100%;
   padding:12px;
   text-align:left;
-  background:#20302e;
-  border:1px solid #3d554b;
+  background:#291b40;
+  border:1px solid #67477d;
   border-radius:8px;
-  color:#edf2ec;
+  color:#f6f2ff;
   margin-bottom:7px;
   cursor:pointer;
 }
 .graph-record-list button[aria-pressed="true"] {
-  border-color:#c6ed78;
-  background:#304334;
+  border-color:#00ff85;
+  background:#422759;
 }
 .record-dot {
   width:7px;
@@ -592,18 +592,18 @@ button:focus-visible, input:focus-visible, summary:focus-visible, a:focus-visibl
   margin:4px 0;
 }
 .graph-record-list small {
-  color:#abbeb0;
+  color:#c8b6d9;
   font-size:10px;
 }
 .evidence-card {
-  border-top:2px solid #658e78;
+  border-top:2px solid #05f0ff;
 }
 .evidence-heading h2 {
   font-size:30px;
   font-weight:550;
 }
 .evidence-source a,.evidence-card summary {
-  color:#c6ed78;
+  color:#00ff85;
 }
 @media(max-width:1100px) {
   .explorer-body {
@@ -611,7 +611,7 @@ button:focus-visible, input:focus-visible, summary:focus-visible, a:focus-visibl
   }
   .graph-inspector {
     border-left:0;
-    border-top:1px solid #354543;
+    border-top:1px solid #49335f;
   }
   .inspector-art {
     display:none;
@@ -662,7 +662,40 @@ button:focus-visible, input:focus-visible, summary:focus-visible, a:focus-visibl
   }
 }
 .map-lane-label {
-  fill: #9db1a4;
+  fill: #bba4cf;
   font-size: 10px;
   letter-spacing: 1px;
 }
+
+/* League-inspired accents and player discovery */
+:root { --league-purple: #37003c; --league-mint: #00ff85; --league-cyan: #05f0ff; --league-pink: #ff2882; }
+.graph-intro { margin: 22px 24px; padding: 26px 28px; border: 1px solid #6c3280; border-top: 3px solid var(--league-mint); border-radius: 14px; background: var(--league-purple); }
+.graph-intro h1 { font-size: clamp(30px, 3vw, 42px); color: #fff; }
+.graph-intro p:not(.workspace-eyebrow) { color: #dac9e5; max-width: 540px; }
+.graph-intro .workspace-eyebrow { color: var(--league-cyan); }
+.workspace-stamp { color: #f3dcff; padding: 14px 18px; border: 1px solid #744287; border-radius: 10px; background: #2a0734; }
+.workspace-stamp > span:last-of-type { color: #cfb4dc; }
+.coverage-metrics { grid-column: 1 / -1; display: flex; gap: 24px; padding-top: 12px; margin-top: 5px; border-top: 1px solid #6b377b; }
+.coverage-metrics strong { display: block; font-size: 26px; font-weight: 650; letter-spacing: -.06em; color: #fff; }
+.coverage-metrics small { display: block; color: #d8b8e7; font-size: 8px; margin-top: 5px; letter-spacing: .12em; }
+.explorer-toolbar .primary-action:hover { color: #14071e; background: #6affb3; }
+.graph-caption { border-left: 3px solid var(--league-cyan); }
+.inspector-type { color: var(--league-cyan); }
+.inspector-art { border-left: 3px solid var(--league-pink); }
+.club-monogram { fill: #f7edff; font-size: 8px; text-anchor: middle; font-weight: 700; }
+.map-node rect { filter: drop-shadow(0 2px 3px #0c071944); }
+.map-node:hover rect { fill: #432550; }
+.map-name { font-size: 14px; }
+.graph-notice { background: #30203e; border-left: 3px solid var(--league-pink); color: #f3e5ff; margin: 0 24px 18px; padding: 16px; border-radius: 8px; line-height: 1.6; }
+.player-suggestions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+.player-suggestions button { display: flex; flex-direction: column; align-items: flex-start; gap: 4px; color: #fff; background: #432655; border: 1px solid #aa7bc7; border-radius: 7px; padding: 10px 14px; cursor: pointer; }
+.player-suggestions button:hover { border-color: var(--league-mint); background: #55316b; }
+.player-suggestions small { color: var(--league-cyan); }
+.analyst-modes button[aria-pressed="true"] { border-color: #ad79ce; background: #37003c; }
+.evidence-coverage { color: #00ff85; }
+@media(max-width:800px) {
+  .graph-intro { margin: 16px 12px 20px; padding: 22px 18px; }
+  .graph-notice { margin-left: 12px; margin-right: 12px; }
+}
+.explorer-toolbar button:disabled { opacity: .5; cursor: wait; }
+@media(max-width:1200px) { .workspace-stamp { display: none; } }
