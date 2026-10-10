@@ -16,6 +16,7 @@ from src.store.mvp_index import DIMENSIONS, MODEL, MODEL_SHA256, embedding_funct
 
 SCHEMA = "evidence-onnx-index-v1"
 BATCH = 32
+VERIFY_BATCH = BATCH * 16
 
 
 def report_path(output: Path, season: str):
@@ -81,10 +82,11 @@ def normalized_vectors(vectors, count):
     return (array / np.linalg.norm(array, axis=1, keepdims=True)).tolist()
 
 
-def stored_batch(collection, rows, expected=None):
-    result = collection.get(
-        ids=[row["id"] for row in rows], include=["documents", "metadatas", "embeddings"]
-    )
+def stored_batch(collection, rows, expected=None, *, result=None):
+    if result is None:
+        result = collection.get(
+            ids=[row["id"] for row in rows], include=["documents", "metadatas", "embeddings"]
+        )
     offsets = {ident: index for index, ident in enumerate(result["ids"])}
     if set(offsets) != {row["id"] for row in rows}:
         raise ValueError("Stored evidence batch is incomplete")
@@ -129,13 +131,26 @@ def verify_index(output, collection, rows, profile, dataset):
     if collection.count() != len(rows):
         raise ValueError("Index record count differs from accepted evidence")
     digests = []
-    for start in range(0, len(rows), BATCH):
-        batch = rows[start : start + BATCH]
-        checkpoint = json.loads(checkpoints(output, dataset, start).read_text())
-        digest = stored_batch(collection, batch)
-        if checkpoint != {"ids": [row["id"] for row in batch], "vectors_sha256": digest}:
-            raise ValueError("Indexed vectors or checkpoint changed")
-        digests.append(digest)
+    for window_start in range(0, len(rows), VERIFY_BATCH):
+        window = rows[window_start : window_start + VERIFY_BATCH]
+        result = collection.get(
+            ids=[row["id"] for row in window], include=["documents", "metadatas", "embeddings"]
+        )
+        offsets = {ident: position for position, ident in enumerate(result["ids"])}
+        if len(offsets) != len(result["ids"]) or set(offsets) != {row["id"] for row in window}:
+            raise ValueError("Stored evidence verification window is incomplete")
+        for offset in range(0, len(window), BATCH):
+            batch = window[offset : offset + BATCH]
+            positions = [offsets[row["id"]] for row in batch]
+            subset = {
+                key: [result[key][position] for position in positions]
+                for key in ("ids", "documents", "metadatas", "embeddings")
+            }
+            checkpoint = json.loads(checkpoints(output, dataset, window_start + offset).read_text())
+            digest = stored_batch(collection, batch, result=subset)
+            if checkpoint != {"ids": [row["id"] for row in batch], "vectors_sha256": digest}:
+                raise ValueError("Indexed vectors or checkpoint changed")
+            digests.append(digest)
     return sha256(encoded(digests))
 
 

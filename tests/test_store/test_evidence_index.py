@@ -284,3 +284,60 @@ def test_identical_small_candidates_are_complete_and_stably_ranked(tmp_path, cor
     second = index.search(tmp_path, "2025-26", "Match", evidence_season="2025-26", limit=3)
     assert [hit["id"] for hit in first] == ["doc032", "doc033", "doc034"]
     assert first == second and all(hit["distance"] == pytest.approx(0) for hit in first)
+
+
+def test_verification_windows_preserve_checkpoint_digest_with_reordered_results(
+    tmp_path, corpus, monkeypatch
+):
+    report = index.build_index(tmp_path, "2025-26")
+    rows, profile, dataset, _ = index.prepare_rows(tmp_path, "2025-26")
+    collection = index.client(tmp_path).get_collection(
+        report["collection"], embedding_function=None
+    )
+    expected = index.verify_index(tmp_path, collection, rows, profile, dataset)
+    calls = []
+
+    class ReorderedCollection:
+        metadata = collection.metadata
+
+        def count(self):
+            return collection.count()
+
+        def get(self, **kwargs):
+            calls.append(len(kwargs["ids"]))
+            result = collection.get(**kwargs)
+            return {
+                key: list(reversed(result[key]))
+                for key in ("ids", "documents", "metadatas", "embeddings")
+            }
+
+    assert index.verify_index(tmp_path, ReorderedCollection(), rows, profile, dataset) == expected
+    assert calls == [35]  # Two durable checkpoints verified with one database read.
+    monkeypatch.setattr(index, "VERIFY_BATCH", 32)
+    calls.clear()
+    assert index.verify_index(tmp_path, ReorderedCollection(), rows, profile, dataset) == expected
+    assert calls == [32, 3]
+
+
+@pytest.mark.parametrize(
+    "mutation", ["documents", "metadatas", "embeddings", "missing", "checkpoint"]
+)
+def test_late_window_corruption_cannot_pass_verification(tmp_path, corpus, monkeypatch, mutation):
+    report = index.build_index(tmp_path, "2025-26")
+    monkeypatch.setattr(index, "VERIFY_BATCH", 32)
+    collection = index.client(tmp_path).get_collection(
+        report["collection"], embedding_function=None
+    )
+    if mutation == "missing":
+        collection.delete(ids=["doc034"])
+    elif mutation == "checkpoint":
+        index.checkpoints(tmp_path, report["dataset_id"], 32).write_text("{}")
+    else:
+        value = {
+            "documents": "tampered",
+            "metadatas": {"source_url": "https://example.org/tampered"},
+            "embeddings": [0.0, 1.0] + [0.0] * 382,
+        }[mutation]
+        collection.update(ids=["doc034"], **{mutation: [value]})
+    with pytest.raises(ValueError):
+        index.status(tmp_path, "2025-26")
