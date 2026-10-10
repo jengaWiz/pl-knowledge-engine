@@ -9,25 +9,33 @@ Source evidence season selector controls historical retrieval independently.
 
 ## Prepare the optional stores
 
-The default Docker launcher prepares the established MVP. Source evidence also
-requires the optional historical corpus, accepted structured text, separate
-vector index and evidence graph. From a configured checkout with the MVP ready:
+Prepare or upgrade the local Docker demo, including the expanded stores, with:
 
 ```bash
-uv run --locked python scripts/collect_history.py
-uv run --locked python scripts/prepare_text.py
-uv run --locked python scripts/accept_corpus.py --require-target
-uv run --locked python scripts/index_evidence.py
-uv run --locked python scripts/load_evidence_graph.py
+python3 scripts/demo.py evidence
+python3 scripts/demo.py evidence-status
 ```
 
-For the Docker app, rebuild the image after pulling the changes and run these
-scripts inside the app container so the named data/index/model volumes contain
-the optional stores. The API's data directory and Neo4j target must be the same
-ones used to prepare them. This optional preparation is not performed by the
-existing default MVP launcher. The local model must be completely cached before
-HTTP retrieval is enabled; preparation can download the public model if needed.
-No paid provider calls or Gemini keys are required.
+This builds the current API/UI image, ensures the MVP is ready, then collects the
+three pinned historical seasons, prepares statistical text, enforces the 2,500
+unique-document target, indexes the accepted text, loads its evidence graph and
+runs the 16-case retrieval smoke gate. All stages run inside app containers using
+the same persistent corpus/index/model volumes and Neo4j as the serving API.
+Existing credentials and volumes are reused. No paid provider calls or Gemini
+keys are required. First-time public model/source downloads need internet access.
+
+The default `python3 scripts/demo.py` still prepares the established MVP only.
+The expanded command can also start from empty storage. On repeat, source caches
+and index checkpoints are verified and reused; acceptance runs again. Preparation
+writes `reports/evidence/2025-26/pipeline.json`. A running or failed preparation
+keeps Source evidence unavailable while statistics remain independently checked.
+After correcting a failure, rerun the expanded command; do not delete readiness
+reports to bypass a failed gate. Preparation is serialized across processes.
+
+For a custom configured checkout with its MVP already ready, run
+`uv run --locked python scripts/prepare_evidence.py` against the same data/Neo4j
+settings as the API. It performs the same six expanded stages. The API requires
+all model/tokenizer cache files before HTTP retrieval is enabled.
 
 The [graph-constrained retrieval guide](graph-constrained-retrieval.md) documents
 supported wording, canonical routing, candidate limits and store integrity.

@@ -80,6 +80,16 @@ python3 scripts/demo.py
 
 Open **http://127.0.0.1:8010** when the launcher reports ready. Interactive API docs are at **http://127.0.0.1:8010/docs**.
 
+For the four-season Source evidence workspace, use the expanded launcher instead:
+
+```bash
+python3 scripts/demo.py evidence
+```
+
+It prepares both the MVP and the optional 2,682-document evidence stores, then
+runs retrieval acceptance. Repeat runs verify and reuse cached sources/vectors.
+[Preparation, readiness and recovery](docs/evidence-api-ui.md).
+
 The command starts from empty storage, collects pinned sources, validates the corpus, loads the graph and vector index, and runs the numerical acceptance gate. It creates private database credentials automatically and persists data across restarts. Gemini and YouTube API keys are disabled in this deployment.
 
 Allow several minutes for the first run, at least 4 GB of Docker memory and several GB of available disk. The local embedding-model archive is approximately 80 MB; later runs reuse verified downloads and the model cache.
@@ -130,7 +140,7 @@ Verified against pinned **2025–26** sources. [Acceptance evidence and reproduc
 
 | Check | Result |
 | --- | --- |
-| Python suite | **526 tests passed**; CI covers Python 3.11 and 3.12. |
+| Python suite | **535 tests passed**; CI covers Python 3.11 and 3.12. |
 | Independent numerical references | **42/42 passed**, plus five insufficient-evidence cases. |
 | Real-store/API acceptance | **Seven checks passed**, including all 42 live numerical references. |
 | Desktop/mobile browser flows | **8/8 passed** against the Docker-served production dashboard. |
@@ -159,7 +169,7 @@ Broader seasons and player coverage, public hosting with authentication, product
 
 ## Development
 
-An [optional historical match collector](docs/historical-match-corpus.md) prepares **1,140 additional match documents** from three complete Premier League seasons (2022–23 through 2024–25). [Structured evidence acceptance](docs/structured-evidence-acceptance.md) combines them with the 2025–26 text into **2,682 verified structured/text documents** across four seasons, meeting the preparation target. A [separate local evidence index](docs/local-evidence-index.md) embeds all 2,682 documents with the existing 384-dimensional ONNX model. A [separate evidence graph](docs/local-evidence-graph.md) now connects those documents and their CSV sources to 2,815 season-scoped entities, with exact fixture reads and bounded player/opponent and association-path traversal. A [graph-constrained retriever](docs/graph-constrained-retrieval.md) now resolves supported natural-language fixture/player requests and ranks only canonical graph candidates, passing 16/16 local smoke cases. The [Source evidence mode and API](docs/evidence-api-ui.md) now expose this pipeline with explicit seasons, readiness checks, clarification and source cards. Expanded stores require optional preparation; Gemini verification and prediction evaluation remain pending, and media collection is optional.
+An [optional historical match collector](docs/historical-match-corpus.md) prepares **1,140 additional match documents** from three complete Premier League seasons (2022–23 through 2024–25). [Structured evidence acceptance](docs/structured-evidence-acceptance.md) combines them with the 2025–26 text into **2,682 verified structured/text documents** across four seasons, meeting the preparation target. A [separate local evidence index](docs/local-evidence-index.md) embeds all 2,682 documents with the existing 384-dimensional ONNX model. A [separate evidence graph](docs/local-evidence-graph.md) now connects those documents and their CSV sources to 2,815 season-scoped entities, with exact fixture reads and bounded player/opponent and association-path traversal. A [graph-constrained retriever](docs/graph-constrained-retrieval.md) now resolves supported natural-language fixture/player requests and ranks only canonical graph candidates, passing 16/16 local smoke cases. The [Source evidence mode and API](docs/evidence-api-ui.md) now expose this pipeline with explicit seasons, readiness checks, clarification and source cards. The optional `python3 scripts/demo.py evidence` command prepares expanded stores in persistent Docker volumes; Gemini verification and prediction evaluation remain pending, and media collection is optional.
 
 An [optional public-media collector](docs/public-media-collection.md) downloads reviewed, licensed image/audio/video samples with checksum, attribution and decoding checks. These are background assets; bounded extraction prepares 106 verified media documents. [Statistical text preparation](docs/statistical-text-documents.md) adds 1,542 source-backed match and appearance documents. [Combined corpus acceptance](docs/multimodal-acceptance.md) verifies **1,648 prepared documents** across all four modalities, from 120 original source files. This optional four-modality corpus remains below its own 2,500-document target; it is separate from the structured preparation target above and is not yet embedded or exposed through the demo index.
 
