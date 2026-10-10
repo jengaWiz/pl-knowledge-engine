@@ -32,18 +32,24 @@ The [fresh-data MVP milestone](https://github.com/jengaWiz/pl-knowledge-engine/m
 
 ## Demo
 
-![Actual Docker demo comparing Aston Villa and Liverpool with verified season statistics](docs/images/demo-analysis.png)
+![Club-first relationship explorer showing the 20 Premier League clubs and season](docs/images/demo-graph.png)
 
 - **Evidence analyst:** compare points, goals and goal difference; inspect last-five form, home/away splits and goal/assist rankings, including per-90 rates with a minutes threshold.
-- **Connected graph:** explore season, club, gameweek, fixture and player relationships, with player search and match views.
+- **Focused graph explorer:** start with 20 clubs, drill into up to 12 available players and six recent fixtures, or search a player. Stable, labeled layouts replace the full-graph cluster; inspect real relationship directions and follow connections. Mobile starts in an accessible list view. Player/fixture views show up to eight recent appearance records.
 - **Fixture browser:** filter the full league schedule and navigate results using mouse or keyboard.
 - **Source evidence:** select a historical season, resolve fixture or player/opponent questions, and inspect verified records with original row/revision references. [Optional preparation and API guide](docs/evidence-api-ui.md).
 - **Evidence retrieval API:** search local summaries by club and inspect source URLs, record IDs and provenance.
 
 <details>
-<summary>See the match graph and mobile experience</summary>
+<summary>See club exploration, match detail and the mobile experience</summary>
 
-![Actual Liverpool–Bournemouth match graph](docs/images/demo-match.png)
+![Liverpool squad and recent fixtures in a bounded relationship map](docs/images/demo-club.png)
+
+![Actual Liverpool–Bournemouth match graph with readable appearance records](docs/images/demo-match.png)
+
+<img src="docs/images/demo-graph-mobile.png" width="390" alt="Mobile graph explorer with selectable club records" />
+
+![Actual Docker demo comparing Aston Villa and Liverpool with verified season statistics](docs/images/demo-analysis.png)
 
 <img src="docs/images/demo-mobile.png" width="390" alt="Mobile analyst showing the verified Aston Villa and Liverpool comparison" />
 
@@ -143,7 +149,7 @@ Verified against pinned **2025–26** sources. [Acceptance evidence and reproduc
 | Python suite | **542 tests passed**; CI covers Python 3.11 and 3.12. |
 | Independent numerical references | **42/42 passed**, plus five insufficient-evidence cases. |
 | Real-store/API acceptance | **Seven checks passed**, including all 42 live numerical references. |
-| Desktop/mobile browser flows | **8/8 passed** against the Docker-served production dashboard. |
+| Desktop/mobile browser flows | **20/20 passed**, covering graph exploration, keyboard navigation, fixtures, statistics and source evidence on desktop/mobile. |
 | Empty-storage Docker setup | Public collection, validation, graph/index loading and readiness passed. |
 | Backup and restart | All four volumes backed up privately; versions, counts and live answers preserved without recollection. |
 | CI | Python checks, wheel packaging, frontend build, Docker build and cold-storage readiness checks. |
