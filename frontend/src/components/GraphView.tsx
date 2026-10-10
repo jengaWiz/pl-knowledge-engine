@@ -3,7 +3,7 @@ import { fetchOverviewGraph, fetchPlayerGraph } from '../api'
 import type { GraphData, GraphNode } from '../types'
 import { project, layout, title } from './graphProjection'
 
-const COLORS: Record<string, string> = { Season: '#00ff85', Team: '#05f0ff', Player: '#91baff', Match: '#f2c178', PlayerAppearance: '#c2a4e8' }
+const COLORS: Record<string, string> = { Season: '#8e7a9c', Team: '#739a92', Player: '#7797b9', Match: '#b69d75', PlayerAppearance: '#a08dab' }
 const TYPE: Record<string, string> = { Season: 'Season', Team: 'Club', Player: 'Player', Match: 'Fixture', PlayerAppearance: 'Appearance' }
 const RELATIONS: Record<string, string> = { IN_SEASON: 'in season', PLAYS_FOR: 'plays for', HOME_TEAM: 'home club', AWAY_TEAM: 'away club', HAD_APPEARANCE: 'recorded appearance', IN_MATCH: 'in fixture', FOR_TEAM: 'for club' }
 interface Props { overrideGraph: GraphData | null; onClearOverride: () => void }
@@ -102,7 +102,7 @@ export default function GraphView({ overrideGraph, onClearOverride }: Props) {
                 onClick={() => inspect(node)} onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); inspect(node) } }}>
                 <title>{title(node)}{node.date ? ` · ${node.date}` : ''}</title>
                 <rect x="-137" y="-21" width="274" height="42" rx="9" />
-                {node.type === 'Team' ? <><circle cx="-119" r="11" fill="#37003c" stroke="#ac85cb" /><text className="club-monogram" x="-119" y="3">{node.name.split(' ').map(word => word[0]).join('').slice(0, 3)}</text></> : <circle cx="-119" r="4" fill={COLORS[node.type] || '#aab6c8'} />}
+                {node.type === 'Team' ? <><circle cx="-119" r="11" fill="#f1edf5" stroke="#d8cfe1" /><text className="club-monogram" x="-119" y="3">{node.name.split(' ').map(word => word[0]).join('').slice(0, 3)}</text></> : <circle cx="-119" r="4" fill={COLORS[node.type] || '#aab6c8'} />}
                 <text x={node.type === 'Team' ? -99 : -106} y="-1" className="map-name">{title(node).length > 31 ? `${title(node).slice(0, 30)}…` : title(node)}</text>
                 <text x={node.type === 'Team' ? -99 : -106} y="13" className="map-kind">{TYPE[node.type]}{node.date ? ` · ${node.date}` : ''}</text>
               </g>
@@ -122,7 +122,7 @@ export default function GraphView({ overrideGraph, onClearOverride }: Props) {
             return <button key={i} onClick={() => setSelected(other)}><small>{outgoing ? '→' : '←'} {RELATIONS[edge.type] || edge.type.toLowerCase().replace(/_/g, ' ')}</small><strong>{title(other)}</strong></button>
           })}</div><button className="clear-selection" onClick={() => setSelected(null)}>Clear selection</button></> : <>
           <div className="inspector-art" aria-hidden="true"><span>01</span><svg viewBox="0 0 220 110"><path d="M30 55H90M90 55C125 55 125 20 185 20M90 55C125 55 125 90 185 90" /><circle cx="30" cy="55" r="9" /><circle cx="90" cy="55" r="6" /><circle cx="185" cy="20" r="9" /><circle cx="185" cy="90" r="9" /></svg></div>
-          <h2>Follow the<br />football.</h2><p>Choose a club to reveal its players and recent fixtures. Select any record to read its details and follow its connections.</p>
+          <h2>Explore a connection</h2><p>Choose a club to reveal its players and recent fixtures. Select any record to read its details and follow its connections.</p>
           {!focused && <h3>Try a focused route</h3>}{!focused && ['Liverpool', 'Aston Villa'].map(name => <button className="club-shortcut" key={name} disabled={!clubs.some(n => n.name === name)} onClick={() => { setClubId(clubs.find(n => n.name === name)!.id); setFocused(false) }}>{name}<span>Explore club ↗</span></button>)}
         </>}
         <p className="inspector-scope">{focused ? 'Showing up to 8 recent appearance records and their connected entities. Fixture views omit squad membership links to keep appearance paths clear.' : clubId ? 'Up to 12 available players, ordered by goals, and 6 recent fixtures. Player coverage is limited to Aston Villa and Liverpool.' : 'The map starts with clubs and the season. Fixtures and players appear when you drill in.'} All links shown come from the stored graph. This explorer covers the 2025–26 MVP.</p>
