@@ -135,10 +135,10 @@ function MatchCard({ match: m, isSelected, onClick }: {
         width: '100%', textAlign: 'left', border: 0, color: 'inherit',
         padding: '12px 14px 12px 11px',
         cursor: 'pointer',
-        borderBottom: '1px solid rgba(33,38,45,0.55)',
+        borderBottom: '1px solid var(--bg-3)',
         borderLeft: `3px solid ${isSelected ? '#670E36' : hovered ? 'rgba(103,14,54,0.45)' : 'transparent'}`,
         background: isSelected
-          ? 'linear-gradient(90deg, rgba(103,14,54,0.16) 0%, rgba(103,14,54,0.04) 100%)'
+          ? '#f0ebf4'
           : hovered ? 'var(--bg-2)' : 'transparent',
         transition: 'background 0.15s, border-color 0.15s',
         display: 'flex', alignItems: 'center', gap: 12,
@@ -148,7 +148,7 @@ function MatchCard({ match: m, isSelected, onClick }: {
       <div style={{ flex: 1, minWidth: 0 }}>
         {/* Date */}
         <div style={{
-          fontSize: 10, color: active ? 'rgba(200,120,150,0.75)' : 'var(--t-3)',
+          fontSize: 10, color: active ? 'var(--accent)' : 'var(--t-3)',
           fontWeight: 600, letterSpacing: '0.04em', marginBottom: 7,
           transition: 'color 0.15s',
         }}>
@@ -169,7 +169,7 @@ function MatchCard({ match: m, isSelected, onClick }: {
             <div style={{
               fontSize: 17, fontWeight: 900, color: 'var(--green)', lineHeight: 1,
               letterSpacing: '-0.02em',
-              textShadow: '0 0 12px rgba(63,185,80,0.5)',
+              textShadow: 'none',
             }}>
               {m.home_score}–{m.away_score}
             </div>
