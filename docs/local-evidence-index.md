@@ -84,3 +84,9 @@ requested home fixture. Use canonical exact filters when the entity is known;
 the new graph-constrained router addresses those identities for supported
 requests, passing the same eight questions at rank one. Broader natural-language
 retrieval evaluation remains necessary.
+
+For eligible candidate sets of at most 50 documents, retrieval computes exact
+cosine distances from verified vectors stored in Chroma, with document-ID tie
+breaking. This prevents filtered approximate search from omitting eligible small
+sets, including bounded graph routes. Larger candidate sets retain approximate
+Chroma search; the small-set correction is not a broader recall guarantee.

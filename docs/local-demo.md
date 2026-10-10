@@ -39,6 +39,31 @@ file with the corresponding graph volume; changing the password file alone does
 not change an initialized database's password. Generated data and secrets are
 excluded from both Git and the image build context.
 
+## Expanded four-season evidence
+
+```bash
+python3 scripts/demo.py evidence
+python3 scripts/demo.py evidence-status
+```
+
+The expanded launcher builds the current image, prepares the MVP if needed, and
+runs historical collection, structured text acceptance, the separate evidence
+index/graph and retrieval smoke acceptance in the serving app's named volumes.
+Open **Evidence Chat → Source evidence** and choose a verified season. The
+[API/UI guide](evidence-api-ui.md) describes supported questions and source cards.
+The default launcher remains the smaller MVP option.
+
+Source evidence is unavailable while preparation is running or failed. The
+ignored `reports/evidence/2025-26/pipeline.json` records each stage and a redacted
+error type. Rerun the expanded launcher after fixing the problem: source caches
+and vector checkpoints are verified and reused, while the acceptance gates run
+again. Concurrent preparation is rejected without rewriting the active report.
+Expect several minutes for initial preparation and full integrity/smoke checks.
+
+The same corpus/index/model/graph volumes persist expanded evidence across app
+rebuilds and restarts. The existing paired backup includes those volumes and its
+private credential; it therefore also includes expanded evidence once prepared.
+
 ## Coverage and provenance
 
 The fixed season is **2025–26**, with primary match dates **15 August 2025 through

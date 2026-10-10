@@ -1,4 +1,4 @@
-"""Start, inspect, stop or back up the persistent local Docker MVP."""
+"""Start, prepare expanded evidence, inspect or back up the persistent local demo."""
 
 import argparse
 import json
@@ -60,19 +60,22 @@ def prepare_secret(path: Path) -> dict:
     return values
 
 
-def status() -> dict:
+def status(path="/api/readiness", timeout=15) -> dict:
     try:
-        with urlopen(URL + "/api/readiness", timeout=15) as response:
+        with urlopen(URL + path, timeout=timeout) as response:
             return json.load(response)
     except HTTPError as exc:
-        if exc.code == 503:
-            return json.load(exc)
+        if exc.code in {429, 503}:
+            return {**json.load(exc), "status": "not_ready"}
         raise
     except (URLError, TimeoutError):
         return {"status": "not_ready", "detail": "Local demo is not running"}
 
 
 def run_demo(command="up", *, recollect=False):
+    if command == "evidence-status":
+        print(json.dumps(status("/api/evidence/status", timeout=120), indent=2))
+        return
     if command == "status":
         print(json.dumps(status(), indent=2))
         return
@@ -144,6 +147,18 @@ def run_demo(command="up", *, recollect=False):
     for _ in range(6):
         report = status()
         if report["status"] == "ready":
+            if command == "evidence":
+                run(
+                    compose
+                    + ["run", "--rm", "--no-deps", "app", "python", "scripts/prepare_evidence.py"]
+                )
+                expanded = status("/api/evidence/status", timeout=120)
+                if expanded["status"] != "ready":
+                    raise RuntimeError("Evidence preparation finished but API readiness failed")
+                print(
+                    f"Source evidence ready: {expanded['index']['documents']} documents; "
+                    f"seasons: {', '.join(expanded['seasons'])}"
+                )
             print(f"Local demo ready: {URL}")
             print(
                 f"Verified corpus: {report['counts']}; "
@@ -157,7 +172,10 @@ def run_demo(command="up", *, recollect=False):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
-        "command", choices=["up", "status", "stop", "backup"], default="up", nargs="?"
+        "command",
+        choices=["up", "evidence", "status", "evidence-status", "stop", "backup"],
+        default="up",
+        nargs="?",
     )
     parser.add_argument(
         "--recollect", action="store_true", help="Revalidate caches and reload all stores"

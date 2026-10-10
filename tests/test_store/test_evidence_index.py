@@ -10,7 +10,11 @@ from src.store import evidence_index as index
 
 
 def vectors(texts):
-    return [[1.0] + [0.0] * 383 for _ in texts]
+    # Distinct directions avoid an all-identical HNSW fixture with unstable recall.
+    return [
+        [1.0, float(text.split()[-1]) / 100 if text.split()[-1].isdigit() else 0.0] + [0.0] * 382
+        for text in texts
+    ]
 
 
 @pytest.fixture
@@ -269,3 +273,14 @@ def test_status_verifies_index_without_embedding(tmp_path, corpus, monkeypatch):
     collection.update(ids=["doc000"], documents=["tampered"])
     with pytest.raises(ValueError, match="text or provenance"):
         index.status(tmp_path, "2025-26")
+
+
+def test_identical_small_candidates_are_complete_and_stably_ranked(tmp_path, corpus, monkeypatch):
+    monkeypatch.setattr(
+        index, "embedding_function", lambda: lambda texts: [[1.0] + [0.0] * 383 for _ in texts]
+    )
+    index.build_index(tmp_path, "2025-26")
+    first = index.search(tmp_path, "2025-26", "Match", evidence_season="2025-26", limit=3)
+    second = index.search(tmp_path, "2025-26", "Match", evidence_season="2025-26", limit=3)
+    assert [hit["id"] for hit in first] == ["doc032", "doc033", "doc034"]
+    assert first == second and all(hit["distance"] == pytest.approx(0) for hit in first)
