@@ -4,6 +4,7 @@ from fastapi import HTTPException
 from neo4j import GraphDatabase, Query
 from neo4j.exceptions import DriverError, Neo4jError
 
+from backend.player_search import resolve_player
 from config.settings import settings
 
 NODE_QUERY = "RETURN elementId(n) AS id, labels(n)[0] AS type, properties(n) AS props"
@@ -36,6 +37,8 @@ def node_view(row):
         "team": "team",
         "total_points": "total_points",
     }
+    if kind == "Player" and props.get("full_name"):
+        result["full_name"] = props["full_name"]
     result.update({target: props[source] for source, target in fields.items() if source in props})
     return result
 
@@ -79,19 +82,24 @@ def read_graph(kind, key=""):
                     + NODE_QUERY,
                 )
             elif kind == "player":
-                candidates = query(
+                roster = query(
                     session,
                     """MATCH (p:Player)
                     WHERE p.mvp_managed=true AND p.season=$season
-                    AND (toLower(p.web_name)=toLower($name)
-                         OR toLower(p.full_name) CONTAINS toLower($name))
-                    RETURN p.player_id AS id LIMIT 2""",
-                    name=key.strip(),
+                    RETURN p.player_id AS id,p.web_name AS name,p.full_name AS full_name""",
                 )
-                if len(candidates) > 1:
-                    raise HTTPException(409, "Player name is ambiguous; use a unique player name")
-                if not candidates:
-                    raise HTTPException(404, "Player is unavailable in the verified season")
+                result = resolve_player(key.strip(), roster)
+                if result["status"] != "matched":
+                    raise HTTPException(
+                        404 if result["status"] == "missing" else 409,
+                        {
+                            "message": "No stored player matches this name."
+                            if result["status"] == "missing"
+                            else "Choose a player from the closest roster matches.",
+                            "suggestions": result["suggestions"],
+                            "coverage": "Pinned 2025–26 Aston Villa and Liverpool roster only.",
+                        },
+                    )
                 rows = query(
                     session,
                     """MATCH (p:Player {player_id:$id})
@@ -100,7 +108,7 @@ def read_graph(kind, key=""):
                     UNWIND [p,t,s,a,m,g] AS n WITH DISTINCT n
                     WHERE n IS NOT NULL AND n.mvp_managed=true AND n.season=$season """
                     + NODE_QUERY,
-                    id=candidates[0]["id"],
+                    id=result["player"]["id"],
                 )
             else:
                 rows = query(
