@@ -76,6 +76,19 @@ def test_league_baseline_uses_prior_home_and_away_rates():
     assert result["probabilities"] == outcome_probabilities(3, 1)
 
 
+def test_rolling_strength_rates_against_hand_calculated_fixture():
+    rows = [
+        match("ab", "2023-01-01", "A", "B", (2, 1)),
+        match("ac", "2023-01-02", "A", "C", (4, 2)),
+        match("bc", "2023-01-03", "B", "C", (1, 3)),
+    ]
+    result = forecast(rows, match("target", "2023-01-04"), window=5)
+    # League GF/team = 13/6; A GF/GA = 6/3, B = 2/5, each with two matches.
+    # Ten prior matches yield attack/defense strengths A=83/78,74/78; B=71/78,80/78.
+    assert result["expected_goals"]["home"] == pytest.approx(7 / 3 * 83 / 78 * 80 / 78)
+    assert result["expected_goals"]["away"] == pytest.approx(2 * 71 / 78 * 74 / 78)
+
+
 def test_metrics_have_independent_reference_and_reject_invalid_probabilities():
     p = {"home": 0.5, "draw": 0.25, "away": 0.25}
     result = metrics([{"outcome": "home", "probabilities": p}])

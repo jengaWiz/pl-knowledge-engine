@@ -170,7 +170,7 @@ Verified against pinned **2025–26** sources. [Acceptance evidence and reproduc
 
 | Check | Result |
 | --- | --- |
-| Python suite | **585 tests passed**; CI covers Python 3.11 and 3.12. |
+| Python suite | **586 tests passed**; CI covers Python 3.11 and 3.12. |
 | Historical outcome evaluation | **380 held-out fixtures**; rolling Poisson log loss **0.9924**, Brier **0.5920**. Retrospective, date-bounded test; [protocol and limitations](docs/prediction-evaluation.md). |
 | Independent numerical references | **42/42 passed**, plus five insufficient-evidence cases. |
 | Real-store/API acceptance | **Seven checks passed**, including all 42 live numerical references. |
