@@ -27,6 +27,7 @@ export default function App() {
   const sidebar = useRef<HTMLElement>(null)
   const main = useRef<HTMLElement>(null)
   const requestId = useRef(0)
+  const wasSidebarOpen = useRef(false)
   const loadMatches = () => {
     setMatchesLoading(true); setMatchesError('')
     fetchMatches().then(setMatches)
@@ -54,22 +55,24 @@ export default function App() {
       if (sidebar.current) sidebar.current.inert = media.matches && !sidebarOpen
       if (main.current) main.current.inert = media.matches && sidebarOpen
     }
-    sync(); media.addEventListener('change', sync)
+    sync()
+    if (wasSidebarOpen.current && !sidebarOpen) menuButton.current?.focus()
+    wasSidebarOpen.current = sidebarOpen
+    media.addEventListener('change', sync)
     return () => media.removeEventListener('change', sync)
   }, [sidebarOpen])
   useEffect(() => {
     if (!sidebarOpen) return
-    const previous = document.activeElement as HTMLElement | null
     sidebar.current?.querySelector<HTMLButtonElement>('button')?.focus()
     const trap = (event: KeyboardEvent) => {
-      if (event.key !== 'Tab' || !sidebar.current) return
+      if (event.key !== 'Tab' || !sidebar.current || dialog.current?.open) return
       const elements = Array.from(sidebar.current.querySelectorAll<HTMLElement>('button:not(:disabled), input, a')).filter(el => el.getClientRects().length)
       const first = elements[0], last = elements[elements.length - 1]
       if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last?.focus() }
       if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first?.focus() }
     }
     document.addEventListener('keydown', trap)
-    return () => { document.removeEventListener('keydown', trap); previous?.focus() }
+    return () => document.removeEventListener('keydown', trap)
   }, [sidebarOpen])
   const selectView = (next: WorkspacePage) => {
     requestId.current += 1; setView(next); setSidebarOpen(false); setSelectionError(''); setSelecting(false)

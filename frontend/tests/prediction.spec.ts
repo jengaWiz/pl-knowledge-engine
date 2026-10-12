@@ -8,7 +8,6 @@ async function open(page: Page) {
   await page.goto('/')
   const menu = page.getByRole('button', { name: 'Navigation', exact: true })
   if (await menu.isVisible()) await menu.click()
-  await page.getByRole('button', { name: 'Evidence Chat', exact: true }).click()
   await page.getByRole('button', { name: 'Predictions', exact: true }).click()
 }
 test('historical probabilities, cutoff, original source and selection reset', async ({ page }) => {

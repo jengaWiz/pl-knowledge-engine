@@ -17,7 +17,7 @@ test('closest matches are selectable and resolve a canonical player identity', a
     } } })
     return route.fulfill({ json: { nodes: [{ id: 'alisson', name: 'A.Becker', full_name: 'Alisson Becker', type: 'Player' }], edges: [] } })
   })
-  await page.goto('/')
+  await page.goto('/#graph')
   await page.getByLabel('Search graph player').fill('allison')
   await page.getByRole('button', { name: 'Search', exact: true }).click()
   await expect(page.getByRole('alert')).toContainText('closest roster matches')
@@ -34,7 +34,7 @@ test('closest matches are selectable and resolve a canonical player identity', a
 test('missing coverage and service outages have different messages', async ({ page }) => {
   let status = 404
   await page.route('**/api/graph/player/**', route => route.fulfill({ status, json: { detail: 'private-error' } }))
-  await page.goto('/')
+  await page.goto('/#graph')
   await page.getByLabel('Search graph player').fill('Luis Diaz')
   await page.getByRole('button', { name: 'Search', exact: true }).click()
   await expect(page.getByRole('alert')).toContainText('No stored player matches')

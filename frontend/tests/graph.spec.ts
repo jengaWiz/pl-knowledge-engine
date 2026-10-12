@@ -19,7 +19,7 @@ test.beforeEach(async ({ page }) => {
 })
 
 test('club-first map bounds detail, supports keyboard inspection and resets', async ({ page }) => {
-  await page.goto('/')
+  await page.goto('/#graph')
   await expect(page.getByText('21 NODES · 20 EDGES')).toBeVisible()
   await page.getByLabel('Explore club').selectOption('club0')
   await expect(page.getByText('19 NODES · 18 EDGES')).toBeVisible()
@@ -49,7 +49,7 @@ test('player routes show eight recent appearances with their real links', async 
       { source: a.id, target: `m${i}`, type: 'IN_MATCH' },
     ])],
   } }))
-  await page.goto('/')
+  await page.goto('/#graph')
   await page.getByLabel('Search graph player').fill('Player 0')
   await page.getByRole('button', { name: 'Search', exact: true }).click()
   await expect(page.getByText('18 NODES · 17 EDGES')).toBeVisible()
@@ -75,7 +75,7 @@ test('fixture paths identify each player appearance without squad-link clutter',
     ]),
   ]
   await page.route('**/api/graph/match/fixture', route => route.fulfill({ json: { nodes: fixtureNodes, edges: fixtureEdges } }))
-  await page.goto('/')
+  await page.goto('/#graph')
   const menu = page.getByRole('button', { name: 'Navigation', exact: true })
   if (await menu.isVisible()) await menu.click()
   await page.getByRole('button', { name: /Liverpool versus Aston Villa/ }).click()
