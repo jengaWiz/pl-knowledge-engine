@@ -12,14 +12,8 @@ const STARTERS = [
   'Which players have the most assists across both teams?',
 ]
 
-export default function ChatView() {
-  const [mode, setMode] = useState<'statistics' | 'evidence' | 'prediction'>('statistics')
+export default function ChatView({ mode }: { mode: 'statistics' | 'evidence' | 'prediction' }) {
   return <div style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
-    <div className="analyst-modes" aria-label="Analyst mode">
-      <button aria-pressed={mode === 'statistics'} onClick={() => setMode('statistics')}>Season statistics</button>
-      <button aria-pressed={mode === 'evidence'} onClick={() => setMode('evidence')}>Source evidence</button>
-      <button aria-pressed={mode === 'prediction'} onClick={() => setMode('prediction')}>Predictions</button>
-    </div>
     <div style={{ flex: 1, minHeight: 0, overflow: 'auto' }}>
       {mode === 'statistics' ? <StatisticsChat /> : mode === 'evidence' ? <EvidenceView /> : <PredictionView />}
     </div>
@@ -79,10 +73,10 @@ function WelcomeScreen({ onSelect }: { onSelect: (s: string) => void }) {
       <div style={{ textAlign: 'left', marginBottom: 36 }}>
         <p className="workspace-eyebrow" style={{ marginBottom: 16 }}>THE ANALYST / 2025–26</p>
         <div style={{ fontSize: 36, fontWeight: 550, color: 'var(--t-1)', letterSpacing: '-0.04em', marginBottom: 9 }}>
-          Ask a football question.
+          Find the story in the numbers.
         </div>
         <div style={{ fontSize: 14, color: 'var(--t-2)', lineHeight: 1.65, maxWidth: 480 }}>
-          Compare form, explore player output, and trace every answer back to the season records.
+          Start with a suggested question about Liverpool or Aston Villa. Explore recorded form, goals and assists, with sources you can follow.
         </div>
       </div>
 
