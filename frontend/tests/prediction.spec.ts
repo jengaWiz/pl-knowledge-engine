@@ -47,4 +47,8 @@ test('unavailable sources can be rechecked and busy forecast preserves selection
   await page.getByRole('button', { name: 'Replay prediction', exact: true }).click()
   await expect(page.getByRole('alert')).toContainText('Recheck sources and retry')
   await expect(page.getByText('private-secret')).toHaveCount(0)
+  available = false
+  await page.getByRole('button', { name: 'Recheck predictions' }).click()
+  await expect(page.getByRole('alert')).toContainText('unavailable or busy')
+  await expect(page.getByRole('button', { name: 'Replay prediction', exact: true })).toBeDisabled()
 })
