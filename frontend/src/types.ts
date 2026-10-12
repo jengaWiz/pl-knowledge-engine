@@ -97,3 +97,22 @@ export interface EvidenceResult {
   }[]
   graph_candidates?: number
 }
+
+export interface PredictionFixture {
+  id: string; season: string; date: string; home_team: string; away_team: string
+}
+export interface PredictionStatus {
+  status: 'ready'; fixtures: PredictionFixture[]
+  evaluations: Record<string, { rolling: { matches: number; accuracy: number; log_loss: number; brier: number }; league: { log_loss: number; brier: number }; uncertainty: { intervals: { accuracy: { lower: number; upper: number } } } }>
+}
+export interface PredictionResult {
+  fixture: PredictionFixture
+  probabilities: { home: number; draw: number; away: number }
+  expected_goals: { home: number; away: number }
+  history_matches: number; feature_cutoff_exclusive: string
+  model_version: string; window: number; selection_season: string
+  explanation: string; evidence_scope: string; history_sha256: string
+  limitations: string[]
+  evidence: { id: string; date: string; home_team: string; away_team: string;
+    home_score: number; away_score: number; source: { url: string; row: number; revision: string } }[]
+}

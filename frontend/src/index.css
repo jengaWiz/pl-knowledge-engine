@@ -731,3 +731,35 @@ button:focus-visible, input:focus-visible, summary:focus-visible, a:focus-visibl
 .evidence-coverage { display: inline-block; background: #e1eee6; border: 1px solid #c1d7c9; color: #41634e; padding: 7px 10px; border-radius: 6px; margin-top: 10px; }
 .evidence-card { border-top: 3px solid #8aaba2; }
 @media(max-width:1100px) { .graph-inspector { border-top-color: #d9cfe3; } }
+
+/* Outcome replay uses the same quiet light palette as the explorer. */
+.analyst-modes { flex-wrap: wrap; }
+.prediction-form { display: flex; gap: 12px; align-items: end; margin: 24px 0; }
+.prediction-form label { display: flex; flex-direction: column; gap: 8px; font-size: 12px; color: var(--t-2); min-width: 0; }
+.prediction-fixture { flex: 1; }
+.prediction-form select { width: 100%; min-width: 0; padding: 10px; border: 1px solid #c5bbd0; border-radius: 8px; color: var(--t-1); background: white; font: inherit; }
+.prediction-form button { background: #746083; color: white; white-space: nowrap; }
+.prediction-results { margin-top: 24px; }
+.prediction-results h3 { font-size: 24px; letter-spacing: -.025em; margin: 12px 0 6px; }
+.prediction-cutoff { display: inline-block; background: #e3eee8; color: #426555; border-radius: 6px; padding: 8px 10px; font-size: 12px; }
+.outcome-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+.outcome-card { display: flex; flex-direction: column; gap: 12px; padding: 20px; border: 1px solid #c8d6e8; background: #eaf0f9; border-radius: 12px; min-width: 0; }
+.outcome-card span { font-size: 13px; overflow-wrap: anywhere; }
+.outcome-card strong { font-size: 32px; font-weight: 600; letter-spacing: -.04em; }
+.outcome-draw { background: #eee7f4; border-color: #d3c5e0; }
+.outcome-away { background: #e6f0eb; border-color: #c3d9cf; }
+.outcome-track { height: 5px; background: #ffffffa0; border-radius: 3px; overflow: hidden; }
+.outcome-track i { display: block; height: 100%; background: #6a7f9b; }
+.outcome-draw i { background: #8b719e; }
+.outcome-away i { background: #6b9380; }
+.prediction-goals, .prediction-explanation p, .prediction-evaluation p { font-size: 13px; line-height: 1.7; color: var(--t-2); margin-top: 12px; }
+.prediction-explanation { padding: 20px; margin: 20px 0; background: white; border: 1px solid var(--bg-3); border-radius: 10px; }
+.prediction-explanation h4, .prediction-evaluation h4 { font-size: 14px; }
+.prediction-evidence { border-top: 1px solid #d5ccdf; padding: 16px 0; font-size: 12px; line-height: 1.7; }
+.prediction-evidence summary { cursor: pointer; color: #6e5480; font-weight: 600; }
+.prediction-evidence article { display: flex; flex-direction: column; padding: 12px; margin: 8px 0; background: white; border: 1px solid var(--bg-3); border-radius: 8px; }
+.prediction-evidence code { font-size: 10px; overflow-wrap: anywhere; }
+.prediction-evidence a { color: #6e5480; }
+.prediction-evidence ul { padding-left: 20px; }
+.prediction-evaluation { padding: 20px; margin-top: 28px; border-radius: 10px; border: 1px solid #dacde5; background: #eee8f4; }
+@media(max-width:600px) { .prediction-form { flex-direction: column; align-items: stretch; } .outcome-grid { gap: 6px; } .outcome-card { padding: 12px 9px; } .outcome-card strong { font-size: 26px; } .outcome-card span { font-size: 11px; } }
