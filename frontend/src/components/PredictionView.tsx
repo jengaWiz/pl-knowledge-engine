@@ -66,7 +66,7 @@ export default function PredictionView() {
         <option value="">Choose a historical fixture</option>
         {fixtures.map(row => <option key={row.id} value={row.id}>{row.date} · {row.home_team} vs {row.away_team}</option>)}
       </select></label>
-      <button type="submit" disabled={!fixture || busy || checking}>{busy ? 'Calculating…' : 'Replay prediction'}</button>
+      <button type="submit" disabled={!catalogue || !fixture || busy || checking}>{busy ? 'Calculating…' : 'Replay prediction'}</button>
     </form>
     {busy && <p role="status">Checking sources and calculating date-bounded probabilities…</p>}
     {result && <div className="prediction-results" aria-live="polite">
