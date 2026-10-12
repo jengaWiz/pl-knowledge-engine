@@ -182,7 +182,7 @@ Verified against pinned **2025–26** sources. [Acceptance evidence and reproduc
 
 | Check | Result |
 | --- | --- |
-| Python suite | **599 tests passed**; CI covers Python 3.11 and 3.12. |
+| Python suite | **603 tests passed**; CI covers Python 3.11 and 3.12. |
 | Historical outcome evaluation | **760 fixtures across two test seasons**; rolling log loss **0.9924 / 1.0350**, Brier **0.5920 / 0.6214**. Retrospective date-bounded tests; [protocol and uncertainty](docs/prediction-workflow.md). |
 | Independent numerical references | **42/42 passed**, plus five insufficient-evidence cases. |
 | Real-store/API acceptance | **Seven checks passed**, including all 42 live numerical references. |

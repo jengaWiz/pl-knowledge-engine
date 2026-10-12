@@ -26,6 +26,7 @@ Reproduce the two-season evaluation inside the rebuilt container:
 
 ```bash
 docker exec pl-knowledge-engine-demo-app-1 .venv/bin/python scripts/evaluate_workflow.py
+docker exec pl-knowledge-engine-demo-app-1 .venv/bin/python scripts/accept_prediction.py --url http://127.0.0.1:8000
 ```
 
 For native setup, collect the historical results and MVP first, then run

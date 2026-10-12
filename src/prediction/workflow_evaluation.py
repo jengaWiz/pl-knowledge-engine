@@ -2,7 +2,7 @@
 
 from src.corpus.contracts import sha256
 from src.corpus.statistical_text import encoded
-from src.prediction.baseline import forecast, metrics
+from src.prediction.baseline import VERSION, forecast, metrics
 from src.prediction.diagnostics import calibration, intervals
 from src.prediction.evaluation import evaluate
 
@@ -43,6 +43,7 @@ def evaluate_all(rows, sources):
     return {
         "valid": True,
         "schema": "prediction-workflow-evaluation-v1",
+        "model_version": VERSION,
         "dataset_sha256": sha256(encoded(rows)),
         "selected_window": window,
         "selection_season": "2023-24",
