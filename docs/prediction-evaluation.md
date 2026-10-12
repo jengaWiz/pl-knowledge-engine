@@ -1,8 +1,8 @@
 # Historical outcome baseline
 
 This offline evaluation estimates home/draw/away probabilities from prior match
-results. It is the statistical foundation for a future prediction workflow; the
-current chat and Source evidence endpoints still abstain from predictions.
+results. It underpins the [historical prediction API and UI](prediction-workflow.md); the
+ordinary chat and Source evidence endpoints still abstain from predictions.
 No Gemini calls, API keys, graph database or embeddings are needed for evaluation.
 
 ## Reproduce
@@ -84,5 +84,6 @@ lack publication timestamps and may include later corrections, so this is not a
 reconstruction of the information available at kickoff. The model has no injury,
 lineup, odds or tactical inputs; no calibrated uncertainty, betting profitability,
 or general forecasting skill is claimed. The probabilities express model outcomes,
-not confidence intervals on model accuracy. Broader temporal evaluation and a
-cutoff-aware prediction API/evidence explanation remain separate work.
+not confidence intervals on model accuracy. The [integrated workflow](prediction-workflow.md) extends evaluation to 2025–26
+and adds descriptive calibration, approximate score intervals and date-bounded
+explanations. Live upcoming-match forecasting remains outside this scope.
