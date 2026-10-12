@@ -24,7 +24,7 @@ export default function WorkspaceHome({ matches, loading, error, onNavigate, onM
         <p className="section-kicker"><span /> A DIFFERENT VIEW OF THE GAME</p>
         <h1>Football.<br /><span>Connected.</span></h1>
         <p className="hero-description">Follow the players. Find the patterns.<br />See the records behind every result.</p>
-        <button className="primary-action" onClick={() => onNavigate('graph')}>Explore the league <span aria-hidden="true">↗</span></button>
+        <button className="hero-action" onClick={() => onNavigate('graph')}>Explore the league <span aria-hidden="true">↗</span></button>
         <div className="hero-footnote">Premier League research workspace <span>2025–26</span></div>
       </div>
       <div className="spotlight" aria-label="Match spotlight">
