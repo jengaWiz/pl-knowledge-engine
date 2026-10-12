@@ -1,6 +1,6 @@
 # Historical prediction workflow
 
-Open **Evidence Chat → Predictions** in the local app. Choose 2024–25 or 2025–26,
+Open **Predictions** from the workspace navigation in the local app. Choose 2024–25 or 2025–26,
 select a recorded fixture and replay its home/draw/away forecast. The 760-fixture
 catalogue covers all 20 clubs in each season. This is a retrospective statistical
 workflow, not a live upcoming-fixture service or Gemini-generated forecast.

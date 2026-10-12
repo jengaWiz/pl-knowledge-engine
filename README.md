@@ -43,12 +43,17 @@ Explore the season through a focused relationship map, searchable player records
 
 Labels, keyboard focus and selection borders keep navigation clear without relying on color alone.
 
-![Club-first relationship explorer showing the 20 Premier League clubs and season](docs/images/demo-graph.png)
+![Discovery workspace with a real match spotlight and direct routes to each research tool](docs/images/discover.png)
+
+Start in **Discover**, browse the match spotlight, or jump directly to a tool. **⌘/Ctrl K** opens the searchable quick switch. Each workspace has a shareable URL; browser back/forward works across tools.
+
+<img src="docs/images/discover-mobile.png" width="390" alt="Mobile discovery workspace and match spotlight" />
 
 - **Evidence analyst:** compare points, goals and goal difference; inspect last-five form, home/away splits and goal/assist rankings, including per-90 rates with a minutes threshold.
 - **Focused graph explorer:** start with 20 clubs, drill into up to 12 available players and six recent fixtures, or search a player. Stable, labeled layouts replace the full-graph cluster; inspect real relationship directions and follow connections. Mobile starts in an accessible list view. Player/fixture views show up to eight recent appearance records.
 - **Player discovery:** search accent-free or full names (`ekitike`, `Alisson`), select closest matches for typos (`allison`), and distinguish missing roster coverage from service errors. [Search behavior and coverage](docs/player-search.md).
 - **Historical predictions:** replay 760 recorded fixtures across 2024–25 and 2025–26, inspect outcome probabilities and strictly earlier source records, and review two-season evaluation limits. [Prediction workflow](docs/prediction-workflow.md).
+- **Guided workspace:** interactive match spotlight, direct tool navigation, keyboard quick switch, mobile focus management and reduced-motion support.
 - **Fixture browser:** filter the full league schedule and navigate results using mouse or keyboard.
 - **Source evidence:** select a historical season, resolve fixture or player/opponent questions, and inspect verified records with original row/revision references. [Optional preparation and API guide](docs/evidence-api-ui.md).
 - **Evidence retrieval API:** search local summaries by club and inspect source URLs, record IDs and provenance.
@@ -186,7 +191,7 @@ Verified against pinned **2025–26** sources. [Acceptance evidence and reproduc
 | Historical outcome evaluation | **760 fixtures across two test seasons**; rolling log loss **0.9924 / 1.0350**, Brier **0.5920 / 0.6214**. Retrospective date-bounded tests; [protocol and uncertainty](docs/prediction-workflow.md). |
 | Independent numerical references | **42/42 passed**, plus five insufficient-evidence cases. |
 | Real-store/API acceptance | **Seven checks passed**, including all 42 live numerical references. |
-| Desktop/mobile browser flows | **28/28 passed**, covering graph exploration, keyboard navigation, fixtures, statistics, source evidence and predictions on desktop/mobile. |
+| Desktop/mobile browser flows | **34/34 passed**, covering discovery, match spotlight, quick switch, history navigation, graph exploration, fixtures, statistics, source evidence and predictions on desktop/mobile. |
 | Empty-storage Docker setup | Public collection, validation, graph/index loading and readiness passed. |
 | Backup and restart | All four volumes backed up privately; versions, counts and live answers preserved without recollection. |
 | CI | Python checks, wheel packaging, frontend build, Docker build and cold-storage readiness checks. |

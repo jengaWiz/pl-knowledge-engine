@@ -49,7 +49,7 @@ python3 scripts/demo.py evidence-status
 The expanded launcher builds the current image, prepares the MVP if needed, and
 runs historical collection, structured text acceptance, the separate evidence
 index/graph and retrieval smoke acceptance in the serving app's named volumes.
-Open **Evidence Chat → Source evidence** and choose a verified season. The
+Open **Source evidence** from the workspace navigation and choose a verified season. The
 [API/UI guide](evidence-api-ui.md) describes supported questions and source cards.
 The default launcher remains the smaller MVP option.
 
