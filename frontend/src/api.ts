@@ -58,3 +58,10 @@ export async function retrieveEvidence(query: string, evidenceSeason: string, si
   }, { signal, timeout: 120000 })
   return data
 }
+
+export async function fetchPredictionStatus(signal?: AbortSignal): Promise<import('./types').PredictionStatus> {
+  return (await api.get('/prediction/status', { signal, timeout: 120000 })).data
+}
+export async function predictFixture(matchId: string, signal?: AbortSignal): Promise<import('./types').PredictionResult> {
+  return (await api.post('/analyst/prediction', { match_id: matchId }, { signal, timeout: 120000 })).data
+}

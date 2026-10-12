@@ -3,6 +3,7 @@ import ReactMarkdown from 'react-markdown'
 import { sendChat } from '../api'
 import type { ChatMessage } from '../types'
 import EvidenceView from './EvidenceView'
+import PredictionView from './PredictionView'
 
 const STARTERS = [
   "Who are Liverpool's top scorers this season?",
@@ -12,14 +13,15 @@ const STARTERS = [
 ]
 
 export default function ChatView() {
-  const [mode, setMode] = useState<'statistics' | 'evidence'>('statistics')
+  const [mode, setMode] = useState<'statistics' | 'evidence' | 'prediction'>('statistics')
   return <div style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
     <div className="analyst-modes" aria-label="Analyst mode">
       <button aria-pressed={mode === 'statistics'} onClick={() => setMode('statistics')}>Season statistics</button>
       <button aria-pressed={mode === 'evidence'} onClick={() => setMode('evidence')}>Source evidence</button>
+      <button aria-pressed={mode === 'prediction'} onClick={() => setMode('prediction')}>Predictions</button>
     </div>
     <div style={{ flex: 1, minHeight: 0, overflow: 'auto' }}>
-      {mode === 'statistics' ? <StatisticsChat /> : <EvidenceView />}
+      {mode === 'statistics' ? <StatisticsChat /> : mode === 'evidence' ? <EvidenceView /> : <PredictionView />}
     </div>
   </div>
 }

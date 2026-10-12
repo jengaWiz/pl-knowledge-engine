@@ -26,7 +26,7 @@
 
 The engine collects historical Premier League data from public sources, verifies its provenance and coverage, then makes it explorable through a React dashboard. Neo4j connects clubs, fixtures and player appearances; Chroma indexes source-linked summaries using a local CPU embedding model.
 
-The evidence analyst calculates supported statistics from verified records. Each answer includes its season, sample size, metric definitions and source references. Unsupported predictions, causal explanations and unavailable commentary receive an explicit insufficient-evidence response.
+The evidence analyst calculates supported statistics from verified records. Each answer includes its season, sample size, metric definitions and source references. The statistics chat abstains from prediction, causal and unavailable-commentary requests. A separate historical prediction workspace estimates fixture outcomes with evaluated statistical baselines and explicit date/source limits.
 
 The [fresh-data MVP milestone](https://github.com/jengaWiz/pl-knowledge-engine/milestone/1) is complete: **all 10 implementation tickets are closed**.
 
@@ -48,6 +48,7 @@ Labels, keyboard focus and selection borders keep navigation clear without relyi
 - **Evidence analyst:** compare points, goals and goal difference; inspect last-five form, home/away splits and goal/assist rankings, including per-90 rates with a minutes threshold.
 - **Focused graph explorer:** start with 20 clubs, drill into up to 12 available players and six recent fixtures, or search a player. Stable, labeled layouts replace the full-graph cluster; inspect real relationship directions and follow connections. Mobile starts in an accessible list view. Player/fixture views show up to eight recent appearance records.
 - **Player discovery:** search accent-free or full names (`ekitike`, `Alisson`), select closest matches for typos (`allison`), and distinguish missing roster coverage from service errors. [Search behavior and coverage](docs/player-search.md).
+- **Historical predictions:** replay 760 recorded fixtures across 2024–25 and 2025–26, inspect outcome probabilities and strictly earlier source records, and review two-season evaluation limits. [Prediction workflow](docs/prediction-workflow.md).
 - **Fixture browser:** filter the full league schedule and navigate results using mouse or keyboard.
 - **Source evidence:** select a historical season, resolve fixture or player/opponent questions, and inspect verified records with original row/revision references. [Optional preparation and API guide](docs/evidence-api-ui.md).
 - **Evidence retrieval API:** search local summaries by club and inspect source URLs, record IDs and provenance.
@@ -90,6 +91,17 @@ The [Source evidence guide](docs/evidence-api-ui.md) explains the optional store
 
 </details>
 
+<details>
+<summary>See the historical prediction workspace</summary>
+
+![Historical outcome probabilities with earlier-result evidence](docs/images/prediction.png)
+
+<img src="docs/images/prediction-mobile.png" width="390" alt="Mobile historical prediction workspace" />
+
+Forecasts use earlier result dates, not guaranteed publication-at-kickoff information. [Evaluation, API and limitations](docs/prediction-workflow.md).
+
+</details>
+
 Try these questions:
 
 > Compare Aston Villa and Liverpool's season statistics.
@@ -110,7 +122,7 @@ python3 scripts/demo.py
 
 Open **http://127.0.0.1:8010** when the launcher reports ready. Interactive API docs are at **http://127.0.0.1:8010/docs**.
 
-For the four-season Source evidence workspace, use the expanded launcher instead:
+For historical predictions and the four-season Source evidence workspace, use the expanded launcher instead:
 
 ```bash
 python3 scripts/demo.py evidence
@@ -170,11 +182,11 @@ Verified against pinned **2025–26** sources. [Acceptance evidence and reproduc
 
 | Check | Result |
 | --- | --- |
-| Python suite | **586 tests passed**; CI covers Python 3.11 and 3.12. |
-| Historical outcome evaluation | **380 held-out fixtures**; rolling Poisson log loss **0.9924**, Brier **0.5920**. Retrospective, date-bounded test; [protocol and limitations](docs/prediction-evaluation.md). |
+| Python suite | **603 tests passed**; CI covers Python 3.11 and 3.12. |
+| Historical outcome evaluation | **760 fixtures across two test seasons**; rolling log loss **0.9924 / 1.0350**, Brier **0.5920 / 0.6214**. Retrospective date-bounded tests; [protocol and uncertainty](docs/prediction-workflow.md). |
 | Independent numerical references | **42/42 passed**, plus five insufficient-evidence cases. |
 | Real-store/API acceptance | **Seven checks passed**, including all 42 live numerical references. |
-| Desktop/mobile browser flows | **24/24 passed**, covering graph exploration, keyboard navigation, fixtures, statistics and source evidence on desktop/mobile. |
+| Desktop/mobile browser flows | **28/28 passed**, covering graph exploration, keyboard navigation, fixtures, statistics, source evidence and predictions on desktop/mobile. |
 | Empty-storage Docker setup | Public collection, validation, graph/index loading and readiness passed. |
 | Backup and restart | All four volumes backed up privately; versions, counts and live answers preserved without recollection. |
 | CI | Python checks, wheel packaging, frontend build, Docker build and cold-storage readiness checks. |
@@ -200,7 +212,7 @@ Broader seasons and player coverage, public hosting with authentication, product
 
 ## Development
 
-An [optional historical match collector](docs/historical-match-corpus.md) prepares **1,140 additional match documents** from three complete Premier League seasons (2022–23 through 2024–25). [Structured evidence acceptance](docs/structured-evidence-acceptance.md) combines them with the 2025–26 text into **2,682 verified structured/text documents** across four seasons, meeting the preparation target. A [separate local evidence index](docs/local-evidence-index.md) embeds all 2,682 documents with the existing 384-dimensional ONNX model. A [separate evidence graph](docs/local-evidence-graph.md) now connects those documents and their CSV sources to 2,815 season-scoped entities, with exact fixture reads and bounded player/opponent and association-path traversal. A [graph-constrained retriever](docs/graph-constrained-retrieval.md) now resolves supported natural-language fixture/player requests and ranks only canonical graph candidates, passing 16/16 local smoke cases. The [Source evidence mode and API](docs/evidence-api-ui.md) now expose this pipeline with explicit seasons, readiness checks, clarification and source cards. The optional `python3 scripts/demo.py evidence` command prepares expanded stores in persistent Docker volumes; Gemini verification and the live prediction workflow remain pending, and media collection is optional. An [offline outcome baseline](docs/prediction-evaluation.md) now evaluates home/draw/away probabilities on a separate held-out historical season, with validation-only window selection and earlier-date-only features.
+An [optional historical match collector](docs/historical-match-corpus.md) prepares **1,140 additional match documents** from three complete Premier League seasons (2022–23 through 2024–25). [Structured evidence acceptance](docs/structured-evidence-acceptance.md) combines them with the 2025–26 text into **2,682 verified structured/text documents** across four seasons, meeting the preparation target. A [separate local evidence index](docs/local-evidence-index.md) embeds all 2,682 documents with the existing 384-dimensional ONNX model. A [separate evidence graph](docs/local-evidence-graph.md) now connects those documents and their CSV sources to 2,815 season-scoped entities, with exact fixture reads and bounded player/opponent and association-path traversal. A [graph-constrained retriever](docs/graph-constrained-retrieval.md) now resolves supported natural-language fixture/player requests and ranks only canonical graph candidates, passing 16/16 local smoke cases. The [Source evidence mode and API](docs/evidence-api-ui.md) now expose this pipeline with explicit seasons, readiness checks, clarification and source cards. The optional `python3 scripts/demo.py evidence` command prepares expanded stores in persistent Docker volumes; The [historical prediction workflow](docs/prediction-workflow.md) now adds a dedicated API and React workspace, with two-season evaluation, calibration diagnostics, approximate score intervals and strictly earlier result explanations. Gemini verification and live upcoming-fixture forecasts remain outside this local workflow; media collection is optional.
 
 An [optional public-media collector](docs/public-media-collection.md) downloads reviewed, licensed image/audio/video samples with checksum, attribution and decoding checks. These are background assets; bounded extraction prepares 106 verified media documents. [Statistical text preparation](docs/statistical-text-documents.md) adds 1,542 source-backed match and appearance documents. [Combined corpus acceptance](docs/multimodal-acceptance.md) verifies **1,648 prepared documents** across all four modalities, from 120 original source files. This optional four-modality corpus remains below its own 2,500-document target; it is separate from the structured preparation target above and is not yet embedded or exposed through the demo index.
 
