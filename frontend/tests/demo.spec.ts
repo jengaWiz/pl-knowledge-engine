@@ -7,7 +7,7 @@ async function navigate(page: Page, name: string) {
 }
 
 test('populated graph, player search and fixture navigation', async ({ page }) => {
-  await page.goto('/')
+  await page.goto('/#graph')
   await expect(page.getByText(/NODES.*EDGES/)).toBeVisible()
   await page.getByLabel('Search graph player').fill('Salah')
   const playerResponse = page.waitForResponse(r => r.url().includes('/api/graph/player/'))
@@ -32,8 +32,8 @@ test('populated graph, player search and fixture navigation', async ({ page }) =
 })
 
 test('deduction and source opening', async ({ page }) => {
-  await page.goto('/')
-  await navigate(page, 'Evidence Chat')
+  await page.goto('/#graph')
+  await navigate(page, 'Season statistics')
   await page.getByRole('button', { name: "Who are Liverpool's top scorers this season?", exact: true }).click()
   await expect(page.getByText('Hugo Ekitiké:', { exact: false })).toBeVisible()
   await expect(page.getByText('11 goals', { exact: false })).toBeVisible()
@@ -58,7 +58,7 @@ test('missing fixtures can be retried', async ({ page }) => {
   let fail = true
   await page.route('**/api/matches', route => fail
     ? route.fulfill({ status: 503, json: { detail: 'Dataset unavailable' } }) : route.continue())
-  await page.goto('/')
+  await page.goto('/#graph')
   const menu = page.getByRole('button', { name: 'Navigation', exact: true })
   if (await menu.isVisible()) await menu.click()
   await expect(page.getByRole('alert')).toContainText('Fixtures are unavailable')
@@ -71,8 +71,8 @@ test('missing fixtures can be retried', async ({ page }) => {
 
 test('failed chat preserves a retryable input', async ({ page }) => {
   await page.route('**/api/chat', route => route.fulfill({ status: 503, json: { detail: 'Unavailable' } }))
-  await page.goto('/')
-  await navigate(page, 'Evidence Chat')
+  await page.goto('/#graph')
+  await navigate(page, 'Season statistics')
   await page.getByLabel('Football statistics question').fill('Liverpool points')
   await page.getByRole('button', { name: 'Send', exact: true }).click()
   await expect(page.getByText('The local evidence service is unavailable', { exact: false })).toBeVisible()

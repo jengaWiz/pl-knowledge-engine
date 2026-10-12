@@ -14,7 +14,6 @@ async function openEvidence(page: Page) {
   await page.goto('/')
   const menu = page.getByRole('button', { name: 'Navigation', exact: true })
   if (await menu.isVisible()) await menu.click()
-  await page.getByRole('button', { name: 'Evidence Chat', exact: true }).click()
   await page.getByRole('button', { name: 'Source evidence', exact: true }).click()
 }
 
@@ -65,6 +64,8 @@ test('optional evidence not ready can be rechecked without hiding statistics', a
   available = true
   await page.getByRole('button', { name: 'Recheck evidence', exact: true }).click()
   await expect(page.getByLabel('Evidence question')).toBeEnabled()
+  const menu = page.getByRole('button', { name: 'Navigation', exact: true })
+  if (await menu.isVisible()) await menu.click()
   await page.getByRole('button', { name: 'Season statistics', exact: true }).click()
   await expect(page.getByRole('button', { name: "Who are Liverpool's top scorers this season?", exact: true })).toBeVisible()
 })
