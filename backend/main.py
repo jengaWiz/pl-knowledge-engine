@@ -9,6 +9,7 @@ Endpoints:
     GET  /api/matches
     POST /api/chat
 """
+
 from __future__ import annotations
 
 import sys
@@ -26,8 +27,13 @@ from src.utils.logger import get_logger
 
 logger = get_logger(__name__)
 
-ALLOWED_STATS = {"goals_scored": "goals", "assists": "assists", "minutes": "minutes",
-                 "goals_per90": "goals_per90", "assists_per90": "assists_per90"}
+ALLOWED_STATS = {
+    "goals_scored": "goals",
+    "assists": "assists",
+    "minutes": "minutes",
+    "goals_per90": "goals_per90",
+    "assists_per90": "assists_per90",
+}
 
 
 app = FastAPI(title="PL Knowledge Engine", version="1.0.0")
@@ -44,27 +50,32 @@ app.add_middleware(
 # Helpers
 # ---------------------------------------------------------------------------
 
+
 @app.get("/api/graph/overview")
 def graph_overview():
     from backend.graph import read_graph
+
     return read_graph("overview")
 
 
 @app.get("/api/graph/player/{web_name}")
 def graph_player(web_name: str):
     from backend.graph import read_graph
-    return read_graph("player",web_name)
+
+    return read_graph("player", web_name)
 
 
 @app.get("/api/graph/match/{match_id}")
 def graph_match(match_id: str):
     from backend.graph import read_graph
-    return read_graph("match",match_id)
+
+    return read_graph("match", match_id)
 
 
 # ---------------------------------------------------------------------------
 # Stats and matches endpoints
 # ---------------------------------------------------------------------------
+
 
 @app.get("/api/stats/top-players")
 def top_players(
@@ -75,21 +86,38 @@ def top_players(
     """Rank verified appearance metrics; transferred players use only requested clubs."""
     from src.analysis.deductions import AnalysisInputError, analyze
     from src.clean.corpus_quality import load_verified_corpus
+
     if stat not in ALLOWED_STATS:
         raise HTTPException(422, f"Unavailable metric. Supported: {sorted(ALLOWED_STATS)}")
     try:
-        result = analyze(settings.data_dir, settings.season, "player_rankings",
-                         teams=[team] if team else None, metric=ALLOWED_STATS[stat], limit=limit,
-                         min_minutes=450 if stat.endswith("per90") else 0)
-        players = {row["id"]: row for row in
-                   load_verified_corpus(settings.data_dir, settings.season)["players"]}
-        return [{"web_name": players[row["player_id"]]["web_name"],
-                 "position": players[row["player_id"]]["position"], "value": row["value"],
-                 "team": ", ".join(row["teams"]), "season": settings.season,
-                 "metric_definition": result["definition"], "minutes": row["minutes"],
-                 "appearances": row["appearances"], "player_id": row["player_id"],
-                 "minimum_minutes": result["minimum_minutes"]}
-                for row in result["rows"]]
+        result = analyze(
+            settings.data_dir,
+            settings.season,
+            "player_rankings",
+            teams=[team] if team else None,
+            metric=ALLOWED_STATS[stat],
+            limit=limit,
+            min_minutes=450 if stat.endswith("per90") else 0,
+        )
+        players = {
+            row["id"]: row
+            for row in load_verified_corpus(settings.data_dir, settings.season)["players"]
+        }
+        return [
+            {
+                "web_name": players[row["player_id"]]["web_name"],
+                "position": players[row["player_id"]]["position"],
+                "value": row["value"],
+                "team": ", ".join(row["teams"]),
+                "season": settings.season,
+                "metric_definition": result["definition"],
+                "minutes": row["minutes"],
+                "appearances": row["appearances"],
+                "player_id": row["player_id"],
+                "minimum_minutes": result["minimum_minutes"],
+            }
+            for row in result["rows"]
+        ]
     except AnalysisInputError as exc:
         raise HTTPException(422, str(exc)) from exc
     except (OSError, ValueError, KeyError) as exc:
@@ -99,12 +127,14 @@ def top_players(
 @app.get("/api/matches")
 def get_matches() -> list[dict[str, Any]]:
     from backend.graph import fixtures
+
     return fixtures()
 
 
 # ---------------------------------------------------------------------------
 # Verified local analysis endpoints
 # ---------------------------------------------------------------------------
+
 
 class ChatMessage(BaseModel):
     role: Literal["user", "assistant"]
@@ -114,6 +144,7 @@ class ChatMessage(BaseModel):
 class ChatRequest(BaseModel):
     message: str = Field(min_length=1, max_length=4096)
     history: list[ChatMessage] = Field(default_factory=list, max_length=8)
+    season: Literal["2022-23", "2023-24", "2024-25", "2025-26"] = "2025-26"
 
 
 class AnalysisRequest(BaseModel):
@@ -127,6 +158,7 @@ class AnalysisRequest(BaseModel):
 @app.post("/api/analysis")
 def analysis(req: AnalysisRequest) -> dict[str, Any]:
     from src.analysis.deductions import AnalysisInputError, analyze
+
     try:
         return analyze(settings.data_dir, settings.season, **req.model_dump())
     except AnalysisInputError as exc:
@@ -137,32 +169,49 @@ def analysis(req: AnalysisRequest) -> dict[str, Any]:
 
 @app.post("/api/chat")
 def chat(req: ChatRequest) -> dict[str, Any]:
-    """Local deterministic answers; no provider credentials or billed generation."""
-    from src.analysis.deductions import answer
+    """Grounded conversation with optional local intent interpretation."""
+    from src.analysis.conversation import converse
+
     if not req.message.strip():
         raise HTTPException(422, "Message must contain text")
     try:
-        return answer(settings.data_dir, settings.season, req.message)
+        return converse(
+            settings.data_dir,
+            req.season,
+            req.message,
+            [item.model_dump() for item in req.history],
+            model=settings.conversation_model,
+            model_url=settings.conversation_model_url,
+        )
     except (OSError, ValueError, KeyError) as exc:
         raise HTTPException(503, "Verified evidence is unavailable; run the MVP pipeline") from exc
 
 
 @app.get("/api/evidence/search")
-def evidence_search(query: str = Query(min_length=1, max_length=4096),
-                    team: str = "", limit: int = Query(default=5, ge=1, le=20)):
+def evidence_search(
+    query: str = Query(min_length=1, max_length=4096),
+    team: str = "",
+    limit: int = Query(default=5, ge=1, le=20),
+):
     from src.store.mvp_index import search
+
     if not query.strip():
         raise HTTPException(422, "Query must contain text")
     try:
-        return {"season": settings.season,
-                "results": search(settings.data_dir, settings.season, query, team=team, limit=limit)}
+        return {
+            "season": settings.season,
+            "results": search(settings.data_dir, settings.season, query, team=team, limit=limit),
+        }
     except (OSError, ValueError, KeyError) as exc:
-        raise HTTPException(503, "Verified text index is unavailable; reload the MVP stores") from exc
+        raise HTTPException(
+            503, "Verified text index is unavailable; reload the MVP stores"
+        ) from exc
 
 
 # ---------------------------------------------------------------------------
 # Health check
 # ---------------------------------------------------------------------------
+
 
 @app.get("/api/health")
 def health() -> dict[str, str]:
