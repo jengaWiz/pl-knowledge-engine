@@ -42,6 +42,7 @@ test('season switch clears context and failed request keeps the draft', async ({
   await page.route('**/api/chat', r => r.fulfill({ status: 503, json: { detail: 'private-path-secret' } }))
   await open(page)
   await page.getByLabel('Conversation season').selectOption('2024-25')
+  await expect(page.getByRole('button', { name: 'How many points did Liverpool earn in 2024-25?' })).toBeVisible()
   const input = page.getByLabel('Football statistics question')
   await input.fill('Liverpool points')
   await page.getByRole('button', { name: 'Send', exact: true }).click()
