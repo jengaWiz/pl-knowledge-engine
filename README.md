@@ -26,7 +26,7 @@
 
 The engine collects historical Premier League data from public sources, verifies its provenance and coverage, then makes it explorable through a React dashboard. Neo4j connects clubs, fixtures and player appearances; Chroma indexes source-linked summaries using a local CPU embedding model.
 
-The evidence analyst calculates supported statistics from verified records. Each answer includes its season, sample size, metric definitions and source references. The statistics chat abstains from prediction, causal and unavailable-commentary requests. A separate historical prediction workspace estimates fixture outcomes with evaluated statistical baselines and explicit date/source limits.
+The Football analyst now supports natural follow-up questions across four verified result seasons, with source-linked answers for matches and club form. Its local Ollama model interprets flexible wording while the calculations and citations come from verified records. Named player coverage remains the 2025–26 Aston Villa and Liverpool snapshot. The analyst abstains from causal, tactical, injury and future-outcome claims. A separate historical prediction workspace estimates fixture outcomes with evaluated statistical baselines and explicit date/source limits.
 
 The [fresh-data MVP milestone](https://github.com/jengaWiz/pl-knowledge-engine/milestone/1) is complete: **all 10 implementation tickets are closed**.
 
@@ -49,7 +49,7 @@ Start in **Discover**, browse the match spotlight, or jump directly to a tool. *
 
 <img src="docs/images/discover-mobile.png" width="390" alt="Mobile discovery workspace and match spotlight" />
 
-- **Evidence analyst:** compare points, goals and goal difference; inspect last-five form, home/away splits and goal/assist rankings, including per-90 rates with a minutes threshold.
+- **Conversational football analyst:** ask about recorded matches, points, form, home/away splits and focus-club players; follow up naturally, switch seasons and inspect original sources. [Conversation guide](docs/conversational-analyst.md).
 - **Focused graph explorer:** start with 20 clubs, drill into up to 12 available players and six recent fixtures, or search a player. Stable, labeled layouts replace the full-graph cluster; inspect real relationship directions and follow connections. Mobile starts in an accessible list view. Player/fixture views show up to eight recent appearance records.
 - **Player discovery:** search accent-free or full names (`ekitike`, `Alisson`), select closest matches for typos (`allison`), and distinguish missing roster coverage from service errors. [Search behavior and coverage](docs/player-search.md).
 - **Historical predictions:** replay 760 recorded fixtures across 2024–25 and 2025–26, inspect outcome probabilities and strictly earlier source records, and review two-season evaluation limits. [Prediction workflow](docs/prediction-workflow.md).
@@ -77,9 +77,11 @@ Start in **Discover**, browse the match spotlight, or jump directly to a tool. *
 
 <img src="docs/images/demo-graph-mobile.png" width="390" alt="Mobile graph explorer with selectable club records" />
 
-**Evidence analyst** — compare verified season totals and inspect the answer’s sources.
+**Football analyst** — ask about verified season totals, follow up and inspect the original sources.
 
-![Actual Docker demo comparing Aston Villa and Liverpool with verified season statistics](docs/images/demo-analysis.png)
+![Actual Docker demo continuing a football analysis conversation from Liverpool to Aston Villa](docs/images/conversation.png)
+
+<img src="docs/images/conversation-mobile.png" width="390" alt="Mobile football analyst with a sourced answer from recorded Liverpool results" />
 
 <img src="docs/images/demo-mobile.png" width="390" alt="Mobile analyst showing the verified Aston Villa and Liverpool comparison" />
 
@@ -187,11 +189,11 @@ Verified against pinned **2025–26** sources. [Acceptance evidence and reproduc
 
 | Check | Result |
 | --- | --- |
-| Python suite | **603 tests passed**; CI covers Python 3.11 and 3.12. |
+| Python suite | **613 tests passed**; CI covers Python 3.11 and 3.12. |
 | Historical outcome evaluation | **760 fixtures across two test seasons**; rolling log loss **0.9924 / 1.0350**, Brier **0.5920 / 0.6214**. Retrospective date-bounded tests; [protocol and uncertainty](docs/prediction-workflow.md). |
 | Independent numerical references | **42/42 passed**, plus five insufficient-evidence cases. |
 | Real-store/API acceptance | **Seven checks passed**, including all 42 live numerical references. |
-| Desktop/mobile browser flows | **34/34 passed**, covering discovery, match spotlight, quick switch, history navigation, graph exploration, fixtures, statistics, source evidence and predictions on desktop/mobile. |
+| Desktop/mobile browser flows | **38/38 passed**, covering discovery, match spotlight, quick switch, history navigation, graph exploration, fixtures, conversations, source evidence and predictions on desktop/mobile. |
 | Empty-storage Docker setup | Public collection, validation, graph/index loading and readiness passed. |
 | Backup and restart | All four volumes backed up privately; versions, counts and live answers preserved without recollection. |
 | CI | Python checks, wheel packaging, frontend build, Docker build and cold-storage readiness checks. |

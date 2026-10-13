@@ -1,7 +1,7 @@
 # Structured evidence in the analyst
 
 Open **Source evidence** from the workspace navigation to search the accepted four-season corpus.
-The existing **Season statistics** mode still calculates supported 2025–26 metrics.
+The existing **Football analyst** workspace still calculates supported 2025–26 metrics.
 The sidebar fixtures and graph continue to show the default 2025–26 MVP; the
 Source evidence season selector controls historical retrieval independently.
 

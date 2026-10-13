@@ -15,6 +15,8 @@ class Settings(BaseSettings):
     # API Keys
     gemini_api_key: str = ""
     youtube_api_key: str = ""
+    conversation_model: str = ""
+    conversation_model_url: str = "http://host.docker.internal:11434"
     balldontlie_api_key: str = ""
 
     # Gemini models

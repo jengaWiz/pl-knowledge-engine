@@ -32,6 +32,8 @@ services:
       GEMINI_API_KEY: ''
       YOUTUBE_API_KEY: ''
       SEASON: '2025-26'
+      CONVERSATION_MODEL: '${CONVERSATION_MODEL:-qwen2.5:7b}'
+      CONVERSATION_MODEL_URL: '${CONVERSATION_MODEL_URL:-http://host.docker.internal:11434}'
     ports:
       - '127.0.0.1:8010:8000'
     volumes:

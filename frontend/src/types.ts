@@ -53,6 +53,8 @@ export interface ChatMessage {
   role: 'user' | 'assistant'
   content: string
   sources?: { type: string; summary: string; url?: string; record_ids?: string[] }[]
+  suggestions?: string[]
+  season?: string
 }
 
 export interface EvidenceStatus {

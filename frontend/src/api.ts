@@ -37,11 +37,13 @@ export async function fetchTopPlayers(
 export async function sendChat(
   message: string,
   history: ChatMessage[],
-): Promise<{ reply: string; sources: { type: string; summary: string; url?: string; record_ids?: string[] }[] }> {
+  season = "2025-26",
+): Promise<{ reply: string; season: string; status: string; suggestions?: string[]; sources: { type: string; summary: string; url?: string; record_ids?: string[] }[] }> {
   const { data } = await api.post('/chat', {
     message,
     history: history.map(m => ({ role: m.role, content: m.content })),
-  })
+    season,
+  }, { timeout: 90000 })
   return data
 }
 
