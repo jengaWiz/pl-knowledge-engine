@@ -82,7 +82,7 @@ def _model_plan(message, history, teams, model, url):
         ],
         "format": "json",
         "stream": False,
-        "options": {"temperature": 0, "num_predict": 100},
+        "options": {"temperature": 0, "num_predict": 120},
         "keep_alive": "5m",
     }
     try:
@@ -131,7 +131,7 @@ def _source(row):
     }
 
 
-def _fixture(matches, teams, text, season):
+def _fixture(matches, teams, text, season, corpus=None):
     if len(teams) != 2:
         return _unavailable(
             season, "Name two clubs for a match question, for example Liverpool vs Bournemouth."
@@ -165,7 +165,37 @@ def _fixture(matches, teams, text, season):
         if m["away_score"] > m["home_score"]
         else "a draw"
     )
-    return {
+    player_detail = ""
+    appearance_sources = []
+    if corpus and re.search(
+        r"\b(who scored|goalscorers?|who assisted|assists?)\b", normalize(text)
+    ):
+        metric = "assists" if "assist" in normalize(text) else "goals"
+        names = {p["id"]: p["name"] for p in corpus["players"]}
+        contributors = [
+            a
+            for a in corpus["appearances"]
+            if a.get("match_id") == m["id"] and a.get(metric) is not None and a[metric] > 0
+        ]
+        if contributors:
+            player_detail = (
+                " Recorded focus-club "
+                + metric
+                + ": "
+                + ", ".join(f"{names[a['player_id']]} ({a[metric]})" for a in contributors)
+                + "."
+            )
+            appearance_sources = [
+                {
+                    "type": "appearance",
+                    "url": a["source"]["url"],
+                    "summary": f"{metric.title()} appearance · row {a['source']['row']}",
+                    "record_ids": [a["id"]],
+                }
+                for a in contributors
+            ]
+        player_detail += " Player event coverage is limited to Aston Villa and Liverpool."
+    response = {
         "status": "ok",
         "season": season,
         "operation": "fixture",
@@ -175,9 +205,11 @@ def _fixture(matches, teams, text, season):
         else f"On **{m['date']}**, {m['away_team']} beat {m['home_team']} **{m['away_score']}–{m['home_score']}**."
         if winner == m["away_team"]
         else f"On **{m['date']}**, {m['home_team']} and {m['away_team']} drew **{m['home_score']}–{m['away_score']}**.",
-        "sources": [_source(m)],
+        "sources": [_source(m), *appearance_sources],
         "suggestions": [],
     }
+    response["reply"] += player_detail
+    return response
 
 
 def _team_result(output, season, matches, teams, kind):
@@ -209,9 +241,25 @@ def _team_result(output, season, matches, teams, kind):
                 )
             else:
                 rows.append({"team": team, **deductions.totals(games)})
-        sources = [
-            _source(m) for m in matches if m["home_team"] in teams or m["away_team"] in teams
-        ]
+        grouped = {}
+        for match in matches:
+            if match["home_team"] not in teams and match["away_team"] not in teams:
+                continue
+            ref = _source(match)
+            item = grouped.setdefault(
+                ref["url"],
+                {
+                    "type": "statistics",
+                    "url": ref["url"],
+                    "summary": "Verified season result rows",
+                    "record_ids": [],
+                    "source_rows": [],
+                    "source_sha256": ref["source_sha256"],
+                },
+            )
+            item["record_ids"].extend(ref["record_ids"])
+            item["source_rows"].extend(ref["source_rows"])
+        sources = list(grouped.values())
     lines = [f"**{season} season · {kind.replace('_', ' ')}**"]
     for row in rows:
         if kind == "home_away":
@@ -226,7 +274,7 @@ def _team_result(output, season, matches, teams, kind):
                 else ""
             )
             lines.append(
-                f"{row['team']}: **{row['points']} points**, {row['wins']} wins, {row['draws']} draws, {row['losses']} losses and a **{row['goal_difference']:+} goal difference** across {row['matches']} matches.{suffix}"
+                f"{row['team']}: **{row['points']} points**, {row['wins']} wins, {row['draws']} draws, {row['losses']} losses with {row['goals_for']} goals scored, {row['goals_against']} conceded and a **{row['goal_difference']:+} goal difference** across {row['matches']} matches.{suffix}"
             )
     lines.append(
         "These are recorded league results; they don't establish causes or forecast future matches."
@@ -272,6 +320,9 @@ def _player_result(output, season, text, corpus):
         return _unavailable(
             season, "I found that player, but no verified appearances in this snapshot."
         )
+    recent = bool(re.search(r"\b(last|recent)\s*(five|5)\b", q))
+    if recent:
+        apps = sorted(apps, key=lambda a: (a["date"], a["id"]), reverse=True)[:5]
     goals = sum(a["goals"] for a in apps if a["goals"] is not None)
     assists_known = all(a["assists"] is not None for a in apps)
     assists = sum(a["assists"] for a in apps if a["assists"] is not None)
@@ -284,7 +335,7 @@ def _player_result(output, season, text, corpus):
         "teams": sorted({a["team"] for a in apps}),
         "reply": f"**{person['name']}** has **{goals} goals**"
         + (f", **{assists} assists**" if assists_known else "; assist coverage is incomplete")
-        + f" and **{minutes} recorded minutes** across {len(apps)} stored appearances for {', '.join(sorted({a['team'] for a in apps}))}. This covers the verified 2025–26 snapshot, not every club.",
+        + f" and **{minutes} recorded minutes** across {len(apps)} {'recent ' if recent else ''}stored appearances for {', '.join(sorted({a['team'] for a in apps}))}. This covers the verified 2025–26 snapshot, not every club.",
         "sources": [
             {
                 "type": "appearance",
@@ -339,9 +390,20 @@ def converse(
             last_kind = _intent(item["content"])
         if last_teams and last_kind:
             break
+    q = normalize(message)
+    followup = bool(
+        re.search(
+            r"^(and|what about|how about|their|they|them|that|those|the same)\b|\b(they|their|that match|that team)\b",
+            q,
+        )
+    )
+    if corpus and not re.search(r"\b(top|most|which players|ranking)\b", q):
+        person = _player_result(output, season, message, corpus)
+        if person["status"] == "ok":
+            return person
     kind = _intent(message)
-    teams = explicit or last_teams
-    if not kind:
+    teams = explicit or (last_teams if followup else [])
+    if not kind and followup:
         kind = last_kind
     if (
         not explicit
@@ -351,7 +413,7 @@ def converse(
         return _unavailable(
             season, "Which club do you mean?", suggestions=[f"{t} points" for t in teams]
         )
-    if not explicit or not kind:
+    if not kind or (not explicit and not followup):
         plan = _model_plan(message, history, all_teams, model, model_url)
         if plan.get("kind") == "unsupported":
             return _unavailable(
@@ -364,7 +426,7 @@ def converse(
             teams = plan.get("teams", [])
     if kind == "fixture":
         fixture_text = message
-        if not DATE.search(message):
+        if followup and not DATE.search(message):
             fixture_text += " " + next(
                 (
                     h["content"]
@@ -373,7 +435,7 @@ def converse(
                 ),
                 "",
             )
-        return _fixture(matches, teams, fixture_text, season)
+        return _fixture(matches, teams, fixture_text, season, corpus)
     if kind == "player" or (
         not kind
         and corpus
@@ -385,6 +447,11 @@ def converse(
             return _unavailable(
                 season,
                 "Player rankings are available for the 2025–26 Aston Villa and Liverpool snapshot.",
+            )
+        if any(team not in ("Liverpool", "Aston Villa") for team in teams):
+            return _unavailable(
+                season,
+                "Player rankings cover the stored Liverpool and Aston Villa appearances only.",
             )
         metric = (
             "assists"
