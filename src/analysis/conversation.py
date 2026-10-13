@@ -31,6 +31,8 @@ def _mentions(text, teams):
     hits = []
     for team in teams:
         aliases = [team, *ALIASES.get(team, [])]
+        if team == "Liverpool":
+            aliases += ["the Reds", "LFC"]
         if any(
             re.search(r"(?<!\w)" + re.escape(normalize(a)) + r"(?!\w)", normalized) for a in aliases
         ):
@@ -47,7 +49,8 @@ def _intent(text):
     ):
         return "home_away"
     if re.search(
-        r"\b(top scorers|most goals|most assists|top players|player rankings|per 90|most minutes)\b",
+        r"\b(top scorers|most goals|most assists|top players|"
+        r"player rankings|per 90|most minutes)\b",
         q,
     ):
         return "player_rankings"
@@ -57,6 +60,8 @@ def _intent(text):
         r"\b(points|goals|goal difference|standings|record|stats|statistics|performed)\b", q
     ):
         return "team_stats"
+    if re.search(r"\b(how are|how is|doing|season so far|tell me about)\b", q):
+        return "team_stats"
     return ""
 
 
@@ -65,7 +70,8 @@ def _model_plan(message, history, teams, model, url):
         return {}
     system = (
         "Classify the latest football question only. Return JSON with kind and teams. "
-        "kind must be one of team_stats, form, home_away, player_rankings, player, fixture, unsupported. "
+        "kind must be one of team_stats, form, home_away, player_rankings, "
+        "player, fixture, unsupported. "
         "teams must contain exact names from this list only: " + ", ".join(teams) + ". "
         "Use earlier user messages only to resolve a clear follow-up. "
         "For causal/tactical/prediction questions choose unsupported. Never answer the question."
@@ -80,7 +86,19 @@ def _model_plan(message, history, teams, model, url):
             *context,
             {"role": "user", "content": message[:1000]},
         ],
-        "format": "json",
+        "format": {
+            "type": "object",
+            "properties": {
+                "kind": {"type": "string", "enum": sorted(KINDS | {"unsupported"})},
+                "teams": {
+                    "type": "array",
+                    "items": {"type": "string", "enum": teams},
+                    "maxItems": 2,
+                },
+            },
+            "required": ["kind", "teams"],
+            "additionalProperties": False,
+        },
         "stream": False,
         "options": {"temperature": 0, "num_predict": 120},
         "keep_alive": "5m",
@@ -195,16 +213,27 @@ def _fixture(matches, teams, text, season, corpus=None):
                 for a in contributors
             ]
         player_detail += " Player event coverage is limited to Aston Villa and Liverpool."
+    if winner == m["home_team"]:
+        reply = (
+            f"On **{m['date']}**, {m['home_team']} beat {m['away_team']} "
+            f"**{m['home_score']}–{m['away_score']}**."
+        )
+    elif winner == m["away_team"]:
+        reply = (
+            f"On **{m['date']}**, {m['away_team']} beat {m['home_team']} "
+            f"**{m['away_score']}–{m['home_score']}**."
+        )
+    else:
+        reply = (
+            f"On **{m['date']}**, {m['home_team']} and {m['away_team']} drew "
+            f"**{m['home_score']}–{m['away_score']}**."
+        )
     response = {
         "status": "ok",
         "season": season,
         "operation": "fixture",
         "teams": teams,
-        "reply": f"On **{m['date']}**, {m['home_team']} beat {m['away_team']} **{m['home_score']}–{m['away_score']}**."
-        if winner == m["home_team"]
-        else f"On **{m['date']}**, {m['away_team']} beat {m['home_team']} **{m['away_score']}–{m['home_score']}**."
-        if winner == m["away_team"]
-        else f"On **{m['date']}**, {m['home_team']} and {m['away_team']} drew **{m['home_score']}–{m['away_score']}**.",
+        "reply": reply,
         "sources": [_source(m), *appearance_sources],
         "suggestions": [],
     }
@@ -265,7 +294,8 @@ def _team_result(output, season, matches, teams, kind):
         if kind == "home_away":
             h, a = row["home"], row["away"]
             lines.append(
-                f"{row['team']} earned **{h['points']} points in {h['matches']} home matches** and **{a['points']} points in {a['matches']} away matches**."
+                f"{row['team']} earned **{h['points']} points in {h['matches']} home matches** "
+                f"and **{a['points']} points in {a['matches']} away matches**."
             )
         else:
             suffix = (
@@ -274,7 +304,11 @@ def _team_result(output, season, matches, teams, kind):
                 else ""
             )
             lines.append(
-                f"{row['team']}: **{row['points']} points**, {row['wins']} wins, {row['draws']} draws, {row['losses']} losses with {row['goals_for']} goals scored, {row['goals_against']} conceded and a **{row['goal_difference']:+} goal difference** across {row['matches']} matches.{suffix}"
+                f"{row['team']}: **{row['points']} points**, {row['wins']} wins, "
+                f"{row['draws']} draws, {row['losses']} losses with "
+                f"{row['goals_for']} goals scored, "
+                f"{row['goals_against']} conceded and a **{row['goal_difference']:+} "
+                f"goal difference** across {row['matches']} matches.{suffix}"
             )
     lines.append(
         "These are recorded league results; they don't establish causes or forecast future matches."
@@ -294,7 +328,8 @@ def _player_result(output, season, text, corpus):
     if season != "2025-26":
         return _unavailable(
             season,
-            "Player appearances are available for the 2025–26 Aston Villa and Liverpool snapshot. Choose that season to ask about a player.",
+            "Player appearances are available for the 2025–26 Aston Villa and Liverpool "
+            "snapshot. Choose that season to ask about a player.",
         )
     q = normalize(text)
     people = [
@@ -328,14 +363,21 @@ def _player_result(output, season, text, corpus):
     assists = sum(a["assists"] for a in apps if a["assists"] is not None)
     minutes = sum(a["minutes"] for a in apps)
     latest = sorted(apps, key=lambda a: (a["date"], a["id"]), reverse=True)[:5]
+    clubs = ", ".join(sorted({a["team"] for a in apps}))
+    reply = (
+        f"**{person['name']}** has **{goals} goals**"
+        + (f", **{assists} assists**" if assists_known else "; assist coverage is incomplete")
+        + f" and **{minutes} recorded minutes** across {len(apps)} "
+        + ("recent " if recent else "")
+        + f"stored appearances for {clubs}. "
+        + "This covers the verified 2025–26 snapshot, not every club."
+    )
     return {
         "status": "ok",
         "season": season,
         "operation": "player",
         "teams": sorted({a["team"] for a in apps}),
-        "reply": f"**{person['name']}** has **{goals} goals**"
-        + (f", **{assists} assists**" if assists_known else "; assist coverage is incomplete")
-        + f" and **{minutes} recorded minutes** across {len(apps)} {'recent ' if recent else ''}stored appearances for {', '.join(sorted({a['team'] for a in apps}))}. This covers the verified 2025–26 snapshot, not every club.",
+        "reply": reply,
         "sources": [
             {
                 "type": "appearance",
@@ -358,7 +400,8 @@ def converse(
     if CAUSAL.search(message):
         return _unavailable(
             season,
-            "I cannot establish that from these records. I can't establish causes, tactics, injuries or future outcomes from these records. I can show recorded results, form, players and sources.",
+            "I can't establish causes, tactics, injuries or future outcomes from these "
+            "records. I can show recorded results, form, players and sources.",
         )
     requested = _season(message)
     if requested:
@@ -393,7 +436,8 @@ def converse(
     q = normalize(message)
     followup = bool(
         re.search(
-            r"^(and|what about|how about|their|they|them|that|those|the same)\b|\b(they|their|that match|that team)\b",
+            r"^(and|what about|how about|their|they|them|that|those|the same)\b"
+            r"|\b(they|their|that match|that team)\b",
             q,
         )
     )
@@ -418,7 +462,8 @@ def converse(
         if plan.get("kind") == "unsupported":
             return _unavailable(
                 season,
-                "I can't verify that kind of answer from the stored football records. Try a club, player, match, form or home/away question.",
+                "I can't verify that kind of answer from the stored football records. "
+                "Try a club, player, match, form or home/away question.",
             )
         if not kind:
             kind = plan.get("kind", "")
@@ -482,7 +527,8 @@ def converse(
             limit=5,
         )
         lines = [f"**{season} · top {metric}**"] + [
-            f"{i + 1}. {row['name']}: **{row['value']} {metric}** in {row['appearances']} appearances for {', '.join(row['teams'])}."
+            f"{i + 1}. {row['name']}: **{row['value']} {metric}** "
+            f"in {row['appearances']} appearances for {', '.join(row['teams'])}."
             for i, row in enumerate(result["rows"])
         ]
         return {
@@ -499,5 +545,6 @@ def converse(
         return _team_result(output, season, matches, teams, kind)
     return _unavailable(
         season,
-        "I can answer questions about recorded club form, points, players and match results. Name a club or fixture to get started.",
+        "I can answer questions about recorded club form, points, players and match results. "
+        "Name a club or fixture to get started.",
     )
