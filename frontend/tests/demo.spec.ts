@@ -33,7 +33,7 @@ test('populated graph, player search and fixture navigation', async ({ page }) =
 
 test('deduction and source opening', async ({ page }) => {
   await page.goto('/#graph')
-  await navigate(page, 'Season statistics')
+  await navigate(page, 'Football analyst')
   await page.getByRole('button', { name: "Who are Liverpool's top scorers this season?", exact: true }).click()
   await expect(page.getByText('Hugo Ekitiké:', { exact: false })).toBeVisible()
   await expect(page.getByText('11 goals', { exact: false })).toBeVisible()
@@ -50,7 +50,7 @@ test('deduction and source opening', async ({ page }) => {
   await popup.close()
   await page.getByLabel('Football statistics question').fill('Will Liverpool win next season?')
   await page.getByRole('button', { name: 'Send', exact: true }).click()
-  await expect(page.getByText('I cannot establish that', { exact: false })).toBeVisible()
+  await expect(page.getByText("I can't establish causes", { exact: false })).toBeVisible()
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true)
 })
 
@@ -72,7 +72,7 @@ test('missing fixtures can be retried', async ({ page }) => {
 test('failed chat preserves a retryable input', async ({ page }) => {
   await page.route('**/api/chat', route => route.fulfill({ status: 503, json: { detail: 'Unavailable' } }))
   await page.goto('/#graph')
-  await navigate(page, 'Season statistics')
+  await navigate(page, 'Football analyst')
   await page.getByLabel('Football statistics question').fill('Liverpool points')
   await page.getByRole('button', { name: 'Send', exact: true }).click()
   await expect(page.getByText('The local evidence service is unavailable', { exact: false })).toBeVisible()

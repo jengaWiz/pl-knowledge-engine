@@ -5,7 +5,7 @@ export type WorkspacePage = 'home' | 'graph' | 'statistics' | 'evidence' | 'pred
 export const destinations: { id: WorkspacePage; label: string; detail: string; symbol: string }[] = [
   { id: 'home', label: 'Discover', detail: 'Your starting point', symbol: '◈' },
   { id: 'graph', label: 'Graph View', detail: 'Connect clubs, players and matches', symbol: '⌘' },
-  { id: 'statistics', label: 'Season statistics', detail: 'Explore form and player output', symbol: '▥' },
+  { id: 'statistics', label: 'Football analyst', detail: 'Ask about matches, players and form', symbol: '▥' },
   { id: 'evidence', label: 'Source evidence', detail: 'Find the original match records', symbol: '≡' },
   { id: 'prediction', label: 'Predictions', detail: 'Replay historical match probabilities', symbol: '↗' },
 ]

@@ -79,7 +79,7 @@ export default function EvidenceView() {
     </div>
     {checking && <p role="status">Verifying sources and local stores…</p>}
     {status?.status === 'not_ready' && <div className="evidence-notice" role="status">
-      Structured evidence is not ready. Season statistics remain available in the other mode.
+      Structured evidence is not ready. The Football analyst remains available in the workspace.
       <p>Prepare the accepted corpus, evidence index and evidence graph, then recheck.</p>
     </div>}
     {error && <p className="evidence-notice" role="alert">{error}</p>}

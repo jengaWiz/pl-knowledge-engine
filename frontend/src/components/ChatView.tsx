@@ -5,11 +5,13 @@ import type { ChatMessage } from '../types'
 import EvidenceView from './EvidenceView'
 import PredictionView from './PredictionView'
 
+const SEASONS = ['2025-26', '2024-25', '2023-24', '2022-23']
+
 const STARTERS = [
   "Who are Liverpool's top scorers this season?",
   'How has Aston Villa performed in their last 5 games?',
-  'Compare Aston Villa and Liverpool home versus away',
-  'Which players have the most assists across both teams?',
+  'Who won Liverpool vs Bournemouth on 2025-08-15?',
+  'Tell me about Ekitiké',
 ]
 
 export default function ChatView({ mode }: { mode: 'statistics' | 'evidence' | 'prediction' }) {
@@ -21,7 +23,13 @@ export default function ChatView({ mode }: { mode: 'statistics' | 'evidence' | '
 }
 
 function StatisticsChat() {
-  const [messages, setMessages] = useState<ChatMessage[]>([])
+  const [messages, setMessages] = useState<ChatMessage[]>(() => {
+    try { const saved = JSON.parse(sessionStorage.getItem('pl-analyst-messages') || '[]'); return Array.isArray(saved) ? saved.slice(-16) : [] } catch { return [] }
+  })
+  const [season, setSeason] = useState(() => sessionStorage.getItem('pl-analyst-season') || '2025-26')
+  const [error, setError] = useState('')
+  useEffect(() => { sessionStorage.setItem('pl-analyst-messages', JSON.stringify(messages.slice(-16))) }, [messages])
+  useEffect(() => { sessionStorage.setItem('pl-analyst-season', season) }, [season])
   const [input, setInput] = useState('')
   const [loading, setLoading] = useState(false)
   const bottomRef = useRef<HTMLDivElement>(null)
@@ -35,48 +43,59 @@ function StatisticsChat() {
     const userMsg: ChatMessage = { role: 'user', content: text }
     setMessages(prev => [...prev, userMsg])
     setInput('')
+    setError('')
     setLoading(true)
     try {
-      const { reply, sources } = await sendChat(text, messages.slice(-8))
-      setMessages(prev => [...prev, { role: 'assistant', content: reply, sources }])
+      const { reply, sources, suggestions, season: answerSeason } = await sendChat(text, messages.slice(-8), season)
+      setMessages(prev => [...prev, { role: 'assistant', content: reply, sources, suggestions, season: answerSeason }])
     } catch {
-      setMessages(prev => [...prev, { role: 'assistant', content: 'The local evidence service is unavailable. Check the dataset status and retry.' }])
+      setMessages(prev => prev.slice(0, -1))
+      setInput(text)
+      setError('The local evidence service is unavailable. Check the dataset status and retry.')
     } finally {
       setLoading(false)
     }
   }
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', height: '100%', background: 'var(--bg-0)' }}>
+    <div className="analyst-chat" style={{ display: 'flex', flexDirection: 'column', height: '100%', background: 'var(--bg-0)' }}>
+      <div className="conversation-bar"><div><strong>Football analyst</strong><span>Answers from recorded results and appearances</span></div><div className="conversation-actions"><label>Season <select aria-label="Conversation season" value={season} disabled={loading} onChange={event => { setSeason(event.target.value); setMessages([]); setError(''); setInput('') }}>{SEASONS.map(item => <option key={item} value={item}>{item.replace('-', '–')}</option>)}</select></label><button onClick={() => { setMessages([]); setInput(''); setError('') }} disabled={loading}>New conversation</button></div></div>
+      {error && <p className="conversation-error" role="alert">{error}</p>}
       <div style={{ flex: 1, overflowY: 'auto', padding: '32px 0 12px' }}>
         {messages.length === 0
-          ? <WelcomeScreen onSelect={send} />
+          ? <WelcomeScreen onSelect={send} season={season} />
           : (
             <div style={{ maxWidth: 760, margin: '0 auto', padding: '0 24px', display: 'flex', flexDirection: 'column', gap: 20 }}>
-              {messages.map((m, i) => <MessageBubble key={i} msg={m} idx={i} />)}
+              {messages.map((m, i) => <MessageBubble key={i} msg={m} idx={i} onSuggestion={send} />)}
               {loading && <TypingIndicator />}
               <div ref={bottomRef} />
             </div>
           )
         }
       </div>
-      <InputBar value={input} onChange={setInput} onSend={() => send(input)} loading={loading} />
+      <InputBar value={input} onChange={setInput} onSend={() => send(input)} loading={loading} season={season} />
     </div>
   )
 }
 
 /* ── Welcome screen ───────────────────────────────────────── */
-function WelcomeScreen({ onSelect }: { onSelect: (s: string) => void }) {
+function WelcomeScreen({ onSelect, season }: { onSelect: (s: string) => void; season: string }) {
+  const starters = season === '2025-26' ? STARTERS : [
+    `How many points did Liverpool earn in ${season}?`,
+    `How did Aston Villa do at home in ${season}?`,
+    `What was Liverpool's last-five form in ${season}?`,
+    `How many goals did Arsenal score in ${season}?`,
+  ]
   return (
     <div className="fade-in" style={{ maxWidth: 760, margin: '0 auto', padding: '20px 24px 40px' }}>
       {/* Hero */}
       <div style={{ textAlign: 'left', marginBottom: 36 }}>
-        <p className="workspace-eyebrow" style={{ marginBottom: 16 }}>THE ANALYST / 2025–26</p>
+        <p className="workspace-eyebrow" style={{ marginBottom: 16 }}>THE ANALYST / {season.replace('-', '–')}</p>
         <div style={{ fontSize: 36, fontWeight: 550, color: 'var(--t-1)', letterSpacing: '-0.04em', marginBottom: 9 }}>
-          Find the story in the numbers.
+          Ask about the game. Keep the conversation going.
         </div>
         <div style={{ fontSize: 14, color: 'var(--t-2)', lineHeight: 1.65, maxWidth: 480 }}>
-          Start with a suggested question about Liverpool or Aston Villa. Explore recorded form, goals and assists, with sources you can follow.
+Ask about a club, player or past match. Then follow up naturally: “What about Villa?” or “How did they do at home?” Every answer comes from a verified record.
         </div>
       </div>
 
@@ -86,7 +105,7 @@ function WelcomeScreen({ onSelect }: { onSelect: (s: string) => void }) {
           SUGGESTED QUESTIONS
         </div>
         <div className="starter-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
-          {STARTERS.map(s => <StarterCard key={s} text={s} onClick={() => onSelect(s)} />)}
+          {starters.map(s => <StarterCard key={s} text={s} onClick={() => onSelect(s)} />)}
         </div>
       </div>
     </div>
@@ -117,7 +136,7 @@ function StarterCard({ text, onClick }: { text: string; onClick: () => void }) {
 }
 
 /* ── Message bubbles ──────────────────────────────────────── */
-function MessageBubble({ msg, idx }: { msg: ChatMessage; idx: number }) {
+function MessageBubble({ msg, idx, onSuggestion }: { msg: ChatMessage; idx: number; onSuggestion: (text: string) => void }) {
   const [sourcesOpen, setSourcesOpen] = useState(false)
   const isUser = msg.role === 'user'
 
@@ -149,6 +168,7 @@ function MessageBubble({ msg, idx }: { msg: ChatMessage; idx: number }) {
           )}
         </div>
 
+        {!isUser && msg.suggestions && msg.suggestions.length > 0 && <div className="conversation-suggestions">{msg.suggestions.map(text => <button key={text} onClick={() => onSuggestion(text)}>{text} <span aria-hidden="true">↗</span></button>)}</div>}
         {!isUser && msg.sources && msg.sources.length > 0 && (
           <div>
             <button
@@ -181,7 +201,7 @@ function MessageBubble({ msg, idx }: { msg: ChatMessage; idx: number }) {
                         {s.record_ids.join('\n')}
                       </pre>
                     </details>}
-                    {s.url && <a href={s.url} target="_blank" rel="noopener noreferrer"
+                    {s.url && /^https?:\/\//.test(s.url) && <a href={s.url} target="_blank" rel="noopener noreferrer"
                       style={{ display: 'block', color: '#756087', marginTop: 4 }}>View source</a>}
                   </div>
                 ))}
@@ -215,11 +235,12 @@ function TypingIndicator() {
 }
 
 /* ── Input bar ────────────────────────────────────────────── */
-function InputBar({ value, onChange, onSend, loading }: {
+function InputBar({ value, onChange, onSend, loading, season }: {
   value: string
   onChange: (v: string) => void
   onSend: () => void
   loading: boolean
+  season: string
 }) {
   const [focused, setFocused] = useState(false)
   const canSend = !loading && !!value.trim()
@@ -275,7 +296,7 @@ function InputBar({ value, onChange, onSend, loading }: {
           </button>
         </div>
         <div style={{ fontSize: 11, color: 'var(--t-3)', marginTop: 8, textAlign: 'left' }}>
-          Press Enter to send · Local evidence · 2025–26
+          Press Enter to send · Verified local records · {season}
         </div>
       </div>
     </div>
